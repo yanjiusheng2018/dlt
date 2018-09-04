@@ -7,9 +7,4 @@
 
 <p>
 <h2>这是标题</h2>
-'''
-#这里是代码块<br>
-import time<br>
-date = time.localtime()<br>
-print(date)
-'''</p>
+
