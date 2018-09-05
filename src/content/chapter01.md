@@ -1,15 +1,12 @@
+# 神经网络
+## 神经元
+## 激活函数
+### sigmod
+### RELU
+## 损失函数
+## 正则化
 
-
-
-### 标题
-<br>
-
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/image/python.jpg)
-# 代码块
-
-<br>
-'''
-#代码<br>
-print('hello world')
-<br>
-'''
+这是两个加粗的**字体**
+>这是第一层引用
+>>这是第二层引用
+[百度一下，你就知道](http://www.baidu.com/)
