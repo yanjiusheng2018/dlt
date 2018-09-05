@@ -59,6 +59,11 @@ life is short ， you need python！
   
  ## 图片  
  
- ![图片标题](https://github.com/yanjiusheng2018/dlt/blob/master/image/python.jpg)  
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/image/python.jpg)  
    
-  
+ ## 表格  
+   
+   
+          |表格   |第一列    |第二列    |
+          |-------|：------：|：-------：|
+          |第一行  |第一列    |第二列    |
