@@ -72,7 +72,7 @@ life is short ， you need python！
   
   
 ## 公式  
-
-这是一个方程：$y = ax^2 + bx^3 + c$
   
-$$\frac{x + y}{5}$$
+\frac{x + y}{5}
+  
+\sum{i=1}^na^b
