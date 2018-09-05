@@ -27,8 +27,9 @@
     print('你好，世界！')
   
 ### 多行代码  
-```for i in range(10):
-      print(i, end = '\t')
+```
+for i in range(10):
+    print(i, end = '\t')
 ```  
 
   
