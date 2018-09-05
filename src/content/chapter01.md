@@ -49,4 +49,6 @@ life is short ， you need python！
 ### 性别  
 * 男  
 * 女  
-
+  
+ ## 图片  
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/image/python.jpg)
