@@ -20,11 +20,17 @@
   
   
 ## 代码  
+### 单行代码  
 
 `print('hello world')`
 
     print('你好，世界！')
   
+### 多行代码  
+```for i in range(10):
+      print(i, end = '\t')
+```  
+
   
 ## 换行  
 life is short ， you need python！  
@@ -51,4 +57,7 @@ life is short ， you need python！
 * 女  
   
  ## 图片  
- ![image](https://github.com/yanjiusheng2018/dlt/blob/master/image/python.jpg)
+ 
+ ![图片标题](https://github.com/yanjiusheng2018/dlt/blob/master/image/python.jpg)  
+   
+  
