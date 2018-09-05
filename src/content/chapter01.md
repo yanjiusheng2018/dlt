@@ -69,10 +69,3 @@ life is short ， you need python！
 1|李|应用统计
 2|王|理学统计
 3|张|基础数学
-  
-  
-## 公式  
-  
-\frac{x + y}{5}
-  
-\sum{i=1}^na^b
