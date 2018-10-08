@@ -36,11 +36,9 @@ for i in range(10):
 
   
 ## 插入Latex数学公式  
-* 行内公式<u>$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$</u>
 
 * 块级公式：
-$$ \sum_{i=1}^{n}{x_{i}}^{3}\pm \int_{a}^{x-1}\frac{\partial^2 }{\partial x^2} $$  
-
+$\sum_{i=1}^{n}x_{i}^{3}\pm \sqrt[3]{x}$
 
 ## 换行  
 life is short ,  <br/>you need python! 
