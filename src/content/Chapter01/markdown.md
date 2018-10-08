@@ -37,14 +37,14 @@ for i in range(10):
   
 ## 插入Latex数学公式  
 -  行内公式：
-$\sum_{i=1}^{n}{x_{i}}^{3}\pm \int_{a}^{x-1}\frac{\partial^2 }{\partial x^2}$  
+$ \sum_{i=1}^{n}{x_{i}}^{3}\pm \int_{a}^{x-1}\frac{\partial^2 }{\partial x^2} $  
 
 -  块级公式：
-$$\sum_{i=1}^{n}{x_{i}}^{3}\pm \int_{a}^{x-1}\frac{\partial^2 }{\partial x^2}$$  
+$$ \sum_{i=1}^{n}{x_{i}}^{3}\pm \int_{a}^{x-1}\frac{\partial^2 }{\partial x^2} $$  
 
 
 ## 换行  
-life is short ,  <br/> you need python! 
+life is short ,  <br/>you need python! 
   
   
 ## 引用  
