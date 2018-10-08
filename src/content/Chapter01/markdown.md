@@ -36,6 +36,7 @@ for i in range(10):
 
   
 ## 插入Latex数学公式  
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
 
 * 块级公式：
 $ \[\sum_{i=1}^{n}x_{i}^{3}\pm \sqrt[3]{x}\] $  
