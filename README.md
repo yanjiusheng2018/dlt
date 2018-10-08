@@ -1,7 +1,7 @@
 
 # 项目简介：Deep Learning By Example  
 <br>  
-**作业提交:  **
+## 作业提交：<br>
 
 -  编辑前请自行学习阅读markdown使用语法  
 
