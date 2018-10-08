@@ -38,8 +38,9 @@ for i in range(10):
 ## 插入Latex数学公式  
 
 * 块级公式：
-$\[\sum_{i=1}^{n}x_{i}^{3}\pm \sqrt[3]{x}\]$
+$ \[\sum_{i=1}^{n}x_{i}^{3}\pm \sqrt[3]{x}\] $  
 
+$$\sqrt{a^2+b^2}$$
 ## 换行  
 life is short ,  <br/>you need python! 
   
