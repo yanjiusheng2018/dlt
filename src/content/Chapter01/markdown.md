@@ -37,6 +37,7 @@ for i in range(10):
   
 ## 插入Latex数学公式  
 -  行内公式：
+$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$
 $ \sum_{i=1}^{n}{x_{i}}^{3}\pm \int_{a}^{x-1}\frac{\partial^2 }{\partial x^2} $  
 
 -  块级公式：
