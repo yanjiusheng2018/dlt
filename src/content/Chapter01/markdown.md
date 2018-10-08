@@ -35,7 +35,9 @@ for i in range(10):
 ```  
 
   
-## 插入Latex数学公式  
+## 插入数学公式，使用在线Latex公式编辑器  
+![](http://latex.codecogs.com/gif.latex?%5Csqrt%7Ba%5E2&plus;b%5E2%7D)  
+![](http://latex.codecogs.com/gif.latex?%5Csqrt%7Ba%5E2&plus;b%5E2%7D2H_2%20&plus;%20O_2%20%5Cxrightarrow%7Bn%2Cm%7D2H_2O)
 
 
 
