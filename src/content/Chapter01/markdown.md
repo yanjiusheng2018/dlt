@@ -50,10 +50,11 @@ life is short ,  <br/>you need python!
 
 
 ## 脚注  
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default">
+$${x}^{m}_{\sum_{i=1}^{n}y_i} \cdot {\sum_{i=1}^{n}y_i}$$
+</script>
 
-Markdown[^1]  
 
-[^1]: Markdown是一种纯文本标记语言  
 
   
 ## 引用  
