@@ -39,13 +39,22 @@ for i in range(10):
 
 ![](http://latex.codecogs.com/gif.latex?%5Csqrt%7Ba%5E2&plus;b%5E2%7D)  
 
-![](http://latex.codecogs.com/gif.latex?2H_2%20&plus;%20O_2%20%5Cxrightarrow%7Bn%2Cm%7D2H_2O)
+![](http://latex.codecogs.com/gif.latex?2H_2%20&plus;%20O_2%20%5Cxrightarrow%7Bn%2Cm%7D2H_2O)  
+
+$$ x \href{why-equal.html}{=} y^2 + 1 $$
 
 
 
 ## 换行  
-life is short ,  <br/>you need python! 
-  
+life is short ,  <br/>you need python!  
+
+
+## 脚注  
+
+Markdown[^1]  
+
+[^1]: Markdown是一种纯文本标记语言  
+
   
 ## 引用  
 >一级引用  
