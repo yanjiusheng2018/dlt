@@ -82,3 +82,12 @@ life is short ,  <br/>you need python!
 1|李|应用统计
 2|王|理学统计
 3|张|基础数学
+<br>
+
+## 注意  
+
+- 文章内需要使用图片时，先在对应章节文件夹内上传图片，然后右击复制图片链接地址，在文章需要使用图片的地方以`![图片描述]（这里粘贴图片链接地址）`格式
+显示图片。  
+
+- 每次编辑内容后，记得提交保存，如下图所示：  
+![点击提交](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter01/tupian.jpg)
