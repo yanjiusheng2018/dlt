@@ -4,11 +4,12 @@
 作业提交  
 ---
 
--  编辑前请自行学习阅读markdown使用语法  
+-  编辑前请自行学习阅读markdown.md文件，了解基本的markdown使用语法  
 
 -  每一章节的翻译文本，图片以及示范代码放在`.md`文件，若附有完整代码，保存为`.py`或`.ipynb`格式，放在对应章节文件夹内
 
 -  每个成员都可以参与项目编辑，即拥有修改、上传、删除文件的权限，请不要随意删除公共项目中的文件夹
+
 
 ## 目录
 -  [第一章](https://github.com/weka-lishihui/dlt/blob/master/src/content/Chapter01/chapter01.md)<br>
