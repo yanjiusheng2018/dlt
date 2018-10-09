@@ -37,6 +37,9 @@ for i in range(10):
   
 ## 插入数学公式，使用在线Latex公式编辑器  
 
+- 百度搜索`在线Latex公式编辑器`，在线编辑好公式后，右击生成的公式图片，复制图片链接地址，以`![](这里粘贴复制的图片链接地址)`格式显示图片。  
+
+
 
 ![](http://latex.codecogs.com/gif.latex?%5Csqrt%7Ba%5E2&plus;b%5E2%7D)  
 
