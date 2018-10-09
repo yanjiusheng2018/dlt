@@ -39,6 +39,10 @@ for i in range(10):
 
 - 百度搜索`在线Latex公式编辑器`，在线编辑好公式后，右击生成的公式图片，复制图片链接地址，以`![](这里粘贴复制的图片链接地址)`格式显示图片。  
 
+![](https://github.com/yanjiusheng2018/dlt/blob/master/image/tupian2.jpg)  
+
+- 插入公式如下：  
+
 
 
 ![](http://latex.codecogs.com/gif.latex?%5Csqrt%7Ba%5E2&plus;b%5E2%7D)  
