@@ -15,3 +15,32 @@
 &emsp;&emsp;即使网络架构非常简单，您也会看到它的执行情况。所以，让我们开始这个实现。<br>
 &emsp;&emsp;我们导入此实现所需的所有包:<br>
 ### 使用包
+```
+#%matplotlib inline线导向魔法函数，绘制命令的输出将在前端显示，该命令激活为 IPython 提供支持的“内联（inline）后端”
+#IPython “内联后端” 也可以使用 IPython的 %config 命令进行微调。
+#对于 Mac OS X 用户 %config InlineBackend.figure_format='retina' 是另一个有用的选项，它能提升 Matplotlib 图形在 Retina 屏上的质量
+#urlretrieve()方法直接将远程数据下载到本地
+#os.path.isfile()函数判断某一路径是否为文件
+#os.path.isdir()函数判断某一路径是否为目录
+#Tqdm 是一个快速，可扩展的Python进度条，可以在 Python 长循环中添加一个进度提示信息
+#tarfile解压缩一个tar包
+#Numpy支持大量的维度数组和矩阵运算，对数组运算提供了大量的数学函数库
+#random() 方法返回随机生成的一个实数，它在[0,1)范围内
+#matplotlib.pyplot绘图库
+#LabelBinarizer标签二值化
+#OneHotEncoder one-hot编码可以使分类更加准确
+#pickle用于python特有的类型和python的数据类型间进行转换
+%matplotlib inline
+%config InlineBackend.figure_format = 'retina'
+from urllib.request import urlretrieve
+from os.path import isfile, isdir
+from tqdm import tqdm
+import tarfile
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelBinarizer
+from sklearn.preprocessing import OneHotEncoder
+import pickle
+import tensorflow as tf
+```
