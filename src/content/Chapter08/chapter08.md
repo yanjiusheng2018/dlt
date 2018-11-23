@@ -692,3 +692,106 @@ Epoch number100, CIFAR-10 Batch Number 4:  Valid Loss: 0.303349<br>
 Valid accuracy: 0.975000<br>
 Epoch number100, CIFAR-10 Batch Number 5:  Valid Loss: 0.203371<br>
 Valid accuracy: 0.975000<br>
+### 测试模型
+&emsp;&emsp;让我们根据CIFAR-10数据集的测试集部分测试训练的模型。 首先，我们将定义一个辅助函数，它将帮助我们可视化一些示例图像及其相应的真实标签的预测：<br>
+```
+# A helper function to visualize some samples and their corresponding predictions
+# 辅助函数可视化一些样本及其相应的预测
+def display_samples_predictions(input_features, target_labels, samples_predictions):
+    num_classes = 10
+
+    cifar10_class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
+    label_binarizer = LabelBinarizer()
+    label_binarizer.fit(range(num_classes))
+    label_inds = label_binarizer.inverse_transform(np.array(target_labels))
+
+    fig, axies = plt.subplots(nrows=4, ncols=2)
+    fig.tight_layout()
+    fig.suptitle('Softmax Predictions', fontsize=20, y=1.1)
+
+    num_predictions = 4
+    margin = 0.05
+    ind = np.arange(num_predictions)
+    width = (1. - 2. * margin) / num_predictions
+
+    for image_ind, (feature, label_ind, prediction_indicies, prediction_values) in enumerate(
+            zip(input_features, label_inds, samples_predictions.indices, samples_predictions.values)):
+        prediction_names = [cifar10_class_names[pred_i] for pred_i in prediction_indicies]
+        correct_name = cifar10_class_names[label_ind]
+
+        axies[image_ind][0].imshow(feature)
+        axies[image_ind][0].set_title(correct_name)
+        axies[image_ind][0].set_axis_off()
+
+        axies[image_ind][1].barh(ind + margin, prediction_values[::-1], width)
+        axies[image_ind][1].set_yticks(ind + margin)
+        axies[image_ind][1].set_yticklabels(prediction_names[::-1])
+        axies[image_ind][1].set_xticks([0, 0.5, 1.0])
+```
+&emsp;&emsp;现在，让我们恢复训练好的模型并根据测试集进行测试：<br>
+```
+test_batch_size = 64
+
+save_model_path = './classification/cifar-10_classification'
+
+# Number of images to visualize
+# 要可视化的图像数量
+num_samples = 4
+
+# Number of top predictions
+# 最高预测数量
+top_n_predictions = 4
+
+# Defining a helper function for testing the trained model
+# 定义辅助函数以测试训练模型
+def test_classification_model():
+    input_test_features, target_test_labels = pickle.load(open('./preprocess/preprocess_test.p', mode='rb'))
+    loaded_graph = tf.Graph()
+
+    with tf.Session(graph=loaded_graph) as sess:
+        # loading the trained model
+        # 加载训练的模型
+        model = tf.train.import_meta_graph(save_model_path + '.meta')
+        model.restore(sess, save_model_path)
+
+        # Getting some input and output Tensors from loaded model
+        # 从加载的模型中获取一些输入和输出张量
+        model_input_values = loaded_graph.get_tensor_by_name('input_images:0')
+        model_target = loaded_graph.get_tensor_by_name('input_images_target:0')
+        model_keep_prob = loaded_graph.get_tensor_by_name('keep_prob:0')
+        model_logits = loaded_graph.get_tensor_by_name('logits:0')
+        model_accuracy = loaded_graph.get_tensor_by_name('model_accuracy:0')
+
+        # Testing the trained model on the test set batches
+        # 在测试集批次上测试训练的模型
+        test_batch_accuracy_total = 0
+        test_batch_count = 0
+
+        for input_test_feature_batch, input_test_label_batch in batch_split_features_labels(input_test_features,
+                                                                                            target_test_labels,
+                                                                                            test_batch_size):
+            test_batch_accuracy_total += sess.run(
+                model_accuracy,
+                feed_dict={model_input_values: input_test_feature_batch, model_target: input_test_label_batch,
+                           model_keep_prob: 1.0})
+            test_batch_count += 1
+
+        print('Test set accuracy: {}\n'.format(test_batch_accuracy_total / test_batch_count))
+
+        # print some random images and their corresponding predictions from the test set results
+        #从测试集结果中打印一些随机图像及其相应的预测
+        random_input_test_features, random_test_target_labels = tuple(
+            zip(*random.sample(list(zip(input_test_features, target_test_labels)), num_samples)))
+
+        random_test_predictions = sess.run(
+            tf.nn.top_k(tf.nn.softmax(model_logits), top_n_predictions),
+            feed_dict={model_input_values: random_input_test_features, model_target: random_test_target_labels,
+                       model_keep_prob: 1.0})
+
+        display_samples_predictions(random_input_test_features, random_test_target_labels, random_test_predictions)
+
+# Calling the function
+# 调用函数
+test_classification_model()
+```
