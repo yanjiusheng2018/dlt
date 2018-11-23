@@ -96,4 +96,4 @@ def load_batch(cifar10_dataset_dir_path, batch_num):
     target_labels = batch['labels']
 
     return input_features, target_labels
-    ```
+```
