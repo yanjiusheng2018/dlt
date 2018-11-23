@@ -351,3 +351,69 @@ def fully_connected_layer(input_tensor, num_outputs):
 def output_layer(input_tensor, num_outputs):
     return  tf.layers.dense(input_tensor, num_outputs)
 ```
+&emsp;&emsp;所以，让我们继续并定义将所有这些碎片组合在一起并创建具有三个卷积层的CNN的功能。 其中每一个都遵循最大池操作。 我们还将有两个完全连接的层，其中每个层后面都有一个压差层，以降低模型复杂性并防止过度拟合。 最后，我们将使输出层生成10个实值向量，其中每个值表示每个类的得分是正确的：<br>
+```
+def build_convolution_net(image_data, keep_prob):
+    # Applying 3 convolution layers followed by max pooling layers
+    #应用3个卷积层，然后应用最大池化层
+    conv_layer_1 = conv2d_layer(image_data, 32, (3, 3), (1, 1), (3, 3), (3, 3))
+    conv_layer_2 = conv2d_layer(conv_layer_1, 64, (3, 3), (1, 1), (3, 3), (3, 3))
+    conv_layer_3 = conv2d_layer(conv_layer_2, 128, (3, 3), (1, 1), (3, 3), (3, 3))
+
+    # Flatten the output from 4D to 2D to be fed to the fully connected layer
+    #将输出从4D展平为2D以馈送到完全连接的层
+    flatten_output = flatten_layer(conv_layer_3)
+
+    # Applying 2 fully connected layers with drop out
+    #应用2个完全连接的层并退出
+    fully_connected_layer_1 = fully_connected_layer(flatten_output, 64)
+    fully_connected_layer_1 = tf.nn.dropout(fully_connected_layer_1, keep_prob)
+    fully_connected_layer_2 = fully_connected_layer(fully_connected_layer_1, 32)
+    fully_connected_layer_2 = tf.nn.dropout(fully_connected_layer_2, keep_prob)
+
+    # Applying the output layer while the output size will be the number of categories that we have
+    # in CIFAR-10 dataset
+    #应用输出层，而输出大小将是我们拥有的类别数。 在CIFAR-10数据集中
+    output_logits = output_layer(fully_connected_layer_2, 10)
+
+    # returning output
+    #返回输出
+    return output_logits
+```
+&emsp;&emsp;让我们调用前面的辅助函数来构建网络并定义其丢失和优化标准：<br>
+```
+#Using the helper function above to build the network
+#使用上面的辅助函数来构建网络
+#First off, let's remove all the previous inputs, weights, biases form the previous runs
+#首先，让我们删除之前运行的所有先前的输入，权重和偏差
+tf.reset_default_graph()
+
+# Defining the input placeholders to the convolution neural network
+#将输入占位符定义到卷积神经网络
+input_images = images_input((32, 32, 3))
+input_images_target = target_input(10)
+keep_prob = keep_prob_input()
+
+# Building the models
+#建立模型
+logits_values = build_convolution_net(input_images, keep_prob)
+
+# Name logits Tensor, so that is can be loaded from disk after training
+#名称logits Tensor，因此可以在训练后从磁盘加载
+logits_values = tf.identity(logits_values, name='logits')
+
+# defining the model loss
+#定义模型损失
+model_cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits_values, labels=input_images_target))
+
+# Defining the model optimizer
+#定义模型优化器
+model_optimizer = tf.train.AdamOptimizer().minimize(model_cost)
+
+# Calculating and averaging the model accuracy
+#计算和平均模型精度
+correct_prediction = tf.equal(tf.argmax(logits_values, 1), tf.argmax(input_images_target, 1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='model_accuracy')
+#tests.test_conv_net(build_convolution_net)这行代码书上有代码里面没有
+```
+&emsp;&emsp;现在我们已经建立了这个网络的计算架构，现在是时候开始培训过程并看到一些结果。<br>
