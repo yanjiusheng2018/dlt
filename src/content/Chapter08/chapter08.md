@@ -156,12 +156,38 @@ Sample Label - Label Id: 8 Name: ship<br>
 ![船](https://github.com/yanjiusheng2018/dlt/blob/master/image/8.2.jpg?raw=true)
 
 在继续将数据集输入模型之前，我们需要将其标准化为0到1的范围。批量标准化优化了网络训练。 它已被证明有几个好处：<br>
-
+<br/>
 更快的训练：<br>
 &emsp;&emsp;由于在网络的前向传递期间的额外计算以及在网络的向后传播过程中训练的额外超参数，每个训练步骤将更慢。 但是，它应该更快地收敛，因此整体训练应该更快。<br>
-
+<br/>
 更高的学习率：<br>
 &emsp;&emsp;梯度下降算法通常需要较小的学习率才能使网络收敛到损失函数的最小值。 随着神经网络越来越深，它们的梯度值在反向传播过程中变得越来越小，因此它们通常需要更多的迭代。 使用批量标准化的想法允许我们使用更高的学习率，这进一步提高了网络训练的速度。<br>
-
+<br/>
 容易初始化权重：<br>
 &emsp;&emsp;权重初始化可能很困难，如果我们使用深度神经网络则会更加困难。 批量标准化似乎让我们在选择初始起始重量时要小心谨慎。<br>
+<br/>
+&emsp;&emsp;因此，让我们继续定义一个函数，该函数将负责规范输入图像，使这些图像的所有像素值介于0和1之间:<br>
+```
+# Normalize CIFAR-10 images to be in the range of [0,1]
+#将CIFAR-10图像标准化为[0,1]范围
+def normalize_images(images):
+    # initial zero ndarray
+    normalized_images = np.zeros_like(images.astype(float))
+
+    # The first images index is number of images where the other indices indicates
+    #第一图像索引是其他索引指示的图像的数量
+    # hieight, width and depth of the image
+    #图像的高度，宽度和深度
+    num_images = images.shape[0]
+
+    # Computing the minimum and maximum value of the input image to do the normalization based on them
+    #计算输入图像的最小值和最大值，以便根据它们进行标准化
+    maximum_value, minimum_value = images.max(), images.min()
+
+    # Normalize all the pixel values of the images to be from 0 to 1
+    #将图像的所有像素值标准化为0到1
+    for img in range(num_images):
+        normalized_images[img, ...] = (images[img, ...] - float(minimum_value)) / float(maximum_value - minimum_value)
+
+    return normalized_images
+```
