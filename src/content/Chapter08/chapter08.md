@@ -44,3 +44,29 @@ from sklearn.preprocessing import OneHotEncoder
 import pickle
 import tensorflow as tf
 ```
+### 加载CIFAR-10数据集
+&emsp;&emsp;在此实施中，我们将使用CIFAR - 10，这是使用最广泛的数据集之一用于对象检测。因此，让我们首先定义一个辅助类来下载和提取 CIFAR - 10数据集(如果尚未下载) :<br>
+```
+cifar10_batches_dir_path = 'cifar-10-batches-py/'
+tar_gz_filename = './data/cifar-10-python.tar.gz'
+
+class DLProgress(tqdm):
+    last_block = 0
+
+    def hook(self, block_num=1, block_size=1, total_size=None):
+        self.total = total_size
+        self.update((block_num - self.last_block) * block_size)
+        self.last_block = block_num
+
+if not isfile(tar_gz_filename):
+    with DLProgress(unit='B', unit_scale=True, miniters=1, desc='CIFAR-10 Python Images Batches') as pbar:
+        urlretrieve(
+            'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz',
+            tar_gz_filename,
+            pbar.hook)
+
+if not isdir(cifar10_batches_dir_path):
+    with tarfile.open(tar_gz_filename) as tar:
+        tar.extractall()
+        tar.close()
+```
