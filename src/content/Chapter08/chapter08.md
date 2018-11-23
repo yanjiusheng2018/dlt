@@ -7,7 +7,7 @@
 &emsp;&emsp;维基百科指出：<br>
 &emsp;&emsp;目标检测：计算机视觉领域中用于在图像或视频序列中查找和识别对象的技术。尽管物体的图像在不同的视点、不同的大小和尺度上可能会有所不同，甚至在被翻译或旋转的时候也会有所不同，但人类并不费力就能识别出图像中的大量物体。当物体部分遮挡视线时，它们甚至可以被识别。这项任务对计算机视觉系统仍然是一个挑战。在过去的几十年里，许多方法都被用来完成这项任务。<br>
 &emsp;&emsp;图像分析是深度学习中最突出的领域之一。图像很容易生成和处理，它们是机器学习的正确类型的数据:人类容易理解，但计算机很难理解。毫不奇怪，图像分析在深层神经网络的历史中扮演了关键角色。<br>
-<div align=center>![image](https://github.com/yanjiusheng2018/dlt/blob/master/image/81.png?raw=true)<br>
+<div align="center">![各种对象](https://github.com/yanjiusheng2018/dlt/blob/master/image/81.png?raw=true)<br>
 &emsp;&emsp;随着自动汽车、人脸检测、智能视频监控以及人口计数解决方案的兴起，快速准确的目标检测系统需求量越来越大。这些系统不仅包括图像中的对象识别和分类，而且还可以通过在它们周围绘制适当的框来定位其中的每一个。这使得目标检测比传统的计算机视觉前身—图像分类任务更困难。<br>
 &emsp;&emsp;在本章中，我们将研究目标检测——找出图像中的对象。例如，想象一辆自动驾驶汽车需要检测路上的其他汽车，如中所示图11.1。有许多复杂的目标检测算法。他们经常需要巨大的数据集、非常深的卷积网络和长的训练时间。<br>
 ## CIFAR-10 建模、构建与训
@@ -150,4 +150,4 @@ Sample Image Number 6:<br>
 Sample image - Minimum pixel value: 30 Maximum pixel value: 242<br>
 Samplei mage - Shape: (32, 32, 3)<br>
 Sample Label - Label Id: 8 Name: ship<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/image/8.2.jpg?raw=true)
+![船](https://github.com/yanjiusheng2018/dlt/blob/master/image/8.2.jpg?raw=true)
