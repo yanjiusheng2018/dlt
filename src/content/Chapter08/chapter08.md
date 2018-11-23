@@ -492,3 +492,203 @@ with tf.Session() as sess:
         print('Epoch number {:>2}, CIFAR-10 Batch Number {}:  '.format(epoch + 1, batch_ind), end='')
         print_model_stats(sess, batch_features, batch_labels, model_cost, accuracy)
 ```
+Epoch number81, CIFAR-10 Batch Number 1:  Valid Loss: 0.444786<br>
+Valid accuracy: 0.875000<br>
+Epoch number81, CIFAR-10 Batch Number 2:  Valid Loss: 0.370622<br><br>
+Valid accuracy: 0.900000<br>
+Epoch number81, CIFAR-10 Batch Number 3:  Valid Loss: 0.335846<br>
+Valid accuracy: 0.900000<br>
+Epoch number81, CIFAR-10 Batch Number 4:  Valid Loss: 0.373282<br>
+Valid accuracy: 0.925000<br>
+Epoch number81, CIFAR-10 Batch Number 5:  Valid Loss: 0.337163<br>
+Valid accuracy: 0.950000<br>
+Epoch number82, CIFAR-10 Batch Number 1:  Valid Loss: 0.374520<br>
+Valid accuracy: 0.875000<br>
+Epoch number82, CIFAR-10 Batch Number 2:  Valid Loss: 0.396648<br>
+Valid accuracy: 0.850000<br>
+Epoch number82, CIFAR-10 Batch Number 3:  Valid Loss: 0.328506<br>
+Valid accuracy: 0.900000<br>
+Epoch number82, CIFAR-10 Batch Number 4:  Valid Loss: 0.347752<br>
+Valid accuracy: 0.900000<br>
+Epoch number82, CIFAR-10 Batch Number 5:  Valid Loss: 0.324170<br>
+Valid accuracy: 0.950000<br>
+Epoch number83, CIFAR-10 Batch Number 1:  Valid Loss: 0.354464<br>
+Valid accuracy: 0.900000<br>
+Epoch number83, CIFAR-10 Batch Number 2:  Valid Loss: 0.360627<br>
+Valid accuracy: 0.900000<br>
+Epoch number83, CIFAR-10 Batch Number 3:  Valid Loss: 0.292083<br>
+Valid accuracy: 0.950000<br>
+Epoch number83, CIFAR-10 Batch Number 4:  Valid Loss: 0.347759<br>
+Valid accuracy: 0.950000<br>
+Epoch number83, CIFAR-10 Batch Number 5:  Valid Loss: 0.334551<br>
+Valid accuracy: 0.900000<br>
+Epoch number84, CIFAR-10 Batch Number 1:  Valid Loss: 0.362116<br>
+Valid accuracy: 0.900000<br>
+Epoch number84, CIFAR-10 Batch Number 2:  Valid Loss: 0.351294<br>
+Valid accuracy: 0.850000<br>
+Epoch number84, CIFAR-10 Batch Number 3:  Valid Loss: 0.281403<br>
+Valid accuracy: 0.950000<br>
+Epoch number84, CIFAR-10 Batch Number 4:  Valid Loss: 0.357493<br>
+Valid accuracy: 0.950000<br>
+Epoch number84, CIFAR-10 Batch Number 5:  Valid Loss: 0.290194<br>
+Valid accuracy: 0.925000<br>
+Epoch number85, CIFAR-10 Batch Number 1:  Valid Loss: 0.356044<br>
+Valid accuracy: 0.900000<br>
+Epoch number85, CIFAR-10 Batch Number 2:  Valid Loss: 0.356335<br>
+Valid accuracy: 0.900000<br>
+Epoch number85, CIFAR-10 Batch Number 3:  Valid Loss: 0.294043<br>
+Valid accuracy: 0.925000<br>
+Epoch number85, CIFAR-10 Batch Number 4:  Valid Loss: 0.377587<br>
+Valid accuracy: 0.950000<br>
+Epoch number85, CIFAR-10 Batch Number 5:  Valid Loss: 0.383265<br>
+Valid accuracy: 0.850000<br>
+Epoch number86, CIFAR-10 Batch Number 1:  Valid Loss: 0.327655<br>
+Valid accuracy: 0.925000<br>
+Epoch number86, CIFAR-10 Batch Number 2:  Valid Loss: 0.365242<br>
+Valid accuracy: 0.875000<br>
+Epoch number86, CIFAR-10 Batch Number 3:  Valid Loss: 0.329025<br>
+Valid accuracy: 0.850000<br>
+Epoch number86, CIFAR-10 Batch Number 4:  Valid Loss: 0.326512<br>
+Valid accuracy: 0.925000<br>
+Epoch number86, CIFAR-10 Batch Number 5:  Valid Loss: 0.300918<br>
+Valid accuracy: 0.925000<br>
+Epoch number87, CIFAR-10 Batch Number 1:  Valid Loss: 0.345766<br>
+Valid accuracy: 0.875000<br>
+Epoch number87, CIFAR-10 Batch Number 2:  Valid Loss: 0.334919<br>
+Valid accuracy: 0.850000<br>
+Epoch number87, CIFAR-10 Batch Number 3:  Valid Loss: 0.286109<br>
+Valid accuracy: 0.900000<br>
+Epoch number87, CIFAR-10 Batch Number 4:  Valid Loss: 0.325842<br>
+Valid accuracy: 0.950000<br>
+Epoch number87, CIFAR-10 Batch Number 5:  Valid Loss: 0.295704<br>
+Valid accuracy: 0.950000<br>
+Epoch number88, CIFAR-10 Batch Number 1:  Valid Loss: 0.303547<br>
+Valid accuracy: 0.925000<br>
+Epoch number88, CIFAR-10 Batch Number 2:  Valid Loss: 0.365599<br>
+Valid accuracy: 0.875000<br>
+Epoch number88, CIFAR-10 Batch Number 3:  Valid Loss: 0.272619<br>
+Valid accuracy: 0.900000<br>
+Epoch number88, CIFAR-10 Batch Number 4:  Valid Loss: 0.281574<br>
+Valid accuracy: 0.925000<br>
+Epoch number88, CIFAR-10 Batch Number 5:  Valid Loss: 0.283096<br>
+Valid accuracy: 0.975000<br>
+Epoch number89, CIFAR-10 Batch Number 1:  Valid Loss: 0.403834<br>
+Valid accuracy: 0.925000<br>
+Epoch number89, CIFAR-10 Batch Number 2:  Valid Loss: 0.364436<br>
+Valid accuracy: 0.875000<br>
+Epoch number89, CIFAR-10 Batch Number 3:  Valid Loss: 0.269096<br>
+Valid accuracy: 0.925000<br>
+Epoch number89, CIFAR-10 Batch Number 4:  Valid Loss: 0.311713<br>
+Valid accuracy: 0.950000<br>
+Epoch number89, CIFAR-10 Batch Number 5:  Valid Loss: 0.277612<br>
+Valid accuracy: 1.000000<br>
+Epoch number90, CIFAR-10 Batch Number 1:  Valid Loss: 0.281425<br>
+Valid accuracy: 0.950000<br>
+Epoch number90, CIFAR-10 Batch Number 2:  Valid Loss: 0.330442<br>
+Valid accuracy: 0.900000<br>
+Epoch number90, CIFAR-10 Batch Number 3:  Valid Loss: 0.276172<br>
+Valid accuracy: 0.925000<br>
+Epoch number90, CIFAR-10 Batch Number 4:  Valid Loss: 0.352412<br>
+Valid accuracy: 0.925000<br>
+Epoch number90, CIFAR-10 Batch Number 5:  Valid Loss: 0.285986<br>
+Valid accuracy: 1.000000<br>
+Epoch number91, CIFAR-10 Batch Number 1:  Valid Loss: 0.323226<br>
+Valid accuracy: 0.900000<br>
+Epoch number91, CIFAR-10 Batch Number 2:  Valid Loss: 0.344056<br>
+Valid accuracy: 0.875000<br>
+Epoch number91, CIFAR-10 Batch Number 3:  Valid Loss: 0.273713<br>
+Valid accuracy: 0.925000<br>
+Epoch number91, CIFAR-10 Batch Number 4:  Valid Loss: 0.310897<br>
+Valid accuracy: 0.900000<br>
+Epoch number91, CIFAR-10 Batch Number 5:  Valid Loss: 0.283160<br>
+Valid accuracy: 0.950000<br>
+Epoch number92, CIFAR-10 Batch Number 1:  Valid Loss: 0.329333<br>
+Valid accuracy: 0.925000<br>
+Epoch number92, CIFAR-10 Batch Number 2:  Valid Loss: 0.314200<br>
+Valid accuracy: 0.900000<br>
+Epoch number92, CIFAR-10 Batch Number 3:  Valid Loss: 0.234912<br>
+Valid accuracy: 0.925000<br>
+Epoch number92, CIFAR-10 Batch Number 4:  Valid Loss: 0.316442<br>
+Valid accuracy: 0.950000<br>
+Epoch number92, CIFAR-10 Batch Number 5:  Valid Loss: 0.293491<br>
+Valid accuracy: 1.000000<br>
+Epoch number93, CIFAR-10 Batch Number 1:  Valid Loss: 0.301471<br>
+Valid accuracy: 0.900000<br>
+Epoch number93, CIFAR-10 Batch Number 2:  Valid Loss: 0.296645<br>
+Valid accuracy: 0.900000<br>
+Epoch number93, CIFAR-10 Batch Number 3:  Valid Loss: 0.291733<br>
+Valid accuracy: 0.900000<br>
+Epoch number93, CIFAR-10 Batch Number 4:  Valid Loss: 0.311010<br>
+Valid accuracy: 0.900000<br>
+Epoch number93, CIFAR-10 Batch Number 5:  Valid Loss: 0.267827<br>
+Valid accuracy: 0.925000<br>
+Epoch number94, CIFAR-10 Batch Number 1:  Valid Loss: 0.313246<br>
+Valid accuracy: 0.900000<br>
+Epoch number94, CIFAR-10 Batch Number 2:  Valid Loss: 0.297267<br>
+Valid accuracy: 0.925000<br>
+Epoch number94, CIFAR-10 Batch Number 3:  Valid Loss: 0.265071<br>
+Valid accuracy: 0.875000<br>
+Epoch number94, CIFAR-10 Batch Number 4:  Valid Loss: 0.308381<br>
+Valid accuracy: 0.925000<br>
+Epoch number94, CIFAR-10 Batch Number 5:  Valid Loss: 0.274654<br>
+Valid accuracy: 0.975000<br>
+Epoch number95, CIFAR-10 Batch Number 1:  Valid Loss: 0.290429<br>
+Valid accuracy: 0.925000<br>
+Epoch number95, CIFAR-10 Batch Number 2:  Valid Loss: 0.334429<br>
+Valid accuracy: 0.875000<br>
+Epoch number95, CIFAR-10 Batch Number 3:  Valid Loss: 0.239052<br>
+Valid accuracy: 0.900000<br>
+Epoch number95, CIFAR-10 Batch Number 4:  Valid Loss: 0.333594<br>
+Valid accuracy: 0.875000<br>
+Epoch number95, CIFAR-10 Batch Number 5:  Valid Loss: 0.257331<br>
+Valid accuracy: 0.950000<br>
+Epoch number96, CIFAR-10 Batch Number 1:  Valid Loss: 0.299432<br>
+Valid accuracy: 0.900000<br>
+Epoch number96, CIFAR-10 Batch Number 2:  Valid Loss: 0.310011<br>
+Valid accuracy: 0.850000<br>
+Epoch number96, CIFAR-10 Batch Number 3:  Valid Loss: 0.276387<br>
+Valid accuracy: 0.875000<br>
+Epoch number96, CIFAR-10 Batch Number 4:  Valid Loss: 0.282793<br>
+Valid accuracy: 0.950000<br>
+Epoch number96, CIFAR-10 Batch Number 5:  Valid Loss: 0.277028<br>
+Valid accuracy: 0.975000<br>
+Epoch number97, CIFAR-10 Batch Number 1:  Valid Loss: 0.279635<br>
+Valid accuracy: 0.950000<br>
+Epoch number97, CIFAR-10 Batch Number 2:  Valid Loss: 0.265130<br>
+Valid accuracy: 0.925000<br>
+Epoch number97, CIFAR-10 Batch Number 3:  Valid Loss: 0.257276<br>
+Valid accuracy: 0.925000<br>
+Epoch number97, CIFAR-10 Batch Number 4:  Valid Loss: 0.287178<br>
+Valid accuracy: 0.925000<br>
+Epoch number97, CIFAR-10 Batch Number 5:  Valid Loss: 0.247864<br>
+Valid accuracy: 0.975000<br>
+Epoch number98, CIFAR-10 Batch Number 1:  Valid Loss: 0.290763<br>
+Valid accuracy: 0.925000<br>
+Epoch number98, CIFAR-10 Batch Number 2:  Valid Loss: 0.299908<br>
+Valid accuracy: 0.850000<br>
+Epoch number98, CIFAR-10 Batch Number 3:  Valid Loss: 0.250594<br>
+Valid accuracy: 0.925000<br>
+Epoch number98, CIFAR-10 Batch Number 4:  Valid Loss: 0.314393<br>
+Valid accuracy: 0.925000<br>
+Epoch number98, CIFAR-10 Batch Number 5:  Valid Loss: 0.250342<br>
+Valid accuracy: 0.950000<br>
+Epoch number99, CIFAR-10 Batch Number 1:  Valid Loss: 0.274724<br>
+Valid accuracy: 0.950000<br>
+Epoch number99, CIFAR-10 Batch Number 2:  Valid Loss: 0.319883<br>
+Valid accuracy: 0.875000<br>
+Epoch number99, CIFAR-10 Batch Number 3:  Valid Loss: 0.242232<br>
+Valid accuracy: 0.900000<br>
+Epoch number99, CIFAR-10 Batch Number 4:  Valid Loss: 0.277071<br>
+Valid accuracy: 0.950000<br>
+Epoch number99, CIFAR-10 Batch Number 5:  Valid Loss: 0.221080<br>
+Valid accuracy: 0.950000<br>
+Epoch number100, CIFAR-10 Batch Number 1:  Valid Loss: 0.261396<br>
+Valid accuracy: 0.900000<br>
+Epoch number100, CIFAR-10 Batch Number 2:  Valid Loss: 0.268680<br>
+Valid accuracy: 0.900000<br>
+Epoch number100, CIFAR-10 Batch Number 3:  Valid Loss: 0.224548<br>
+Valid accuracy: 0.950000<br>
+Epoch number100, CIFAR-10 Batch Number 4:  Valid Loss: 0.303349<br>
+Valid accuracy: 0.975000<br>
+Epoch number100, CIFAR-10 Batch Number 5:  Valid Loss: 0.203371<br>
+Valid accuracy: 0.975000<br>
