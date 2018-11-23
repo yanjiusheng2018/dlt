@@ -492,6 +492,57 @@ with tf.Session() as sess:
         print('Epoch number {:>2}, CIFAR-10 Batch Number {}:  '.format(epoch + 1, batch_ind), end='')
         print_model_stats(sess, batch_features, batch_labels, model_cost, accuracy)
 ```
+Epoch number 90, CIFAR-10 Batch Number 1:  Valid Loss: 1.389294<br>
+Valid accuracy: 0.500000<br>
+Epoch number 91, CIFAR-10 Batch Number 1:  Valid Loss: 1.410175<br>
+Valid accuracy: 0.500000<br>
+Epoch number 92, CIFAR-10 Batch Number 1:  Valid Loss: 1.332405<br>
+Valid accuracy: 0.550000<br>
+Epoch number 93, CIFAR-10 Batch Number 1:  Valid Loss: 1.307268<br>
+Valid accuracy: 0.525000<br>
+Epoch number 94, CIFAR-10 Batch Number 1:  Valid Loss: 1.356404<br>
+Valid accuracy: 0.525000<br>
+Epoch number 95, CIFAR-10 Batch Number 1:  Valid Loss: 1.326406<br>
+Valid accuracy: 0.500000<br>
+Epoch number 96, CIFAR-10 Batch Number 1:  Valid Loss: 1.358722<br>
+Valid accuracy: 0.550000<br>
+Epoch number 97, CIFAR-10 Batch Number 1:  Valid Loss: 1.366259<br>
+Valid accuracy: 0.500000<br>
+Epoch number 98, CIFAR-10 Batch Number 1:  Valid Loss: 1.274579<br>
+Valid accuracy: 0.575000<br>
+Epoch number 99, CIFAR-10 Batch Number 1:  Valid Loss: 1.327188<br>
+Valid accuracy: 0.525000<br>
+Epoch number 100, CIFAR-10 Batch Number 1:  Valid Loss: 1.234392<br>
+Valid accuracy: 0.550000<br>
+&emsp;&emsp;如您所见，仅在单个批次上进行培训时，验证准确性并不高。 让我们看看验证准确性如何仅根据模型的完整培训流程进行更改：<br>
+```
+print('Full training for the network...')  
+model_save_path = './classification/cifar-10_classification'
+
+with tf.Session() as sess:
+    # Initializing the variables
+    # 初始化变量
+    sess.run(tf.global_variables_initializer())
+
+    # Training cycle
+    # 训练周期
+    for epoch in range(num_epochs):
+
+        # iterate through the batches
+        # 遍历批次
+        num_batches = 5
+
+        for batch_ind in range(1, num_batches + 1):
+            for batch_features, batch_labels in load_preprocess_training_batch(batch_ind, batch_size):
+                train(sess, model_optimizer, keep_probability, batch_features, batch_labels)
+
+            print('Epoch number{:>2}, CIFAR-10 Batch Number {}:  '.format(epoch + 1, batch_ind), end='')
+            print_model_stats(sess, batch_features, batch_labels, model_cost, accuracy)
+
+    # Save the trained Model
+    saver = tf.train.Saver()
+    save_path = saver.save(sess, model_save_path)
+```
 Epoch number81, CIFAR-10 Batch Number 1:  Valid Loss: 0.444786<br>
 Valid accuracy: 0.875000<br>
 Epoch number81, CIFAR-10 Batch Number 2:  Valid Loss: 0.370622<br><br>
