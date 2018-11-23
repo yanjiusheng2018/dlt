@@ -191,3 +191,80 @@ def normalize_images(images):
 
     return normalized_images
 ```
+&emsp;&emsp;接下来，我们需要实现另一个辅助函数来对输入图像的标签进行编码。在这个函数中，我们将使用sklearn的one-hot编码，其中每个图像标签都由一个0向量表示，除了这个向量表示的图像的类索引之外。输出向量的大小将取决于我们在数据集中拥有的类的数量，在CIFAR-10数据中是10个类:<br>
+```
+# encoding the input images. Each image will be represented by a vector of zeros except for the class index of the image
+#编码输入图像。 除了图像的类索引之外，每个图像将由零向量表示
+# that this vector represents. The length of this vector depends on number of classes that we have
+#这个向量代表。这个向量的长度取决于我们拥有的类的数量
+# the dataset which is 10 in CIFAR-10
+#CIFAR-10中的数据集为10
+
+def one_hot_encode(images):
+    num_classes = 10
+
+    # use sklearn helper function of OneHotEncoder() to do that
+    #使用OneHotEncoder（）的sklearn辅助函数来做到这一点
+    encoder = OneHotEncoder(num_classes)
+
+    # resize the input images to be 2D
+    #将输入图像的大小调整为2D
+    input_images_resized_to_2d = np.array(images).reshape(-1, 1)
+    one_hot_encoded_targets = encoder.fit_transform(input_images_resized_to_2d)
+
+    return one_hot_encoded_targets.toarray()
+```
+&emsp;&emsp;现在，是时候调用前面的辅助函数来进行预处理和持久化数据集，以便我们以后可以使用它了:<br>
+```
+def preprocess_persist_data(cifar10_batches_dir_path, normalize_images, one_hot_encode):
+    num_batches = 5
+    valid_input_features = []
+    valid_target_labels = []
+
+    for batch_ind in range(1, num_batches + 1):
+        # Loading batch
+        #加载批次
+        input_features, target_labels = load_batch(cifar10_batches_dir_path, batch_ind)
+        num_validation_images = int(len(input_features) * 0.1)
+
+        # Preprocess the current batch and perisist it for future use
+        #预处理当前批次并对其进行保存以备将来使用
+        input_features = normalize_images(input_features[:-num_validation_images])
+        target_labels = one_hot_encode(target_labels[:-num_validation_images])
+
+        # Persisting the preprocessed batch
+        #保留预处理的批处理
+        pickle.dump((input_features, target_labels), open('./preprocess/preprocess_train_batch_' + str(batch_ind) + '.p', 'wb'))
+
+        # Define a subset of the training images to be used for validating our model
+        #定义用于验证模型的训练图像的子集
+        valid_input_features.extend(input_features[-num_validation_images:])
+        valid_target_labels.extend(target_labels[-num_validation_images:])
+
+    # Preprocessing and persisting the validationi subset
+    #预处理并持久化validationi子集
+    input_features = normalize_images(np.array(valid_input_features))
+    target_labels = one_hot_encode(np.array(valid_target_labels))
+
+    pickle.dump((input_features, target_labels), open('./preprocess/preprocess_valid.p', 'wb'))
+
+    # Now it's time to preporcess and persist the test batche
+    #现在是时候预处理并持久化测试批次了
+    with open(cifar10_batches_dir_path + '/test_batch', mode='rb') as file:
+        test_batch = pickle.load(file, encoding='latin1')
+
+    test_input_features = test_batch['data'].reshape((len(test_batch['data']), 3, 32, 32)).transpose(0, 2, 3, 1)
+    test_input_labels = test_batch['labels']
+
+    # Normalizing and encoding the test batch
+    #对测试批处理进行规范化和编码
+    input_features = normalize_images(np.array(test_input_features))
+    target_labels = one_hot_encode(np.array(test_input_labels))
+
+    pickle.dump((input_features, target_labels), open('./preprocess/preprocess_test.p', 'wb'))
+
+# Calling the helper function above to preprocess and persist the training, validation, and testing set
+#调用上面的辅助函数来预处理并持久化训练，验证和测试集
+preprocess_persist_data(cifar10_batches_dir_path, normalize_images, one_hot_encode)
+```
+&emsp;&emsp;我们将预处理后的数据保存到磁盘。我们还需要在训练过程的不同时期加载用于在其上运行训练模型的验证集：<br>
