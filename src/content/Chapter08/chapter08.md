@@ -846,3 +846,4 @@ def test_classification_model():
 # 调用函数
 test_classification_model()
 ```
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/image/8.3.png?raw=true)
