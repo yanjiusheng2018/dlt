@@ -417,3 +417,78 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='model_a
 #tests.test_conv_net(build_convolution_net)这行代码书上有代码里面没有
 ```
 &emsp;&emsp;现在我们已经建立了这个网络的计算架构，现在是时候开始培训过程并看到一些结果。<br>
+### 模型训练
+&emsp;&emsp;因此，让我们定义一个辅助函数，使我们能够启动训练过程。该函数将获取输入图像、目标类的one-hot编码，并保留概率值作为输入。然后，它将把这些值提供给计算图，并调用模型优化器:<br>
+```
+#Define a helper function for kicking off the training process
+#定义辅助函数以启动培训过程
+def train(session, model_optimizer, keep_probability, in_feature_batch, target_batch):
+
+    session.run(model_optimizer, feed_dict={input_images: in_feature_batch, input_images_target: target_batch, keep_prob: keep_probability})
+```
+&emsp;&emsp;我们需要在训练过程的不同时间步骤中验证我们的模型，因此我们将定义一个辅助函数，该函数将在验证集上打印出模型的准确性：<br>
+```
+# Defining a helper funcitno for print information about the model accuracy and it's validation accuracy as well
+#定义辅助函数以获取有关模型精度的打印信息以及它的验证准确性
+def print_model_stats(session, input_feature_batch, target_label_batch, model_cost, model_accuracy):
+    validation_loss = session.run(model_cost,
+                                  feed_dict={input_images: input_feature_batch, input_images_target: target_label_batch,
+                                             keep_prob: 1.0})
+    validation_accuracy = session.run(model_accuracy, feed_dict={input_images: input_feature_batch,
+                                                                 input_images_target: target_label_batch,
+                                                                 keep_prob: 1.0})
+
+    print("Valid Loss: %f" % (validation_loss))
+    print("Valid accuracy: %f" % (validation_accuracy))
+```
+&emsp;&emsp;我们还定义模型超参数，我们可以使用它来调整模型以获得更好的性能：<br>
+```
+# Model Hyperparameters
+#模型超参数
+# 原始数据num_epochs是100，batch_size是128
+num_epochs = 100
+batch_size = 128
+keep_probability = 0.5
+```
+&emsp;&emsp;现在，让我们开始训练过程，但仅针对一批CIFAR-10数据集，并查看基于此批次的模型准确性。<br>
+<br\>
+&emsp;&emsp;然而，在此之前，我们将定义一个辅助函数，它将加载批处理训练并将输入图像与目标类分开：<br>
+```
+# Splitting the dataset features and labels to batches
+#将数据集特征和标签拆分为批次
+def batch_split_features_labels(input_features, target_labels, train_batch_size):
+    for start in range(0, len(input_features), train_batch_size):
+        end = min(start + train_batch_size, len(input_features))
+        yield input_features[start:end], target_labels[start:end]
+
+#Loading the persisted preprocessed training batches
+#加载持久的预处理培训批次
+def load_preprocess_training_batch(batch_id, batch_size):
+    filename = './preprocess/preprocess_train_batch_' + str(batch_id) + '.p'
+    input_features, target_labels = pickle.load(open(filename, mode='rb'))
+    train_batch_size = batch_size
+
+    # Returning the training images in batches according to the batch size defined above
+    #根据上面定义的批量大小分批返回训练图像
+    return batch_split_features_labels(input_features, target_labels, train_batch_size)
+```
+&emsp;&emsp;现在，让我们开始一批的训练过程：<br>
+```
+print('Training on only a Single Batch from the CIFAR-10 Dataset...')
+
+with tf.Session() as sess:
+    # Initializing the variables
+    # 初始化变量
+    sess.run(tf.global_variables_initializer())
+
+    # Training cycle
+    # 训练周期
+    for epoch in range(num_epochs):
+        batch_ind = 1
+
+        for batch_features, batch_labels in load_preprocess_training_batch(batch_ind, batch_size):
+            train(sess, model_optimizer, keep_probability, batch_features, batch_labels)
+
+        print('Epoch number {:>2}, CIFAR-10 Batch Number {}:  '.format(epoch + 1, batch_ind), end='')
+        print_model_stats(sess, batch_features, batch_labels, model_cost, accuracy)
+```
