@@ -70,3 +70,14 @@ if not isdir(cifar10_batches_dir_path):
         tar.extractall()
         tar.close()
 ```
+&emsp;&emsp;下载并提取CIFAR - 10数据集后，您会发现它已经存在分成五批。CIFAR - 10包含10个类别/类别的图像:<br>
+1. airplane
+2. automobile
+3. bird
+4. cat
+5. deer
+6. dog
+7. frog
+8. horse
+9. ship
+10. truck
