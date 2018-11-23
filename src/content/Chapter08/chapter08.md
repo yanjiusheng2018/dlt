@@ -150,3 +150,4 @@ Sample Image Number 6:<br>
 Sample image - Minimum pixel value: 30 Maximum pixel value: 242<br>
 Samplei mage - Shape: (32, 32, 3)<br>
 Sample Label - Label Id: 8 Name: ship<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/image/8.2.jpg?raw=true)
