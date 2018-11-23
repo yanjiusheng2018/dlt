@@ -81,3 +81,19 @@ if not isdir(cifar10_batches_dir_path):
 8. horse
 9. ship
 10. truck
+
+&emsp;&emsp;在我们深入研究构建网络核心之前，让我们做一些数据分析预处理。<br>
+### 数据分析和预处理
+&emsp;&emsp;我们需要分析数据集并做一些基本的预处理。那么，让我们从定义一些辅助函数，使我们能够从这五个批次中加载特定的批次进行处理，并打印关于该批次及其样本的一些分析:<br>
+```
+# Defining a helper function for loading a batch of images
+#定义用于加载一批图像的辅助函数
+def load_batch(cifar10_dataset_dir_path, batch_num):
+    with open(cifar10_dataset_dir_path + 'data_batch_' + str(batch_num), mode='rb') as file:
+        batch = pickle.load(file, encoding='latin1')
+
+    input_features = batch['data'].reshape((len(batch['data']), 3, 32, 32)).transpose(0, 2, 3, 1)
+    target_labels = batch['labels']
+
+    return input_features, target_labels
+    ```
