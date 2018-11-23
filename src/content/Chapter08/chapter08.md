@@ -135,3 +135,18 @@ def batch_image_stats(cifar10_dataset_dir_path, batch_num, sample_num):
     plt.imshow(image)
 ```
 &emsp;&emsp;现在，我们可以使用这个函数来处理我们的数据集并可视化特定的图像:<br>
+```
+# Explore a specific batch and sample from the dataset
+#从数据集中探索特定批次和样本
+batch_num = 3
+sample_num = 6
+batch_image_stats(cifar10_batches_dir_path, batch_num, sample_num)
+```
+Statistics of batch number 3:<br>
+Number of samples in this batch: 10000<br>
+Per class counts of each Label: {0: 994, 1: 1042, 2: 965, 3: 997, 4: 990, 5: 1029, 6: 978, 7: 1015, 8: 961, 9: 1029}<br>
+
+Sample Image Number 6:<br>
+Sample image - Minimum pixel value: 30 Maximum pixel value: 242<br>
+Samplei mage - Shape: (32, 32, 3)<br>
+Sample Label - Label Id: 8 Name: ship<br>
