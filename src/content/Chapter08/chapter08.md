@@ -156,6 +156,7 @@ Sample Label - Label Id: 8 Name: ship<br>
 ![船](https://github.com/yanjiusheng2018/dlt/blob/master/image/8.2.jpg?raw=true)
 
 在继续将数据集输入模型之前，我们需要将其标准化为0到1的范围。批量标准化优化了网络训练。 它已被证明有几个好处：<br>
+
 更快的训练：<br>
 &emsp;&emsp;由于在网络的前向传递期间的额外计算以及在网络的向后传播过程中训练的额外超参数，每个训练步骤将更慢。 但是，它应该更快地收敛，因此整体训练应该更快。<br>
 
