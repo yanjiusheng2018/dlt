@@ -268,3 +268,86 @@ def preprocess_persist_data(cifar10_batches_dir_path, normalize_images, one_hot_
 preprocess_persist_data(cifar10_batches_dir_path, normalize_images, one_hot_encode)
 ```
 &emsp;&emsp;我们将预处理后的数据保存到磁盘。我们还需要在训练过程的不同时期加载用于在其上运行训练模型的验证集：<br>
+```
+# Load the Preprocessed Validation data
+#加载预处理的验证数据
+valid_input_features, valid_input_labels = pickle.load(open('./preprocess/preprocess_valid.p', mode='rb'))
+```
+### 建立网络
+&emsp;&emsp;现在是时候构建我们的分类应用程序的核心，这是该CNN架构的计算图，但是为了最大化这种实现的好处，我们不会使用TensorFlow层API。 相反，我们将使用它的TensorFlow神经网络版本。<br>
+<br\>
+&emsp;&emsp;因此，让我们首先定义模型输入占位符，它将输入图像，目标类和丢失层的保持概率参数（这有助于我们通过删除一些连接来降低架构的复杂性，从而减少机会的可能性过拟合）：<br>
+```
+# Defining the model inputs
+#定义模型输入
+def images_input(img_shape):
+    return tf.placeholder(tf.float32, (None,) + img_shape, name="input_images")
+
+
+def target_input(num_classes):
+    target_input = tf.placeholder(tf.int32, (None, num_classes), name="input_images_target")
+    return target_input
+
+
+# define a function for the dropout layer keep probability
+#为dropout层定义一个保持概率的函数
+def keep_prob_input():
+    return tf.placeholder(tf.float32, name="keep_prob")
+
+tf.reset_default_graph()
+```
+&emsp;&emsp;接下来，我们需要使用TensorFlow神经网络实现版本来构建具有最大池的卷积层：<br>
+```
+# Applying a convolution operation to the input tensor followed by max pooling
+#将卷积运算应用于输入张量，然后进行最大池化
+def conv2d_layer(input_tensor, conv_layer_num_outputs, conv_kernel_size, conv_layer_strides, pool_kernel_size,
+                 pool_layer_strides):
+    input_depth = input_tensor.get_shape()[3].value
+    weight_shape = conv_kernel_size + (input_depth, conv_layer_num_outputs,)
+
+    # Defining layer weights and biases
+    #定义图层权重和偏差
+    weights = tf.Variable(tf.random_normal(weight_shape))
+    biases = tf.Variable(tf.random_normal((conv_layer_num_outputs,)))
+
+    # Considering the biase variable
+    #考虑偏差变量
+    conv_strides = (1,) + conv_layer_strides + (1,)
+
+    conv_layer = tf.nn.conv2d(input_tensor, weights, strides=conv_strides, padding='SAME')
+    conv_layer = tf.nn.bias_add(conv_layer, biases)
+
+    conv_kernel_size = (1,) + conv_kernel_size + (1,)
+
+    pool_strides = (1,) + pool_layer_strides + (1,)
+
+    pool_layer = tf.nn.max_pool(conv_layer, ksize=conv_kernel_size, strides=pool_strides, padding='SAME')
+
+    return pool_layer
+```
+&emsp;&emsp;正如您在上一章中可能看到的，最大池操作的输出是一个4D张量，它与完全连接层所需的输入格式不兼容。因此，我们需要实现一个平化层，将最大池化层的输出从4D转换为2D张量:<br>
+```
+#Flatten the output of max pooling layer to be fing to the fully connected layer which only accepts the output
+# to be in 2D
+#将最大池层的输出展平为仅接受输出的完全连接层
+#在2D中
+def flatten_layer(input_tensor):
+
+    return tf.contrib.layers.flatten(input_tensor)
+```
+&emsp;&emsp;接下来，我们需要定义一个辅助函数，使我们能够在我们的架构中添加一个完全连接的层：<br>
+```
+#Define the fully connected layer that will use the flattened output of the stacked convolution layers
+#to do the actuall classification
+#定义将使用堆叠卷积层的展平输出的完全连接层。
+#进行实际分类
+def fully_connected_layer(input_tensor, num_outputs):
+    return tf.layers.dense(input_tensor, num_outputs)
+```
+&emsp;&emsp;最后，在使用这些辅助函数创建整个体系结构之前，我们需要创建另一个函数来获取完全连接层的输出，并生成与我们在数据集中具有的类数相对应的10个实值：<br>
+```
+#Defining the output function
+#定义输出函数
+def output_layer(input_tensor, num_outputs):
+    return  tf.layers.dense(input_tensor, num_outputs)
+```
