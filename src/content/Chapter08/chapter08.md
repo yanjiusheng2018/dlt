@@ -97,3 +97,41 @@ def load_batch(cifar10_dataset_dir_path, batch_num):
 
     return input_features, target_labels
 ```
+&emsp;&emsp;然后，我们定义了一个函数，它可以帮助我们显示来自特定批次:<br>
+```
+# Defining a function to show the stats for batch ans specific sample
+#定义一个函数来显示批次和特定样本的统计数据
+def batch_image_stats(cifar10_dataset_dir_path, batch_num, sample_num):
+    batch_nums = list(range(1, 6))
+
+    # checking if the batch_num is a valid batch number
+    #检查batch_num是否是有效的批号
+    if batch_num not in batch_nums:
+        print('Batch Num is out of Range. You can choose from these Batch nums: {}'.format(batch_nums))
+        return None
+
+    input_features, target_labels = load_batch(cifar10_dataset_dir_path, batch_num)
+
+    # checking if the sample_num is a valid sample number
+    #检查sample_num是否是有效的样本号
+    if not (0 <= sample_num < len(input_features)):
+        print('{} samples in batch {}.  {} is not a valid sample number.'.format(len(input_features), batch_num,
+                                                                                 sample_num))
+        return None
+
+    print('\nStatistics of batch number {}:'.format(batch_num))
+    print('Number of samples in this batch: {}'.format(len(input_features)))
+    print('Per class counts of each Label: {}'.format(dict(zip(*np.unique(target_labels, return_counts=True)))))
+
+    image = input_features[sample_num]
+    label = target_labels[sample_num]
+    cifar10_class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
+    print('\nSample Image Number {}:'.format(sample_num))
+    print('Sample image - Minimum pixel value: {} Maximum pixel value: {}'.format(image.min(), image.max()))
+    print('Samplei mage - Shape: {}'.format(image.shape))
+    print('Sample Label - Label Id: {} Name: {}'.format(label, cifar10_class_names[label]))
+    plt.axis('off')
+    plt.imshow(image)
+```
+&emsp;&emsp;现在，我们可以使用这个函数来处理我们的数据集并可视化特定的图像:<br>
