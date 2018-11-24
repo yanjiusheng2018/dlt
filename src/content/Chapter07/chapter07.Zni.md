@@ -278,6 +278,21 @@ num_channels = 1
 
 # 在MNIST数据集中的数据类是从0到9的10个数据类
 num_classes = 10
+
+# 第一次进行卷积时，卷积核的尺寸
+filter_size_1 = 5
+
+# 第一次卷积之后，产生的特征映射数
+filters_1 = 16
+
+# 第一次进行卷积时，卷积核的尺寸
+filter_size_2 = 5
+
+# 第一次卷积之后，产生的特征映射数
+filters_2 = 36
+
+# 用来接收卷积结果的神经元个数
+fc_num_neurons = 128
 ```
 
 接下来，我们需要定义一个辅助函数来显示MNIST数据集中的图片。这个辅助函数将会把图片绘画在有9个子图的网格中：
@@ -300,7 +315,8 @@ def plot_imgs(imgs,cls_actual,cls_predicted = None):
         # 移除图像上的刻度
         ax.set_yticks([])
         ax.set_xticks([])
-        # 将类显示为x轴的标签
+        # 设置x轴的标签
+	ax.set_xlabel(xlabel)
 
     plt.show()
 ```
