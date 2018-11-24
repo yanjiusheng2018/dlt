@@ -243,7 +243,7 @@ import math
 接下来，我们将会使用TensorFlow辅助函数来下载MNIST数据集：
 
 ```{.python .input}
-from tf.examples.tutorials.mnist import input_data
+from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets('data/MNIST/',one_hot=True)
 ```
 
@@ -311,12 +311,12 @@ def plot_imgs(imgs,cls_actual,cls_predicted = None):
         if cls_predicted is None:
             xlabel = 'True:{0}'.format(cls_actual[i])
         else:
-            xlabel = 'True:{0},Pred:{1}'.format(cls_actual[i],cls_prcls_predicted[i])
+            xlabel = 'True:{0},Pred:{1}'.format(cls_actual[i],cls_predicted[i])
         # 移除图像上的刻度
         ax.set_yticks([])
         ax.set_xticks([])
         # 设置x轴的标签
-	ax.set_xlabel(xlabel)
+        ax.set_xlabel(xlabel)
 
     plt.show()
 ```
@@ -350,7 +350,7 @@ def new_biases(length):
 
 ```{.python .input}
 # input是之前层的输出
-def conv_layer(input,input_channels,filter_size,filters,use_pooling=True):# 在这里使用了2*2的最大池化
+def conv_layer(inputs,input_channels,filter_size,filters,use_pooling=True):# 在这里使用了2*2的最大池化
 
     #准备输入张量能接受的结构
     shape = [filter_size,filter_size,input_channels,filters]
@@ -362,15 +362,15 @@ def conv_layer(input,input_channels,filter_size,filters,use_pooling=True):# 在�
     filters_biases = new_biases(length = filters)
 
     # 正如我们上面所解释的那牙膏，在这里我们调用conv2d函数，同时里面的步长（strides）参数中有四个值，第一个是指图片的数量，最后一个是指的图像的通道数，中间两个代表着滤镜移动的像素数
-    conv_layer = tf.nn.conv2d(input=input,filter=filter_weights,strides = [1,1,1,1],padding='SAME')
+    conv_layers = tf.nn.conv2d(input=inputs,filter=filters_weights,strides = [1,1,1,1],padding='SAME')
 
     # 对conv_layer的输出结果增加偏差
-    conv_layer += filters_biases
+    conv_layers += filters_biases
 
     # 用池化操作来降低图片的分辨率
     if use_pooling:
         # 用最大池化层来减小特征地图的输出结果
-        pool_layer = tf.nn.max_pool(value=conv_layer,ksize=[1,2,2,1],strides=[1,2,2,1],padding='SAME')
+        pool_layer = tf.nn.max_pool(value=conv_layers,ksize=[1,2,2,1],strides=[1,2,2,1],padding='SAME')
 
     # 将输出的结果提供给ReLU激活函数
     relu_layer = tf.nn.relu(pool_layer)
@@ -390,7 +390,7 @@ def flatten_layer(layer):
     number_features = shape[1:4].num_elements()
 
     # 重塑图片，然后将其提供给完全连接的神经网络
-    flatten_layer = tf.reshaoe(layer,[-1,number_features])
+    flatten_layer = tf.reshape(layer,[-1,number_features])
 
     # 将压平的图层和要素数量返回
     return flatten_layer,number_features
@@ -403,13 +403,13 @@ def flatten_layer(layer):
 # num_inputs 来自上一层的输入数量
 # num_outputs 输出的数量
 # use_relu 在结果中使用ReLU激活函数来移除其中的负值
-def fc_layer(input,num_input,num_outputs,use_relu=True):
+def fc_layer(inputs,num_inputs,num_outputs,use_relu=True):
     # 为这一层的神经元创建权重
     fc_weights = new_weights(shape=[num_inputs,num_outputs])
     fc_biases = new_biases(length=num_outputs)
 
     # 通过对输入的值和权重进行矩阵相乘然后再加上偏差，来计算这一层的值
-    fc_layer = tf.matmul(input,fc_layer) + fc_biases
+    fc_layer = tf.matmul(inputs,fc_weights) + fc_biases
 
     # 如果使用ReLU激活函数的话
     if use_relu:
@@ -425,10 +425,7 @@ input_values = tf.placeholder(tf.float32,shape=[None,image_size_flat],name='inpu
 ```
 
 正如我们之前提到的，我们需要输入到卷积步骤中的图片是需要一个四维的张量，所以我们需要把输入的图片重塑为下列的结构：
-
-```{.python .input}
-[num_images,image_height,image_width,num_channels]
-```
+> [num_images,image_height,image_width,num_channels]
 
 所以，我们把输入的值进行重塑以满足下面的格式：
 
@@ -451,7 +448,7 @@ y_actual_cls_integer = tf.argmax(y_actual,axis=1)
 那么，接下来就是开始建立第一个卷积层：
 
 ```{.python .input}
-conv_layer_1,conv1_weights = conv_layer(input=input_image,input_channels=num_channels,filter_size=filter_size_1,filters=filters_1,use_pooling=True)
+conv_layer_1,conv1_weights = conv_layer(inputs=input_image,input_channels=num_channels,filter_size=filter_size_1,filters=filters_1,use_pooling=True)
 ```
 
 我们来检查下第一个卷积层输出结果的具体形状：
@@ -463,7 +460,7 @@ conv_layer_1
 接下来，我们将创建第二个卷积网络，然后将第一个结果提交给它：
 
 ```{.python .input}
-conv_layer_2,conv2_weights = conv_layer(input=conv_layer_1,input_channels=filter_1,filter_size=filter_size_2,filters = filters_2,use_pooling=True)
+conv_layer_2,conv2_weights = conv_layer(inputs=conv_layer_1,input_channels=filters_1,filter_size=filter_size_2,filters = filters_2,use_pooling=True)
 ```
 
 在这里，我们需要第二次检查第二个的卷积层的输出结果，而其输出加过应该是(?,7,7,36),问号所代表的可以是任何数量的图像。
@@ -483,7 +480,7 @@ flatten_layer
 接下来，我们将创建一个完全连接层，并且将平坦层的结果提供给它。同时，我们也将完全连接层的结果提交给ReLU激活函数，然后再提交给随后的完全连接层：
 
 ```{.python .input}
-fc_layer_1 = fc_layer(input = flatten_layer,num_inputs=number_features,num_outputs=fc_num_neurons,use_relu=True)
+fc_layer_1 = fc_layer(inputs = flatten_layer,num_inputs=number_features,num_outputs=fc_num_neurons,use_relu=True)
 ```
 
 我们还需要再次检查第一个完全连接层的输出结果的形状：
@@ -495,14 +492,14 @@ fc_layer_1
 接下来，我们需要添加另一个完全连接层，这个完全连接层将会把第一个完全连接层的结果当作输入，而且为每个图像生成一个大小为10的数组，表示每个目标类的分数是正确的：
 
 ```{.python .input}
-fc_layer_2 = fc_layer(input=fc_layer_1,num_inputs=fc_num_neurons,num_outputs = num_classes,use_relu=False)
+fc_layer_2 = fc_layer(inputs=fc_layer_1,num_inputs=fc_num_neurons,num_outputs = num_classes,use_relu=False)
 fc_layer_2
 ```
 
 接下来，我们将从第二个完全连接的层中对这些分数进行归一化，并将其提供给softmax激活函数，该函数将校准值压缩到介于0和1之间。
 
 ```{.python .input}
-y_predicted = tf.nn.softmax(fx_layer_2)
+y_predicted = tf.nn.softmax(fc_layer_2)
 ```
 
 接着，我们需要用TensorFlow的argmax函数，来提取概率最大的那个目标类：
@@ -573,21 +570,21 @@ total_iterations = 0
 def optimize(num_iterations):
 	# 将迭代次数变量进行全局更新
 	global total_iterations
-	for I in range(total_iterations,total_iterations + num_iterations):
+	for j in range(total_iterations,total_iterations + num_iterations):
 
 		# 为训练过程随机生成批次
 		# input_batch包含从训练集中获取的图片，而y_actual_batch是所对应的图片的事实标签
-		input_batch,y_actual_batch = mnist.train.next_batch(train_batch_size
+		input_batch,y_actual_batch = mnist.train.next_batch(train_batch_size)
 		# 将先前的值放在TensorFlow的dict格式中，以自动将它们分配给我们在上面定义的输入占位符。
 		feed_dict = {input_values:input_batch,y_actual:y_actual_batch}
 		# 接下来，我们将会在这个批次的图片上进行模型优化：
 		session.run(model_optimizer,feed_dict = feed_dict)
 		# 每进行100次迭代之后，打印训练状态：
-		if i%100 == 0:
+		if j%100 == 0:
 			# 测量训练集的准确度
 			acc_training_set = session.run(model_accuracy,feed_dict=feed_dict)
 			# 打印训练集的准确度
-			print(‘Iteration:{0:>6},Accuracy Over the training set:{1:>6.1%}’.format(I + 1,acc_training_set))
+			print('Iteration:{0:>6},Accuracy Over the training set:{1:>6.1%}'.format(j + 1,acc_training_set))
 		# 更新到目前执行迭代的次数
 		total_iterations +=num_iterations
 ```
@@ -606,7 +603,7 @@ def plot_errors(cls_predicted,correct):
 	# 获取那些不正确图像的真实类
 	cls_true = mnist.test.cls_integer[incorrect]
 	# 绘画9个图片
-	plot_imgs(imgs=imgs[0:9],cls_actual=cls_actual[0:9],cls_predicted = cls_predicted[0:9])
+	plot_imgs(imgs=images[0:9],cls_actual=cls_true[0:9],cls_predicted = cls_pred[0:9])
 ```
 
 我们还可以绘制预测结果与实际真实类别的混淆矩阵：
@@ -626,8 +623,8 @@ def plot_confusionMatrix(cls_predicted):
 	tick_marks = np.arange(num_classes)
 	plt.xticks(tick_marks,range(num_classes))
 	plt.yticks(tick_marks,range(num_classes))
-	plt.xlabel(‘Predicted class’)
-	plt.ylabel(‘True class’)
+	plt.xlabel('Predicted class')
+	plt.ylabel('True class')
 	# 展示绘画
 	plt.show()
 ```
@@ -665,14 +662,14 @@ def test_accuracy(show_errors=False,show_confusionMatrix=False):
 	#通过将正确的分类与测试集中的图像总数相除来测量精度
 	testset_accuracy = float(correct_number_images)/number_test
 	# 展示准确性
-	print(‘Accuracy on Test-Set:{0:.1%} ({1}/{2})’.format(testset_accuracy,correct_number_images,number_test))
+	print('Accuracy on Test-Set:{0:.1%} ({1}/{2})'.format(testset_accuracy,correct_number_images,number_test))
 	# 显示一些不正确的例子
 	if show_errors:
-		print(‘Example errors:’)
+		print('Example errors:')
 		plot_errors(cls_predicted=cls_predicted,correct=correct)
 	#显示测试集预测的混淆矩阵
 	if show_confusionMatrix:
-		print(‘Confusion Matrix:’)
+		print('Confusion Matrix:')
 		plot_confusionMatrix(cls_predicted=cls_predicted)
 ```
 
@@ -688,10 +685,10 @@ test_accuracy()
 optimize(num_iterations=1)
 ```
 
-现在，我们迭代10000次的来进行优化过程：
+现在，我们迭代10000次的来进行优化过程：(注：在此处代码中设置的为1000，因为10000次运行时间太久)
 
 ```{.python .input}
-optimize(num_iterations=9999)
+optimize(num_iterations=1000)
 ```
 
 现在，我们来检测模型将如何概括测试：
