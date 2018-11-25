@@ -341,7 +341,7 @@ Then open http://localhost:6006/ into your web browser<br>
 
 &emsp;&emsp;这显示了我们正在监视的变量，例如模型精度是如何变得越来越高的，在整个训练过程中模型损失是如何变得越来越低的。所以，你观察到我们这里有一个正常的学习过程。但有时你会发现精度和模型损失是随机变化的，或者你想要保持跟踪一些变量以及它们在整个会话期间是如何变化的，TensorBoard将非常有助于您发现任何随机性或错误。<br>
 &emsp;&emsp;此外，在Tensorflow中如果切换到GRAPHS，你会看到我们在前面的代码中建立的计算图：<br>
-<div align="center">
+ <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/GRAPHS%20tab.png>
 </div>
 
