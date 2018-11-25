@@ -27,7 +27,7 @@
 `Cat /proc/driver/nvidia/versio`<br>
 &emsp;&emsp;然后您会在终端中获得以下输出：<br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/NVIDIA%E7%9A%84%E5%AE%89%E8%A3%85.png)
-
+&emsp;&emsp;接下来，我们需要安装CUDA 8。打开以下CUDA下载链接：https://developer.nvidia.com/cuda-downloads. 按照以下截图选择操作系统、体系结构、发行版本和安装程序类型：<br>
 
 # 一级标题
 ## 二级标题
