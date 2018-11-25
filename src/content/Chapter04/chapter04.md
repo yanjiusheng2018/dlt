@@ -153,6 +153,9 @@ https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter
 &emsp;&emsp;在这个图中，我们有变量b和W以及一个叫做占位符的x；我们也让计算图图中的每个操作都有节点。因此，让我们更加详细地了解那些节点类型。<br>
 ## 变量
 &emsp;&emsp;变量将是状态节点，这些节点输出它们的当前值。在这个例子中，它只是b和W。我们所说的变量是有状态的，是指它们在多个执行中保持当前值，并且很容易将保存的值还原成变量：<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%AE%A1%E7%AE%97%E5%9B%BE-%E5%8F%98%E9%87%8F.png">
+</div>
 &emsp;&emsp;此外，变量还有其他有用的特性；例如，它们可以在训练期间和之后保存到磁盘上，这就提供了我们之前提到的设备使用，它允许来自不同公司和小组的人保存、存储和发送他们的模型参数给其他人。此外，变量是为了使损失最小你想要调整的，我们将看到如何尽快做到这一点。<br>
 &emsp;&emsp;计算图中变量的操作是很重要的，比如b和W。因为根据定义，图中的所有节点都是操作。因此，当您评估这些持有值的操作时，b和W在运行时，您将得到这些变量的值。<br>
 &emsp;&emsp;我们可以使TensorFlow的Variable()函数去定义变量并赋予它一些初始值：<br>
