@@ -113,7 +113,7 @@ tf.summary.scalar('model loss',model_cost)  #对标量数据汇总和记录使�
 tf.summary.scalar('model accuracy',model_accuracy)
 merged_summary_operation = tf.summary.merge_all()
 ```
-&emsp;&emsp;最后，我们将通过定义会话变量来运行模型，会话变量将用于执行我们建立的计算图：<br>
+&emsp;&emsp;最后，我们将通过定义会话变量来运行模型，会话变量将用于执行我们建立的计算图,训练过程的输出应与此类似。<br>
 ```
 with tf.Session() as sess:
     sess.run(init)
@@ -166,3 +166,12 @@ Accuracy: 0.8322<br>
 To view summaries in the Tensorboard,run the command line:<br>
 --> tensorboard.exe --logdir=/tmp/tensorflow_tensorboard<br>
 Then open http://localhost:6006/ into your web browser<br>
+&emsp;&emsp;为了在TensorBoard中查看总结的统计数据，我们将在终端中通过发出以下命令来跟踪输出结尾处的消息<br>
+`tensorboard.exe --logdir=/tmp/tensorflow_tensorboard`
+&emsp;&emsp;然后，在你的浏览器上打开这个网址：http://localhost:6006/<br>
+&emsp;&emsp;当你打开TensorBoard，你应该得到一些类似于以下截图：<br>
+&emsp;&emsp;这显示了我们正在监视的变量，例如模型精度是如何变得越来越高的，在整个训练过程中模型损失是如何变得越来越低的。所以，你观察到我们这里有一个正常的学习过程。但有时你会发现精度和模型损失是随机变化的，或者你想要保持跟踪一些变量以及它们在整个会话期间是如何变化的，TensorBoard将非常有助于您发现任何随机性或错误。<br>
+&emsp;&emsp;此外，在Tensorflow中如果切换到GRAPHS，你会看到我们在前面的代码中建立的计算图：<br>
+## 总结
+&emsp;&emsp;在本章中，我们介绍了Ubuntu和Mac的安装过程，概述了TensorFlow编程模型，并解释了可用于构建复杂操作的不同类型的简单节点以及如何使用会话对象从TensorFlow获得输出。此外，我们涵盖了TensorBoard以及它为什么将有助于调试和分析复杂的深度学习应用。<br>
+&emsp;&emsp;接下来，我们将对神经网络和多层神经网络背后的直觉进行基本解释。我们还将介绍TensorFlow的一些基本示例，并演示如何将其应用于回归和分类问题。<br>
