@@ -42,3 +42,17 @@ h = tf.nn.relu(tf.matmul(x,W) + b)  #数据运算 计算激活函数relu
 ## 从TensorFlow中获取输出
 &emsp;&emsp;在前一节中，我们知道如何构建一个计算图，但是我们需要实际运行它并获得它的值。我们可以使用“会话”来部署/运行计算图，该会话只是对特定执行上下文（如CPU或GPU）的绑定。因此，我们将采取的计算图是建立和部署到CPU或GPU上下文。为了运行该图，我们需要定义一个叫做sess的会话对象，我们将调用并运行这个函数，它包含两个参数：<br>
 `sess.run(fetches,feeds)`
+&emsp;&emsp;1.fetches是返回节点输出的图形节点列表。这些是我们感兴趣的节点在计算的值。<br>
+&emsp;&emsp;2.feeds将是我们想在模型中运行的从图节点到实际值的字典映射。这就是我们之前填写占位符的地方。<br>
+&emsp;&emsp;那么，让我们继续运行我们的计算图：<br>
+```
+#从tensorflow中获取输出  建立计算图之后，可建立session对话函数执行计算图。
+import numpy as np  #导入numpy
+sess = tf.Session()  
+sess.run(tf.global_variables_initializer())  #初始化tensorflow gloal变量
+sess.run(h,{x:np.random.random((100,784))})  #生成100*784的0-1之间的随机浮点数。
+```
+&emsp;&emsp;运行我们的计算图之后通过sess对象，我们应该得到和下面类似的输出：<br>
+&emsp;&emsp;如你所见，在上面的代码片段的第二行中，我们初始化了变量，这是TensorFlow中的一个概念称为延后计算。这意味着你的计算图的计算只在运
+行时发生，而在TensorFlow中运行时意味着会话。所以，调用这个函数global_variables_initializer()实际上会初始化图表中的变量，如在我们的例子中的W和b。<br>
+
