@@ -65,6 +65,13 @@
 &emsp;&emsp;最后，我们可以通过发出以下命令开始在GPU模式下安装TensorFlow:<br>
 `pip3 install --upgrade tensorflow-gpu`<br>
 &emsp;&emsp;您可以使用Python验证TensorFlow的成功安装：<br>
+`import tensorflow as tf`<br>
+`a = tf.constant(5)`<br>
+`b = tf.constant(6)`<br>
+`sess = tf.Session()`<br>
+`sess.run(a+b)` #这时应该打印一堆显示设备状态的消息，如果安装过程一切顺利，您应该看到设备中列出的GPU<br>
+输出结果：11
+
 
 
 
