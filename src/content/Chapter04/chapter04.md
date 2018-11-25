@@ -139,8 +139,8 @@ https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter
 </div>
 
  &emsp;&emsp;一旦打开了命令窗口，就可以发出以下命令来在GPU模式中安装TensorFlow:<br>
-#&emsp;&emsp;[你需要拥有pip或pip3（取决于您的Python版本）在发出下一个命令之前安装。]<br>
-#`pip3 install --upgrade tensorflow-gpu`<br>
+&emsp;&emsp;[你需要拥有pip或pip3（取决于您的Python版本）在发出下一个命令之前安装。]<br>
+`pip3 install --upgrade tensorflow-gpu`<br>
 &emsp;&emsp;发出以下命令来在CPU模式下安装TensorFlow:<br>
 `pip3 install --upgrade tensorflow`<br>
 https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%AE%A1%E7%AE%97%E5%9B%BE-%E5%8F%98%E9%87%8F.png
