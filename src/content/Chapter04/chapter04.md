@@ -163,6 +163,7 @@ https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter
 </div>
 
 &emsp;&emsp;在这个图中，我们有变量b和W以及一个叫做占位符的x；我们也让计算图图中的每个操作都有节点。因此，让我们更加详细地了解那些节点类型。<br>
+##数据流类型、变量和占位符
 ### 变量
 &emsp;&emsp;变量将是状态节点，这些节点输出它们的当前值。在这个例子中，它只是b和W。我们所说的变量是有状态的，是指它们在多个执行中保持当前值，并且很容易将保存的值还原成变量：<br>
 <div align="center">
