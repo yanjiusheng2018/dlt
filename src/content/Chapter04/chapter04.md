@@ -40,6 +40,17 @@
 &emsp;&emsp;接下来，您需要通过发出以下命令来验证CUDA 8的安装：<br>
 `nvcc -v`<br>
 &emsp;&emsp;然后您会在终端中获得以下输出：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/CUDA8%E7%9A%84%E5%AE%89%E8%A3%85.png)  
+&emsp;&emsp;最后，在本节中，我们需要安装CUDNN 6.0。这个NVIDIA CUDA深神经网络图书馆(CUDNN）是一个GPU加速的深层神经基元库网络。你可以从Nvidia的网页下载。发布以下命令来提取和安装CUDNN：<br>
+`cd ~/Downloads/`<br>
+`tar xvf cudnn*.tgz`<br>
+`cd cuda`<br>
+`sudo cp */*.h /usr/local/cuda/include/`<br>
+`sudo cp */libcudnn* /usr/local/cuda/lib64/`<br>
+`sudo chmod a+r /usr/local/cuda/lib64/libcudnn*`<br>
+
+
+
 
 # 一级标题
 ## 二级标题
