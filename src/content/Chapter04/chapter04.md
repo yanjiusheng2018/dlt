@@ -228,6 +228,10 @@ with tf.Session() as sess:
 ```
 ## TensorBoard —— 可视化学习
 &emsp;&emsp;使用TensorFlow进行大规模深层神经网络之类的计算可能很复杂和令人困惑，并且其相应的计算图也会很复杂。为了便于理解、调试和优化TensorFlow程序，TensorFlow团队已经包括了一套名为TensorBoard的可视化工具，这是一套可以通过浏览器运行的Web应用程序。TensorBoard可用于可视化您的TensorFlow图，绘制关于计算图执行的定量度量，并显示其他数据，例如通过它的图像。当TensorBoard被完全安装时，看起来是这样的：<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/TensorBoard-%E5%8F%AF%E8%A7%86%E5%8C%96.png">
+</div>
+
 &emsp;&emsp;为了理解TensorBoard的工作原理，我们将构建一个计算图，该图将充当MNIST数据集（手写图像的数据集）的分类器。您不必理解这个模型的所有细节，但是它将向您展示在TensorFlow中实现的机器学习模型的一般流程。<br>
 &emsp;&emsp;因此，让我们首先导入TensorFlow并使用TensorFlow帮助函数加载所需的数据集；这些帮助函数将检查您是否已经下载了数据集，否则它将为您下载：<br>
 ```
@@ -331,8 +335,16 @@ Then open http://localhost:6006/ into your web browser<br>
 `tensorboard.exe --logdir=/tmp/tensorflow_tensorboard`
 &emsp;&emsp;然后，在你的浏览器上打开这个网址：http://localhost:6006/<br>
 &emsp;&emsp;当你打开TensorBoard，你应该得到一些类似于以下截图：<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/TensorBoard%E7%9B%91%E8%A7%86%E5%9B%BE.png">
+</div>
+
 &emsp;&emsp;这显示了我们正在监视的变量，例如模型精度是如何变得越来越高的，在整个训练过程中模型损失是如何变得越来越低的。所以，你观察到我们这里有一个正常的学习过程。但有时你会发现精度和模型损失是随机变化的，或者你想要保持跟踪一些变量以及它们在整个会话期间是如何变化的，TensorBoard将非常有助于您发现任何随机性或错误。<br>
 &emsp;&emsp;此外，在Tensorflow中如果切换到GRAPHS，你会看到我们在前面的代码中建立的计算图：<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/GRAPHS%20tab.png>
+</div>
+
 ## 总结
 &emsp;&emsp;在本章中，我们介绍了Ubuntu和Mac的安装过程，概述了TensorFlow编程模型，并解释了可用于构建复杂操作的不同类型的简单节点以及如何使用会话对象从TensorFlow获得输出。此外，我们涵盖了TensorBoard以及它为什么将有助于调试和分析复杂的深度学习应用。<br>
 &emsp;&emsp;接下来，我们将对神经网络和多层神经网络背后的直觉进行基本解释。我们还将介绍TensorFlow的一些基本示例，并演示如何将其应用于回归和分类问题。<br>
