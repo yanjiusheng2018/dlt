@@ -20,7 +20,9 @@
 &emsp;&emsp;首先，您需要根据您的GPU安装正确的NVIDIA驱动程序。我（作者）有GeFig GTX 960M GPU，所以我会继续安装nvidia-375（如果你有不同的GPU，你可以使用NVIDIA搜索工具 http://nvidia.com/Download/index.aspx 帮助您找到正确的驱动程序版本)。如果你想知道你的机器的GPU，你可以在终端中发出下面的命令：<br>
 `lspci | grep -i nvidia`<br>
 &emsp;&emsp;然后您会在终端中获得以下输出：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/GPU%E7%9A%84%E6%9F%A5%E7%9C%8B.png)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/GPU%E7%9A%84%E6%9F%A5%E7%9C%8B.png">
+</div>
 &emsp;&emsp;接下来，我们需要添加一个专有的NVIDIA驱动程序库来安装驱动程序。使用apt-get:<br>
 `Sudo add-apt-repository ppa:graphics-drivers/ppa`<br>
 `Sudo apt-get updata`<br>
