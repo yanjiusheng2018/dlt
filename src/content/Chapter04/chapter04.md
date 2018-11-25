@@ -75,7 +75,7 @@ import tensorflow as tf  #导入tensorflow模块
 from tensorflow.examples.tutorials.mnist import input_data  #tensorflow中已经提供现成模块可用于下载并读取数据
 mnist_dataset = input_data.read_data_sets("/tmp/data/", one_hot=True)  #one_hot编码，1个one_hot向量只有1位数是1，其他维数全都是0.
 ```
-output:<br>
+结果输出:<br>
 Extracting /tmp/data/train-images-idx3-ubyte.gz<br>
 Extracting /tmp/data/train-labels-idx1-ubyte.gz<br>
 Extracting /tmp/data/t10k-images-idx3-ubyte.gz<br>
@@ -135,7 +135,7 @@ with tf.Session() as sess:
               "--> tensorboard.exe --logdir=/tmp/tensorflow_tensorboard"\
               "\nThen open http://localhost:6006/ into your web browser")
 ```
-output:<br>
+结果输出:<br>
 Epoch: 001 cost= 2.250371679<br>
 Epoch: 002 cost= 2.091732949<br>
 Epoch: 003 cost= 1.960212840<br>
