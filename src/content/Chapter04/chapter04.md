@@ -1,7 +1,7 @@
 ## 计算图
 &emsp;&emsp;关于TensorFlow的所有想法中最大的想法是，数值计算被表示为计算图，如下图所示。因此，任何TensorFlow程序的主干将是一个计算图，下面的说法是正确的：<br>
-&emsp;&emsp;&emsp;&emsp;1.图中的节点是具有任意数量的输入和输出的操作。<br>
-&emsp;&emsp;&emsp;&emsp;2.节点之间的图边将是在这些操作之间流动的张量，并且认为张量在实践中的最佳方式是n维数组。<br>
+&emsp;&emsp;1.图中的节点是具有任意数量的输入和输出的操作。<br>
+&emsp;&emsp;2.节点之间的图边将是在这些操作之间流动的张量，并且认为张量在实践中的最佳方式是n维数组。<br>
 &emsp;&emsp;使用流程图作为深度学习框架骨干的优点在于，它允许您根据小而简单的操作构建复杂模型。此外，这将使梯度计算非常简单，我们会在后面的部分中提到这一点。<br>
 &emsp;&emsp;另外一种考虑TensorFlow计算图的方法是每一个操作是一个可以在那个点进行评估的函数。<br>
 ## TensorFlow的数据类型，变量和占位符
@@ -30,3 +30,10 @@ result = tf.matmul(ph_var1,ph_var2)
 &emsp;&emsp;1.创建权重W和b，并将其初始化。我们可以利用均匀分布W~U(-1,1)初始化权重矩阵W ，并将b的值初始化为0。<br>
 &emsp;&emsp;2.创建并输入占位符x，这将是一个m行784列的矩阵。<br>
 &emsp;&emsp;3.建立流程图。<br>
+&emsp;&emsp;让我们按照下面的步骤来构建流程图：<br>
+```
+b = tf.Variable(tf.zeros((100,)))  #100行的0矩阵
+W = tf.Variable(tf.random_uniform((784,100),-1,1))  #生成1个784*100的矩阵，生成的值在（-1,1）内服从均匀分布
+x = tf.placeholder(tf.float32,(100,784))  
+h = tf.nn.relu(tf.matmul(x,W) + b)  #数据运算 计算激活函数relu
+```
