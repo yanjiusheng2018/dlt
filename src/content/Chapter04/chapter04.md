@@ -192,6 +192,10 @@ x = tf.placeholder(tf.float32,(100,784))
 h = tf.nn.relu(tf.matmul(x,W) + b)  #数据运算 计算激活函数relu
 ```
 &emsp;&emsp;从前面的代码中可以看出，我们实际上并没有用这个代码片段操做任何数据。我们只是在图形内部建立符号，在运行这个图表之前不能打印出来h和看到他的值。所以，这个代码片段只是用于构建一个我们模型的主干。如果尝试打印值W或b在前面的代码中，您应该在Python中获得以下输出：<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%9E%8B%E4%B8%BB%E5%B9%B2.png">
+</div>
+
 &emsp;&emsp;到目前为止，我们已经定义了我们的计算图。现在，我们需要实际运行它。<br>
 ## 从TensorFlow中获取输出
 &emsp;&emsp;在前一节中，我们知道如何构建一个计算图，但是我们需要实际运行它并获得它的值。我们可以使用“会话”来部署/运行计算图，该会话只是对特定执行上下文（如CPU或GPU）的绑定。因此，我们将采取的计算图是建立和部署到CPU或GPU上下文。为了运行该图，我们需要定义一个叫做sess的会话对象，我们将调用并运行这个函数，它包含两个参数：<br>
