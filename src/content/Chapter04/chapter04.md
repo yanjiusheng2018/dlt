@@ -70,13 +70,99 @@ with tf.Session() as sess:
 &emsp;&emsp;因此，让我们首先导入TensorFlow并使用TensorFlow帮助函数加载所需的数据集；这些帮助函数将检查您是否已经下载了数据集，否则它将为您下载：<br>
 ```
 #MNIST数据集共有训练数据6000项，测试数据1000项。MNIST数据都有images(数字图像)与labels(真实的数字)组成。
-#1.下载MNIST数据集 
+#下载MNIST数据集 
 import tensorflow as tf  #导入tensorflow模块
 from tensorflow.examples.tutorials.mnist import input_data  #tensorflow中已经提供现成模块可用于下载并读取数据
 mnist_dataset = input_data.read_data_sets("/tmp/data/", one_hot=True)  #one_hot编码，1个one_hot向量只有1位数是1，其他维数全都是0.
 ```
-output:
+output:<br>
 Extracting /tmp/data/train-images-idx3-ubyte.gz<br>
 Extracting /tmp/data/train-labels-idx1-ubyte.gz<br>
 Extracting /tmp/data/t10k-images-idx3-ubyte.gz<br>
 Extracting /tmp/data/t10k-labels-idx1-ubyte.gz<br>
+&emsp;&emsp;接下来，我们需要定义超参数（可用于微调模型性能的参数）和模型的输入：<br>
+```
+定义训练参数并输入模型
+learning_rate = 0.01  #学习率
+num_training_epochs = 25  #迭代25次
+train_batch_size = 100  #训练样本的样本个数
+display_epoch = 1      
+logs_path = '/tmp/tensorflow_tensorboard/'  #数据下载的路径
+input_values = tf.placeholder(tf.float32,[None,784],name='input_values')  #输入值，形状第一维项数不定，第二维784个项数。
+target_values = tf.placeholder(tf.float32,[None,10],name='target_values')  #目标值
+weights =tf.Variable(tf.zeros([784,10]),name='weights')  #权重
+biases =tf.Variable(tf.zeros([10]),name='biases')  #偏差值  生成1行10列全0矩阵
+```
+&emsp;&emsp;现在我们需要建立模型并定义一个我们将要优化的损失函数：<br>
+```
+定义损失函数
+with tf.name_scope('Model'):  # 它的主要目的是为了更加方便地管理参数命名。
+    predicted_values = tf.nn.softmax(tf.matmul(input_values,weights)) + biases  #预测值
+with tf.name_scope('Loss'):
+    model_cost = tf.reduce_mean(-tf.reduce_sum(target_values*tf.log(predicted_values),reduction_indices=1))  #损失模型，使用交叉熵训练法
+with tf.name_scope('SGD'):
+    model_optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(model_cost)  #使用梯度下降法优化模型
+with tf.name_scope('Accuracy'):
+    model_accuracy = tf.equal(tf.argmax(predicted_values,1),tf.argmax(target_values,1))  #判断预测值和真实值是否相等，相等返回1，不等返回0.
+    model_accuracy = tf.reduce_mean(tf.cast(model_accuracy,tf.float32))  #tf.cast转换数据类型
+init = tf.global_variables_initializer() #初始化tensorflow gloal变量
+```
+&emsp;&emsp;我们将定义汇总变量，用于监视将发生在特定的变量上的更改，比如损失函数，以及它如何通过训练过程：<br>
+```
+tf.summary.scalar('model loss',model_cost)  #对标量数据汇总和记录使用
+tf.summary.scalar('model accuracy',model_accuracy)
+merged_summary_operation = tf.summary.merge_all()
+```
+&emsp;&emsp;最后，我们将通过定义会话变量来运行模型，会话变量将用于执行我们建立的计算图：<br>
+```
+with tf.Session() as sess:
+    sess.run(init)
+    summary_writer = tf.summary.FileWriter(logs_path,graph=tf.get_default_graph()) #使用程序代码将要显示在tensorboard的计算图写入log文件
+    for train_epoch in range(num_training_epochs):
+        average_cost = 0
+        total_num_batch = int(mnist_dataset.train.num_examples/train_batch_size) #计算每个训练周期，所需执行的批次=训练数据项数6000/每一批次项数1000
+        for i in range(total_num_batch):
+            batch_xs,batch_ys = mnist_dataset.train.next_batch(train_batch_size)  #读取批次数据
+            _, c,summary = sess.run([model_optimizer,model_cost,merged_summary_operation],
+            feed_dict = {input_values:batch_xs,target_values:batch_ys})   #see.run计算准确率，并通过feed_dict把数据传给两个占位符。
+            summary_writer.add_summary(summary,train_epoch * total_num_batch + i)
+            average_cost  += c / total_num_batch  #相加返回前一个变量
+        if (train_epoch+1) % display_epoch == 0:  #求余运算，为了将25次的迭代结果全部显示
+            print("Epoch:", '%03d' % (train_epoch+1), "cost=", "{:.9f}".format(average_cost)) #定义打印出来的格式。
+    print("Optimization Finished!")
+    print("Accuracy:",model_accuracy.eval({input_values:mnist_dataset.test.images,target_values:mnist_dataset.test.labels}))
+    print("To view summaries in the Tensorboard,run the command line:\n"\
+              "--> tensorboard.exe --logdir=/tmp/tensorflow_tensorboard"\
+              "\nThen open http://localhost:6006/ into your web browser")
+```
+output:<br>
+Epoch: 001 cost= 2.250371679<br>
+Epoch: 002 cost= 2.091732949<br>
+Epoch: 003 cost= 1.960212840<br>
+Epoch: 004 cost= 1.882646561<br>
+Epoch: 005 cost= 1.833850788<br>
+Epoch: 006 cost= 1.801827587<br>
+Epoch: 007 cost= 1.779734955<br>
+Epoch: 008 cost= 1.763468241<br>
+Epoch: 009 cost= 1.750940601<br>
+Epoch: 010 cost= 1.740937850<br>
+Epoch: 011 cost= 1.732734323<br>
+Epoch: 012 cost= 1.725847443<br>
+Epoch: 013 cost= 1.719974984<br>
+Epoch: 014 cost= 1.714881604<br>
+Epoch: 015 cost= 1.710406746<br>
+Epoch: 016 cost= 1.706438520<br>
+Epoch: 017 cost= 1.702880976<br>
+Epoch: 018 cost= 1.699663615<br>
+Epoch: 019 cost= 1.696721135<br>
+Epoch: 020 cost= 1.694013688<br>
+Epoch: 021 cost= 1.691496699<br>
+Epoch: 022 cost= 1.689108889<br>
+Epoch: 023 cost= 1.686783923<br>
+Epoch: 024 cost= 1.684409949<br>
+Epoch: 025 cost= 1.681657583<br>
+Optimization Finished!<br>
+Accuracy: 0.8322<br>
+To view summaries in the Tensorboard,run the command line:<br>
+--> tensorboard.exe --logdir=/tmp/tensorflow_tensorboard<br>
+Then open http://localhost:6006/ into your web browser<br>
