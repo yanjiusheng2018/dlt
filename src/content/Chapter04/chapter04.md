@@ -48,7 +48,9 @@
 &emsp;&emsp;接下来，您需要通过发出以下命令来验证CUDA 8的安装：<br>
 `nvcc -v`<br>
 &emsp;&emsp;然后您会在终端中获得以下输出：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/CUDA8%E7%9A%84%E5%AE%89%E8%A3%85.png)  
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/CUDA8%E7%9A%84%E5%AE%89%E8%A3%85.png">
+</div>
 &emsp;&emsp;最后，在本节中，我们需要安装CUDNN 6.0。这个NVIDIA CUDA深神经网络图书馆(CUDNN）是一个GPU加速的深层神经基元库网络。你可以从Nvidia的网页下载。发布以下命令来提取和安装CUDNN：<br>
 `cd ~/Downloads/`<br>
 `tar xvf cudnn*.tgz`<br>
@@ -79,7 +81,9 @@
 `sess.run(a+b)` #这时应该打印一堆显示设备状态的消息，如果安装过程一切顺利，您应该看到设备中列出的GPU<br>
 `sess.close()`<br>
 &emsp;&emsp;您应该在终端中获得以下输出：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/tansorflow%E7%9A%84%E5%AE%89%E8%A3%85.png)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/tansorflow%E7%9A%84%E5%AE%89%E8%A3%85.png">
+</div>
 ### Ubuntu 16.04的TensorFlow CPU安装
 &emsp;&emsp;在本节中，我们将安装CPU版本，在安装之前不需要任何驱动程序。因此，让我们开始安装一些有用的数据操作和可视化包。<br>
 `sudo apt-get update && apt-get install -y python-numpy python-scipy python-nose python-h5py python-skimage python-matplotib python-pandas python-sklearn python-sympy`<br>
@@ -100,8 +104,11 @@
 `sess.run(a+b)`<br>
 `sess.close()`<br>
 &emsp;&emsp;您应该在终端中获得以下输出：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/Ubuntu%2016.04%E7%9A%84TensorFlow%20CPU%E5%AE%89%E8%A3%85.png)<br>
-### Mac OS X的TensorFlow CPU安装&emsp;&emsp;在本节中，我们将为Mac OS X安装TensorFlow,使用vortualenv. 那么，让我们从安装QJQ通过发出以下命令的工具：<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/Ubuntu%2016.04%E7%9A%84TensorFlow%20CPU%E5%AE%89%E8%A3%85.png">
+</div>
+### Mac OS X的TensorFlow CPU安装
+&emsp;&emsp;在本节中，我们将为Mac OS X安装TensorFlow,使用vortualenv. 那么，让我们从安装QJQ通过发出以下命令的工具：<br>
 `sudo easy_install pip`<br>
 &emsp;&emsp;接下来，我们需要安装虚拟环境库：<br>
 `sudo pip install --upgrade virtualenv`<br>
@@ -110,8 +117,6 @@
 `virtualenv --system-site-packages -p python3 targetDirectory # for Python3.n`<br>
 &emsp;&emsp;这假设targetDirectory是~/tensorflow.<br>
 &emsp;&emsp;既然已经创建了虚拟环境，可以通过发出以下命令来访问它：<br>
-
-
 `source ~/tensorflow/bin/activate`<br>
 ?&emsp;&emsp;发出此命令后，您将访问刚刚创建的虚拟机，并且可以安装仅安装在此环境中且不会影响正在使用的底层或主机系统的任何包。<br>
  &emsp;&emsp;为了从环境中退出，可以发出以下命令：<br>
@@ -123,7 +128,9 @@ https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter
 `(tensorflow)$ pip3 install --upgrade tensorflow   #for python 3.n`<br>
 ### Windows的TensorFlow GPU/CPU安装
 &emsp;&emsp;我们假设您的系统已经安装了Python 3。若要安装TensorFlow，请按如下方式启动管理员。打开起点菜单，搜索CMD，然后右键点击它并点击作为管理员运行:<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/Windows%E7%9A%84TensorFlow%E5%AE%89%E8%A3%85.png)<br> 
+ <div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/Windows%E7%9A%84TensorFlow%E5%AE%89%E8%A3%85.png">
+</div>
  &emsp;&emsp;一旦打开了命令窗口，就可以发出以下命令来在GPU模式中安装TensorFlow:<br>
 #&emsp;&emsp;[你需要拥有pip或pip3（取决于您的Python版本）在发出下一个命令之前安装。]<br>
 #`pip3 install --upgrade tensorflow-gpu`<br>
