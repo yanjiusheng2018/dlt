@@ -14,3 +14,13 @@
 &emsp;&emsp;计算图中变量的操作是很重要的，比如b和W。因为根据定义，图中的所有节点都是操作。因此，当您评估这些持有值的操作时，b和W在运行时，您将得到这些变量的值。<br>
 &emsp;&emsp;我们可以使TensorFlow的Variable()函数去定义变量并赋予它一些初始值：<br>
 &emsp;&emsp;`var = tf.Variable(tf.random_normal((0,1)),name='random_values')`<br>
+&emsp;&emsp;这一行代码将定义2行2列的变量，并用标准正态分布初始化它。你也可以给变量赋一个名称。<br>
+## 占位符
+&emsp;&emsp;第二种类型的节点是占位符。占位符的值在执行时被给予的节点：<br>
+&emsp;&emsp;如果您在计算图中依赖于一些外部数据的输入，那么这些值的占位符，我们将在训练期间添加到计算中。因此，对于占位符，我们不提供任何初始值。我们只是赋值一个张量的数据类型和形状，所以图形仍然知道要计算什么，即使它还没有任何存储值。<br>
+&emsp;&emsp;我们可以使用TensorFlow的占位符函数来创建占位符：<br>
+```
+ph_var1 = tf.placeholder(tf.float32,shape=(2,3))  
+ph_var2 = tf.placeholder(tf.float32,shape=(3,2))
+result = tf.matmul(ph_var1,ph_var2)
+```
