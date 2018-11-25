@@ -130,7 +130,7 @@
 &emsp;&emsp;请注意，现在我们确实希望处于虚拟环境中，所以现在就把它打开。一旦你完成了TensorFlow的游戏，你就应该停用它：<br>
 `source bin/activate`<br>
 &emsp;&emsp;为了安装TensorFlow的CPU版本，可以发出以下命令，这些命令还将安装TensorFlow需要的任何依赖库：<br>
-https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%AE%A1%E7%AE%97%E5%9B%BE-%E5%8F%98%E9%87%8F.png`(tensorflow)$ pip install --upgrade tensorflow   #for python 2.7`<br>
+`(tensorflow)$ pip install --upgrade tensorflow   #for python 2.7`<br>
 `(tensorflow)$ pip3 install --upgrade tensorflow   #for python 3.n`<br>
 ### Windows的TensorFlow GPU/CPU安装
 &emsp;&emsp;我们假设您的系统已经安装了Python 3。若要安装TensorFlow，请按如下方式启动管理员。打开起点菜单，搜索CMD，然后右键点击它并点击作为管理员运行:<br>
@@ -143,7 +143,7 @@ https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter
 `pip3 install --upgrade tensorflow-gpu`<br>
 &emsp;&emsp;发出以下命令来在CPU模式下安装TensorFlow:<br>
 `pip3 install --upgrade tensorflow`<br>
-https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%AE%A1%E7%AE%97%E5%9B%BE-%E5%8F%98%E9%87%8F.png
+
 ## TensorFlow环境
 &emsp;&emsp;TensorFlow是谷歌的另一个深度学习框架，名为TensorFlow意味着，它来自神经网络基于多维数据数组或张量执行的操作。从字面上看，它是张量的流动。但是首先要知道，我们为什么要在这本书中使用一个深度的学习框架？<br>
 &emsp;&emsp;（1）**它缩放机器学习代码**，大部分关于深度学习和 机器学习的研究都可以应用于这些学习框架。他们允许数据科学家非常快速地迭代，并使得深层学习和其他ML算法更容易被实践者访问。诸如谷歌、脸谱网等大公司正在使用这样的深度学习框架来扩展到数十亿用户。<br>&emsp;&emsp;（2）**它计算梯度**，深度学习框架也可以 自动地计算梯度。如果您一步一步地进行梯度计算，您会发现梯度计算并不简单，而且您自己实现它的无bug版本可能很棘手。<br>
