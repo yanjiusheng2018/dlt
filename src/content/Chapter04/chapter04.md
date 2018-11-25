@@ -211,6 +211,10 @@ sess.run(tf.global_variables_initializer())  #初始化tensorflow gloal变量
 sess.run(h,{x:np.random.random((100,784))})  #生成100*784的0-1之间的随机浮点数。
 ```
 &emsp;&emsp;运行我们的计算图之后通过sess对象，我们应该得到和下面类似的输出：<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C.png">
+</div>
+
 &emsp;&emsp;如你所见，在上面的代码片段的第二行中，我们初始化了变量，这是TensorFlow中的一个概念称为延后计算。这意味着你的计算图的计算只在运
 行时发生，而在TensorFlow中运行时意味着会话。所以，调用这个函数global_variables_initializer()实际上会初始化图表中的变量，如在我们的例子中的W和b。<br>
 &emsp;&emsp;我们还可以使用会话变量，以确保在执行计算图之后它将被关闭：<br>
