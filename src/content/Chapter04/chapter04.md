@@ -95,8 +95,7 @@
 `sess.close()`<br>
 &emsp;&emsp;您应该在终端中获得以下输出：<br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/Ubuntu%2016.04%E7%9A%84TensorFlow%20CPU%E5%AE%89%E8%A3%85.png)<br>
-### Mac OS X的TensorFlow CPU安装
-&emsp;&emsp;在本节中，我们将为Mac OS X安装TensorFlow,使用vortualenv. 那么，让我们从安装QJQ通过发出以下命令的工具：<br>
+### Mac OS X的TensorFlow CPU安装&emsp;&emsp;在本节中，我们将为Mac OS X安装TensorFlow,使用vortualenv. 那么，让我们从安装QJQ通过发出以下命令的工具：<br>
 `sudo easy_install pip`<br>
 &emsp;&emsp;接下来，我们需要安装虚拟环境库：<br>
 `sudo pip install --upgrade virtualenv`<br>
@@ -105,6 +104,7 @@
 `virtualenv --system-site-packages -p python3 targetDirectory # for Python3.n`<br>
 &emsp;&emsp;这假设targetDirectory是~/tensorflow.<br>
 &emsp;&emsp;既然已经创建了虚拟环境，可以通过发出以下命令来访问它：<br>
+
 `source ~/tensorflow/bin/activate`<br>
 &emsp;&emsp;发出此命令后，您将访问刚刚创建的虚拟机，并且可以安装仅安装在此环境中且不会影响正在使用的底层或主机系统的任何包。<br>
 &emsp;&emsp;为了从环境中退出，可以发出以下命令：<br>
@@ -146,32 +146,6 @@
 &emsp;&emsp;对计算图的理解将帮助我们从子图和操作的角度考虑复杂模型。让我们来看一个只有一个隐藏层的神经网络的例子，以及它的计算图在TensorFlow中的样子：<br>
 &emsp;&emsp;因此，我们有一些试图计算的隐藏层，一些参数矩阵W乘以一些输入值x加上偏倚项b作为激活函数。 Relu函数取输入值和零中最大的数值。下面的图表展示了TensorFlow计算图：<br>
 &emsp;&emsp;在这个图中，我们有变量b和W以及一个叫做占位符的x；我们也让计算图图中的每个操作都有节点。因此，让我们更加详细地了解那些节点类型。<br>
-## 变量
-&emsp;&emsp;变量将是状态节点，这些节点输出它们的当前值。在这个例子中，它只是b和W。我们所说的变量是有状态的，是指它们在多个执行中保持当前值，并且很容易将保存的值还原成变量：<br>
-&emsp;&emsp;此外，变量还有其他有用的特性；例如，它们可以在训练期间和之后保存到磁盘上，这就提供了我们之前提到的设备使用，它允许来自不同公司和小组的人保存、存储和发送他们的模型参数给其他人。此外，变量是为了使损失最小你想要调整的，我们将看到如何尽快做到这一点。<br>
-&emsp;&emsp;计算图中变量的操作是很重要的，比如b和W。因为根据定义，图中的所有节点都是操作。因此，当您评估这些持有值的操作时，b和W在运行时，您将得到这些变量的值。<br>
-&emsp;&emsp;我们可以使TensorFlow的Variable()函数去定义变量并赋予它一些初始值：<br>
-&emsp;&emsp;`var = tf.Variable(tf.random_normal((0,1)),name='random_values')`<br>
-&emsp;&emsp;这一行代码将定义2行2列的变量，并用标准正态分布初始化它。你也可以给变量赋一个名称。<br>
-## 占位符
-&emsp;&emsp;第二种类型的节点是占位符。占位符的值在执行时被给予的节点：<br>
-&emsp;&emsp;如果您在计算图中依赖于一些外部数据的输入，那么这些值的占位符，我们将在训练期间添加到计算中。因此，对于占位符，我们不提供任何初始值。我们只是赋值一个张量的数据类型和形状，所以图形仍然知道要计算什么，即使它还没有任何存储值。我们可以使用TensorFlow的占位符函数来创建占位符：<br>
-```
-ph_var1 = tf.placeholder(tf.float32,shape=(2,3))  
-ph_var2 = tf.placeholder(tf.float32,shape=(3,2))
-result = tf.matmul(ph_var1,ph_var2)
-```
-&emsp;&emsp;这些代码行定义特定形状的两个占位符变量，然后定义将这两个值相乘的操作（参见下一节）。<br>
-## 数学运算
-&emsp;&emsp;第三种类型的节点是数学运算，它们是矩阵乘法（MatMul）、加法（Add）和ReLU激活函数。所有这些都是TensorFlow图中的节点，并且非常类似于NumPy操作：<br>
-&emsp;&emsp;让我们看看计算图用代码如何实现。我们执行以下步骤来生成计算图：<br>
-&emsp;&emsp;1.创建权重W和b，并将其初始化。我们可以利用均匀分布W~U(-1,1)初始化权重矩阵W ，并将b的值初始化为0。<br>
-&emsp;&emsp;2.创建并输入占位符x，这将是一个m行784列的矩阵。<br>
-&emsp;&emsp;3.建立流程图。<br>
-&emsp;&emsp;让我们按照下面的步骤来构建流程图：<br>
-```
-b = tf.Variable(tf.zeros((100,)))  #100行的0矩阵
-W = tf.Variable(tf.random_uniform((784,100),-1,1))  
 
 
  ## 表格  
