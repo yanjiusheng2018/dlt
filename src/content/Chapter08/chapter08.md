@@ -153,7 +153,7 @@ Sample Image Number 6:<br>
 Sample image - Minimum pixel value: 30 Maximum pixel value: 242<br>
 Samplei mage - Shape: (32, 32, 3)<br>
 Sample Label - Label Id: 8 Name: ship<br>
-![船](https://github.com/yanjiusheng2018/dlt/blob/master/image/8.2.jpg?raw=true)
+![船](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter08/chapter08_image/8.2.jpg?raw=true)
 
 在继续将数据集输入模型之前，我们需要将其标准化为0到1的范围。批量标准化优化了网络训练。 它已被证明有几个好处：<br>
 <br/>
@@ -757,7 +757,7 @@ def test_classification_model():
 # 调用函数
 test_classification_model()
 ```
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/image/8.3.png?raw=true)
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter08/chapter08_image/8.3.png?raw=true)
 &emsp;&emsp;现在，我们的测试精度大约为62％，对于像我们使用的CNN这样简单的CNN也不错。<br>
 ## 总结
 &emsp;&emsp;本章向我们展示了如何制作CNN来对CIFAR-10数据集中的图像进行分类。 测试集的分类准确度约为79％-80％。 还绘制了卷积层的输出，但很难看出神经网络如何识别和分类输入图像。 需要更好的可视化技术。<br>
