@@ -56,7 +56,7 @@ sess.run(h,{x:np.random.random((100,784))})  #生成100*784的0-1之间的随机
 &emsp;&emsp;如你所见，在上面的代码片段的第二行中，我们初始化了变量，这是TensorFlow中的一个概念称为延后计算。这意味着你的计算图的计算只在运
 行时发生，而在TensorFlow中运行时意味着会话。所以，调用这个函数global_variables_initializer()实际上会初始化图表中的变量，如在我们的例子中的W和b。<br>
 &emsp;&emsp;我们还可以使用会话变量，以确保在执行计算图之后它将被关闭：<br>
-#使用会话变量确保在执行完流程图后将其关闭
+#使用会话变量确保在执行完流程图后将其关闭.<br>
 ```
 ph_var1 = tf.placeholder(tf.float32,shape=(2,3)) 
 ph_var2 = tf.placeholder(tf.float32,shape=(3,2)) 
@@ -64,3 +64,17 @@ result = tf.matmul(ph_var1,ph_var2)
 with tf.Session() as sess: 
     print(sess.run([result],feed_dict={ph_var1:[[1.,3.,4.],[1.,3.,4.]],ph_var2:[[1., 3.],[3.,1.],[.1,4.]]})) 
 ```
+## TensorBoard —— 可视化学习
+&emsp;&emsp;使用TensorFlow进行大规模深层神经网络之类的计算可能很复杂和令人困惑，并且其相应的计算图也会很复杂。为了便于理解、调试和优化TensorFlow程序，TensorFlow团队已经包括了一套名为TensorBoard的可视化工具，这是一套可以通过浏览器运行的Web应用程序。TensorBoard可用于可视化您的TensorFlow图，绘制关于计算图执行的定量度量，并显示其他数据，例如通过它的图像。当TensorBoard被完全安装时，看起来是这样的：<br>
+&emsp;&emsp;为了理解TensorBoard的工作原理，我们将构建一个计算图，该图将充当MNIST数据集（手写图像的数据集）的分类器。您不必理解这个模型的所有细节，但是它将向您展示在TensorFlow中实现的机器学习模型的一般流程。<br>
+&emsp;&emsp;因此，让我们首先导入TensorFlow并使用TensorFlow帮助函数加载所需的数据集；这些帮助函数将检查您是否已经下载了数据集，否则它将为您下载：<br>
+```
+#MNIST数据集共有训练数据6000项，测试数据1000项。MNIST数据都有images(数字图像)与labels(真实的数字)组成。
+#1.下载MNIST数据集 
+import tensorflow as tf  #导入tensorflow模块                                                                                              from tensorflow.examples.tutorials.mnist import input_data  #tensorflow中已经提供现成模块可用于下载并读取数据
+mnist_dataset = input_data.read_data_sets("/tmp/data/", one_hot=True)  #one_hot编码，1个one_hot向量只有1位数是1，其他维数全都是0.
+```
+Extracting /tmp/data/train-images-idx3-ubyte.gz
+Extracting /tmp/data/train-labels-idx1-ubyte.gz
+Extracting /tmp/data/t10k-images-idx3-ubyte.gz
+Extracting /tmp/data/t10k-labels-idx1-ubyte.gz
