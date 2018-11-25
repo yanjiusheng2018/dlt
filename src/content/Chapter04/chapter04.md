@@ -37,7 +37,9 @@
 `echo ‘export PATH=/usr/local/cuda/bin:$PATH’ >> ~/.bashrc`<br>
 `echo ‘exportLD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH’>>~/.bashrc`<br>
 `Source ~/.bashrc`<br>
-
+&emsp;&emsp;接下来，您需要通过发出以下命令来验证CUDA 8的安装：<br>
+`nvcc -v`<br>
+&emsp;&emsp;然后您会在终端中获得以下输出：<br>
 
 # 一级标题
 ## 二级标题
