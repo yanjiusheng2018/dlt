@@ -12,8 +12,10 @@
 
 ## TensorFlow的安装
 &emsp;&emsp;TensorFlow安装有两种模式：CPU和GPU。首先我们将在GPU模式下安装TensorFlow，开始安装教程。<br>
+
 ### Ubuntu 16.04的TensorFlow GPU安装
 &emsp;&emsp;因为TensorFlow的GPU版本目前只支持CUDA，所以TensorFlow的GPU模式安装需要最新的NVIDIA驱动程序安装。下面的部分将带您一步一步地安装NVIDIA驱动程序和CUDA 8。<br>
+
 #### 安装NVIDIA驱动程序和CUDA 8
 &emsp;&emsp;首先，您需要根据您的GPU安装正确的NVIDIA驱动程序。我（作者）有GeFig GTX 960M GPU，所以我会继续安装nvidia-375（如果你有不同的GPU，你可以使用NVIDIA搜索工具 http://nvidia.com/Download/index.aspx 帮助您找到正确的驱动程序版本)。如果你想知道你的机器的GPU，你可以在终端中发出下面的命令：<br>
 `lspci | grep -i nvidia`<br>
@@ -48,6 +50,25 @@
 `sudo cp */*.h /usr/local/cuda/include/`<br>
 `sudo cp */libcudnn* /usr/local/cuda/lib64/`<br>
 `sudo chmod a+r /usr/local/cuda/lib64/libcudnn*`<br>
+&emsp;&emsp;为了确保安装成功，可以使用nvidia-smi终端中的工具。如果安装成功，该工具将为您提供诸如RAM之类的监控信息以及GPU的运行过程。<br>
+### 安装TensorFlow
+&emsp;&emsp;在准备TensorFlow的GPU环境之后，我们现在准备在GPU模式下安装TensorFlow。但是，为了完成TensorFlow的安装过程，您可以首先安装一些有用的Python包，这些包将在下一章中帮助您并使您的开发环境更容易。<br>
+&emsp;&emsp;我们可以通过发出以下命令来安装一些数据操作、分析和可视化库：<br>
+`sudo apt-get update && apt-get install -y python-numpy python-scipy python-nose python-h5py python-skimage python-matplotib python-pandas python-sklearn python-sympy`<br>
+`sudo apt-get clean && sudo apt-get autoremove`<br>
+`sudo re -rf /var/lib/apt/lists/*`<br>
+&emsp;&emsp;接下来，您可以安装更有用的库，例如虚拟环境、Juyter  Notebook等：<br>
+`sudo apt-get update`<br>
+`sudo apt-get install git python-dev python3-dev python-numpy python3-numpy build-essential python-pip python3-pip python-virtualenv swig python-wheel libcur13-dev`<br>
+`sudo apt-get install -y libfreetype6-dev libpng12-dev`<br>
+`pip3 install -U matplotlib ipython[all] jupyter pandas scikit-image`<br>
+&emsp;&emsp;最后，我们可以通过发出以下命令开始在GPU模式下安装TensorFlow:<br>
+`pip3 install --upgrade tensorflow-gpu`<br>
+&emsp;&emsp;您可以使用Python验证TensorFlow的成功安装：<br>
+
+
+
+
 
 
 
