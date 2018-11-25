@@ -94,8 +94,26 @@
 `sess.run(a+b)`<br>
 `sess.close()`<br>
 &emsp;&emsp;您应该在终端中获得以下输出：<br>
-
-
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/Ubuntu%2016.04%E7%9A%84TensorFlow%20CPU%E5%AE%89%E8%A3%85.png)<br>
+### Mac OS X的TensorFlow CPU安装
+&emsp;&emsp;在本节中，我们将为Mac OS X安装TensorFlow,使用vortualenv. 那么，让我们从安装QJQ通过发出以下命令的工具：<br>
+`sudo easy_install pip`<br>
+&emsp;&emsp;接下来，我们需要安装虚拟环境库：<br>
+`sudo pip install --upgrade virtualenv`<br>
+&emsp;&emsp;在安装虚拟环境库之后，我们需要创建一个容器或虚拟环境，该容器或虚拟环境将托管TensorFlow和您可能想要安装的任何包的安装，而不影响底层主机系统：<br>
+`virtualenv --system-site-packages targetDirectory # for Python 2.7`<br>
+`virtualenv --system-site-packages -p python3 targetDirectory # for Python3.n`<br>
+&emsp;&emsp;这假设targetDirectory是~/tensorflow.<br>
+&emsp;&emsp;既然已经创建了虚拟环境，可以通过发出以下命令来访问它：<br>
+`source ~/tensorflow/bin/activate`<br>
+&emsp;&emsp;发出此命令后，您将访问刚刚创建的虚拟机，并且可以安装仅安装在此环境中且不会影响正在使用的底层或主机系统的任何包。<br>
+&emsp;&emsp;为了从环境中退出，可以发出以下命令：<br>
+`deactivate`<br>
+&emsp;&emsp;请注意，现在我们确实希望处于虚拟环境中，所以现在就把它打开。一旦你完成了TensorFlow的游戏，你就应该停用它：<br>
+`source bin/activate`<br>
+&emsp;&emsp;为了安装TensorFlow的CPU版本，可以发出以下命令，这些命令还将安装TensorFlow需要的任何依赖库：<br>
+`(tensorflow)$ pip install --upgrade tensorflow   #for python 2.7`<br>
+`(tensorflow)$ pip3 install --upgrade tensorflow   #for python 3.n`<br>
 
 
 
