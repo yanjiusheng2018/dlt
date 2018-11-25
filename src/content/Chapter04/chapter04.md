@@ -6,4 +6,5 @@
 &emsp;&emsp;另外一种考虑TensorFlow计算图的方法是每一个操作是一个可以在那个点进行评估的函数。<br>
 ## TensorFlow的数据类型，变量和占位符
 &emsp;&emsp;对计算图的理解将帮助我们从子图和操作的角度考虑复杂模型。让我们来看一个只有一个隐藏层的神经网络的例子，以及它的计算图在TensorFlow中的样子：<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/guiabbey-patch-1/src/content/Chapter04/chapter04_images/tu2.jpg)
+&emsp;&emsp;因此，我们有一些试图计算的隐藏层，一些参数矩阵W乘以一些输入值x加上偏倚项b作为激活函数。 Relu函数取输入值和零中最大的数值。下面的图表展示了TensorFlow计算图：<br>
+&emsp;&emsp;在这个图中，我们有变量b和W以及一个叫做占位符的x；我们也让计算图图中的每个操作都有节点。因此，让我们更加详细地了解那些节点类型。<br>
