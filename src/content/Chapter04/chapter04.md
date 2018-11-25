@@ -349,6 +349,8 @@ Then open http://localhost:6006/ into your web browser<br>
 &emsp;&emsp;在本章中，我们介绍了Ubuntu和Mac的安装过程，概述了TensorFlow编程模型，并解释了可用于构建复杂操作的不同类型的简单节点以及如何使用会话对象从TensorFlow获得输出。此外，我们涵盖了TensorBoard以及它为什么将有助于调试和分析复杂的深度学习应用。<br>
 &emsp;&emsp;接下来，我们将对神经网络和多层神经网络背后的直觉进行基本解释。我们还将介绍TensorFlow的一些基本示例，并演示如何将其应用于回归和分类问题。<br>
 
+
+
 ### 组员信息：
 学号|姓名|专业
 -|-|-
