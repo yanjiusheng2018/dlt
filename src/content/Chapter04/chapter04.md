@@ -341,9 +341,6 @@ Then open http://localhost:6006/ into your web browser<br>
 
 &emsp;&emsp;这显示了我们正在监视的变量，例如模型精度是如何变得越来越高的，在整个训练过程中模型损失是如何变得越来越低的。所以，你观察到我们这里有一个正常的学习过程。但有时你会发现精度和模型损失是随机变化的，或者你想要保持跟踪一些变量以及它们在整个会话期间是如何变化的，TensorBoard将非常有助于您发现任何随机性或错误。<br>
 &emsp;&emsp;此外，在Tensorflow中如果切换到GRAPHS，你会看到我们在前面的代码中建立的计算图：<br>
- <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/GRAPHS%20tab.png>
-</div>
 
 ## 总结
 &emsp;&emsp;在本章中，我们介绍了Ubuntu和Mac的安装过程，概述了TensorFlow编程模型，并解释了可用于构建复杂操作的不同类型的简单节点以及如何使用会话对象从TensorFlow获得输出。此外，我们涵盖了TensorBoard以及它为什么将有助于调试和分析复杂的深度学习应用。<br>
