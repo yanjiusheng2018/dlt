@@ -1,6 +1,14 @@
 # TensorFlow的启动和运行
-&emsp;&emsp;在《Deep Learning》一书的第四章中，我们要学习广泛使用的深度学习框架——TensorFlow。目前TensorFlow的社区支持日益增长，这使它成为构建复杂深度学习应用程序的一个不错的选择。下面是从TensorFlow网站上截取的一段话：
-&emsp;&emsp;“TensorFlow是使用数据流图进行数值计算的开源软件库。图中的节点表示数学运算，而图边表示它们之间通信的多维数据阵列（张量）。灵活的体系结构允许您使用单个API将计算部署到桌面、服务器或移动设备中的一个或多个CPU或GPU上。TensorFlow最初是由在Google机器智能研究组织内的Google Brain Team工作的研究人员和工程师开发的，用于进行机器学习和深度神经网络研究，但是该系统足够通用，可以广泛地应用于其他具有多样性的各个领域。”
+&emsp;&emsp;在《Deep Learning》一书的第四章中，我们要学习广泛使用的深度学习框架——TensorFlow。目前TensorFlow的社区支持日益增长，这使它成为构建复杂深度学习应用程序的一个不错的选择。下面是从TensorFlow网站上截取的一段话：<br>
+&emsp;&emsp;“TensorFlow是使用数据流图进行数值计算的开源软件库。图中的节点表示数学运算，而图边表示它们之间通信的多维数据阵列（张量）。灵活的体系结构允许您使用单个API将计算部署到桌面、服务器或移动设备中的一个或多个CPU或GPU上。TensorFlow最初是由在Google机器智能研究组织内的Google Brain Team工作的研究人员和工程师开发的，用于进行机器学习和深度神经网络研究，但是该系统足够通用，可以广泛地应用于其他具有多样性的各个领域。”<br>
+&emsp;&emsp;本章将介绍以下主题：<br>
+&emsp;&emsp;（1）TensorFlow的安装；<br>
+&emsp;&emsp;（2）TensorFlow的环境；<br>
+&emsp;&emsp;（3）计算图；<br>
+&emsp;&emsp;（4）数据流类型、变量和占位符；<br>
+&emsp;&emsp;（5）从TensorFlow中获取输出；<br>
+&emsp;&emsp;（6）TensorBoard的可视化学习。<br>
+
 # 一级标题
 ## 二级标题
 ### 三级标题
