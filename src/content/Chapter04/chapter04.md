@@ -233,7 +233,6 @@ biases =tf.Variable(tf.zeros([10]),name='biases')  #偏差值  生成1行10列�
 ```
 &emsp;&emsp;现在我们需要建立模型并定义一个我们将要优化的损失函数：<br>
 ```
-定义损失函数
 with tf.name_scope('Model'):  # 它的主要目的是为了更加方便地管理参数命名。
     predicted_values = tf.nn.softmax(tf.matmul(input_values,weights)) + biases  #预测值
 with tf.name_scope('Loss'):
@@ -314,3 +313,9 @@ Then open http://localhost:6006/ into your web browser<br>
 &emsp;&emsp;在本章中，我们介绍了Ubuntu和Mac的安装过程，概述了TensorFlow编程模型，并解释了可用于构建复杂操作的不同类型的简单节点以及如何使用会话对象从TensorFlow获得输出。此外，我们涵盖了TensorBoard以及它为什么将有助于调试和分析复杂的深度学习应用。<br>
 &emsp;&emsp;接下来，我们将对神经网络和多层神经网络背后的直觉进行基本解释。我们还将介绍TensorFlow的一些基本示例，并演示如何将其应用于回归和分类问题。<br>
 
+## 组员信息：
+学号|姓名|专业
+-|-|-
+201802210507|桂贝贝|应用统计
+201802210516|刘梦婷|应用统计
+<br>
