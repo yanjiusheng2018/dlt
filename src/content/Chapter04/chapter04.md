@@ -6,3 +6,4 @@
 &emsp;&emsp;另外一种考虑TensorFlow计算图的方法是每一个操作是一个可以在那个点进行评估的函数。<br>
 ## TensorFlow的数据类型，变量和占位符
 &emsp;&emsp;对计算图的理解将帮助我们从子图和操作的角度考虑复杂模型。让我们来看一个只有一个隐藏层的神经网络的例子，以及它的计算图在TensorFlow中的样子：<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/guiabbey-patch-1/src/content/Chapter04/chapter04_images/tu2.jpg)
