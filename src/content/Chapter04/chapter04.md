@@ -107,7 +107,7 @@
 
 `source ~/tensorflow/bin/activate`<br>
 ?&emsp;&emsp;发出此命令后，您将访问刚刚创建的虚拟机，并且可以安装仅安装在此环境中且不会影响正在使用的底层或主机系统的任何包。<br>
-&emsp;&emsp;为了从环境中退出，可以发出以下命令：<br>
+ &emsp;&emsp;为了从环境中退出，可以发出以下命令：<br>
 `deactivate`<br>
 &emsp;&emsp;请注意，现在我们确实希望处于虚拟环境中，所以现在就把它打开。一旦你完成了TensorFlow的游戏，你就应该停用它：<br>
 `source bin/activate`<br>
@@ -117,7 +117,7 @@
 ### Windows的TensorFlow GPU/CPU安装
 &emsp;&emsp;我们假设您的系统已经安装了Python 3。若要安装TensorFlow，请按如下方式启动管理员。打开起点菜单，搜索CMD，然后右键点击它并点击作为管理员运行:<br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/Windows%E7%9A%84TensorFlow%E5%AE%89%E8%A3%85.png)<br> 
-&emsp;&emsp;一旦打开了命令窗口，就可以发出以下命令来在GPU模式中安装TensorFlow:<br>
+ &emsp;&emsp;一旦打开了命令窗口，就可以发出以下命令来在GPU模式中安装TensorFlow:<br>
 &emsp;&emsp;[你需要拥有pip或pip3（取决于您的Python版本）在发出下一个命令之前安装。]<br>
 `pip3 install --upgrade tensorflow-gpu`<br>
 &emsp;&emsp;发出以下命令来在CPU模式下安装TensorFlow:<br>
@@ -127,11 +127,10 @@
 &emsp;&emsp;TensorFlow是谷歌的另一个深度学习框架，名为TensorFlow意味着，它来自神经网络基于多维数据数组或张量执行的操作。从字面上看，它是张量的流动。但是首先要知道，我们为什么要在这本书中使用一个深度的学习框架？<br>
 &emsp;&emsp;（1）**它缩放机器学习代码**，大部分关于深度学习和 机器学习的研究都可以应用于这些学习框架。他们允许数据科学家非常快速地迭代，并使得深层学习和其他ML算法更容易被实践者访问。诸如谷歌、脸谱网等大公司正在使用这样的深度学习框架来扩展到数十亿用户。<br>
 &emsp;&emsp;（2）**它计算梯度**，深度学习框架也可以 自动地计算梯度。如果您一步一步地进行梯度计算，您会发现梯度计算并不简单，而且您自己实现它的无bug版本可能很棘手。<br>
-&emsp;&emsp;（3）**它规范了机器学习应用程序的共享**，同样地，预先训练模型可以在线获得，可以跨不同的深度学习框架使用，并且这些预先训练的模型可以帮助在GPU方面资源有限的人，从而不必每次都从头开始。我们可以站在巨人的肩膀上，从那里夺走它。<br>
+ &emsp;&emsp;（3）**它规范了机器学习应用程序的共享**，同样地，预先训练模型可以在线获得，可以跨不同的深度学习框架使用，并且这些预先训练的模型可以帮助在GPU方面资源有限的人，从而不必每次都从头开始。我们可以站在巨人的肩膀上，从那里夺走它。<br>
 &emsp;&emsp;（4）**有很多可用的深度学习框框架**，这些深度学习框架具有不同的优势， 范式、抽象层次、编程语言等等。<br>
 &emsp;&emsp;（5）**用于并行处理的GPU接口**，使用GPU进行计算是一个有吸引力的的特点，因为GPU加速你的代码比CPU快很多，因为核的数量和并行化。<br>
-&emsp;&emsp;这就是为什么Tensorflow在深度学习方面取得进步几乎是必要的，因为它可以促进你的项目。<br>
-&emsp;&emsp;简言之，TensorFlow是什么？<br>
+&emsp;&emsp;这就是为什么Tensorflow在深度学习方面取得进步几乎是必要的，因为它可以促进你的项目。<br>&emsp;&emsp;简言之，TensorFlow是什么？<br>
 &emsp;&emsp;（1）TensorFlow是谷歌的一个深度学习框架，它是使用数据流图进行数值计算的开放源代码。<br>
 &emsp;&emsp;（2）它最初是由谷歌大脑团队开发的，以便于他们的机器学习研究。<br>
 &emsp;&emsp;（3）TensorFlow是表示机器学习算法的接口和执行这些算法的实现。<br>
@@ -146,8 +145,8 @@
 &emsp;&emsp;对计算图的理解将帮助我们从子图和操作的角度考虑复杂模型。让我们来看一个只有一个隐藏层的神经网络的例子，以及它的计算图在TensorFlow中的样子：<br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E5%85%AC%E5%BC%8F.gif)<br>
 &emsp;&emsp;因此，我们有一些试图计算的隐藏层，一些参数矩阵W乘以一些输入值x加上偏倚项b作为激活函数。 Relu函数取输入值和零中最大的数值。下面的图表展示了TensorFlow计算图：<br>
-<div align="center">
-<image="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%AE%A1%E7%AE%97%E5%9B%BE.jpg?raw=true">
+ <div align=center>
+<https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%AE%A1%E7%AE%97%E5%9B%BE.jpg>
 </div>
 
 &emsp;&emsp;在这个图中，我们有变量b和W以及一个叫做占位符的x；我们也让计算图图中的每个操作都有节点。因此，让我们更加详细地了解那些节点类型。<br>
