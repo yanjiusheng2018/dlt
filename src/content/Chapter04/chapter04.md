@@ -26,6 +26,8 @@
 &emsp;&emsp;在成功安装NVIDIA驱动程序后，重新启动机器。为了验证驱动程序是否正确安装，在终端中发出以下命令：<br>
 `Cat /proc/driver/nvidia/versio`<br>
 &emsp;&emsp;然后您会在终端中获得以下输出：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/NVIDIA%E7%9A%84%E5%AE%89%E8%A3%85.png)
+
 
 # 一级标题
 ## 二级标题
