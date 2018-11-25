@@ -124,7 +124,7 @@
 &emsp;&emsp;这假设targetDirectory是~/tensorflow.<br>
 &emsp;&emsp;既然已经创建了虚拟环境，可以通过发出以下命令来访问它：<br>
 `source ~/tensorflow/bin/activate`<br>
-?&emsp;&emsp;发出此命令后，您将访问刚刚创建的虚拟机，并且可以安装仅安装在此环境中且不会影响正在使用的底层或主机系统的任何包。<br>
+&emsp;&emsp;发出此命令后，您将访问刚刚创建的虚拟机，并且可以安装仅安装在此环境中且不会影响正在使用的底层或主机系统的任何包。<br>
  &emsp;&emsp;为了从环境中退出，可以发出以下命令：<br>
 #`deactivate`<br>
 &emsp;&emsp;请注意，现在我们确实希望处于虚拟环境中，所以现在就把它打开。一旦你完成了TensorFlow的游戏，你就应该停用它：<br>
