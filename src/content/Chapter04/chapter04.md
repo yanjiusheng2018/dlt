@@ -26,9 +26,9 @@
 &emsp;&emsp;在成功安装NVIDIA驱动程序后，重新启动机器。为了验证驱动程序是否正确安装，在终端中发出以下命令：<br>
 `Cat /proc/driver/nvidia/versio`<br>
 &emsp;&emsp;然后您会在终端中获得以下输出：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/NVIDIA%E7%9A%84%E5%AE%89%E8%A3%85.png)
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/NVIDIA%E7%9A%84%E5%AE%89%E8%A3%85.png)<br>
 &emsp;&emsp;接下来，我们需要安装CUDA 8。打开以下CUDA下载链接：https://developer.nvidia.com/cuda-downloads. 按照以下截图选择操作系统、体系结构、发行版本和安装程序类型：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/CUDA%E7%89%88%E6%9C%AC%E7%9A%84%E9%80%89%E6%8B%A9.png) 
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/CUDA%E7%89%88%E6%9C%AC%E7%9A%84%E9%80%89%E6%8B%A9.png)<br> 
 &emsp;&emsp;安装程序文件约为2 GB。您需要发出以下安装说明：<br>
 `Sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64.deb`<br>
 `Sudo apt-get update`<br>
