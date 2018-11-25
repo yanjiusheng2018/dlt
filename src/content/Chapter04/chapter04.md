@@ -116,8 +116,12 @@
 `(tensorflow)$ pip3 install --upgrade tensorflow   #for python 3.n`<br>
 ### Windows的TensorFlow GPU/CPU安装
 &emsp;&emsp;我们假设您的系统已经安装了Python 3。若要安装TensorFlow，请按如下方式启动管理员。打开起点菜单，搜索CMD，然后右键点击它并点击作为管理员运行:<br>
-
-
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/Windows%E7%9A%84TensorFlow%E5%AE%89%E8%A3%85.png)<br> 
+&emsp;&emsp;一旦打开了命令窗口，就可以发出以下命令来在GPU模式中安装TensorFlow:<br>
+&emsp;&emsp;[你需要拥有pip或pip3（取决于您的Python版本）在发出下一个命令之前安装。]<br>
+`pip3 install --upgrade tensorflow-gpu`<br>
+&emsp;&emsp;发出以下命令来在CPU模式下安装TensorFlow:<br>
+`pip3 install --upgrade tensorflow`<br>
 
 # 一级标题
 ## 二级标题
