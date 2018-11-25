@@ -9,6 +9,9 @@
 &emsp;&emsp;（5）从TensorFlow中获取输出；<br>
 &emsp;&emsp;（6）TensorBoard的可视化学习。<br>
 
+## TensorFlow的安装
+&emsp;&emsp;TensorFlow安装有两种模式：CPU和GPU。首先我们将在GPU模式下安装TensorFlow，开始安装教程。<br>
+
 # 一级标题
 ## 二级标题
 ### 三级标题
