@@ -39,7 +39,7 @@
 
 &#8195;&#8195;MNIST是一种广泛使用的数据集，用于对机器学习技术进行基准测试。数据集包含一组手写数字，如下所示：
 
-![image.png](./3.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/3.png)
 
 <center>图3：MNIST数据集中的样本数字</center> 
 
@@ -98,7 +98,7 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 &#8195;&#8195;每个图像是28像素乘28像素。 我们可以将其解释为一大堆数字：
 
-![image.png](./4.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/4.png)
 
 <center>图4：矩阵表示中的MNIST数字（强度值）</center> 
 
@@ -106,7 +106,7 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 &#8195;&#8195;结果是mnist.train.images(训练图像)是一个形状为（55000,784)的张量。第一个维度是图像列表的索引，第二个维度是索引每个图像中的每个像素强度值。对于特定图像中的特定像素，张量中的每个条目是0到1之间的像素强度：
 
-![image.png](./5.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/5.png)
 
 <center>图5：MNIST数据分析</center> 
 
@@ -114,7 +114,7 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 &#8195;&#8195;出于实现的目的，我们将标签编码为单热向量（one—hot）。one—hot向量是除了该向量的数字的索引之外的全零的向量代表。例如，3将是[0,0,0,1,0,0,0,0,0,0]。因此，mnist.train.labels是（55000,10）的浮点数组。
 
-![image.png](./6.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/6.png)
 
 <center>图6：MNIST数据分析</center> 
 
@@ -130,13 +130,13 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 &#8195;&#8195;图7显示了一个模型学习到的图片上每个像素对于特定数字类的权值。红色代表负数权值，蓝色代表正数权值。
 
-![image.png](./7.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/7.png)
 
 <center>图7：为每个MNIST类学习的一个模型的权重</center> 
 
 &#8195;&#8195;我们也需要加入一个额外的偏置量（bias），因为输入往往会带有一些无关的干扰量。因此对于给定的输入图片 x 它代表的是数字 i 的证据可以表示为:
 
-![image.png](./8.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/8.png)
 
 其中: 
 +      **W**i代表权重
@@ -153,25 +153,25 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 &#8195;&#8195;展开等式右边的子式，可以得到：
 
-![image.png](./9.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/9.png)
 
 &#8195;&#8195;但是更多的时候把softmax模型函数定义为前一种形式：把输入值当成幂指数求值，再正则化这些结果值。这个幂运算表示，更大的证据对应更大的假设模型（hypothesis）里面的乘数权重值。反之，拥有更少的证据意味着在假设模型里面拥有更小的乘数系数。假设模型里的权值不可以是0值或者负值。Softmax然后会正则化这些权重值，使它们的总和等于1，以此构造一个有效的概率分布。
 
 &#8195;&#8195;对于softmax回归模型可以用下面的图解释，对于输入的xs加权求和，再分别加上一个偏置量，最后再输入到softmax函数中：
 
-![image.png](./10.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/10.png)
 
 <center>图8：softmax回归的可视化</center> 
 
 &#8195;&#8195;如果把它写成一个等式，我们可以得到：
 
-![image.png](./12.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/12.png)
 
 <center>图9：softmax回归的方程表示</center> 
 
 &#8195;&#8195;我们也可以用向量表示这个计算过程：用矩阵乘法和向量相加。这有助于提高计算效率和可读性：
 
-![image.png](./13.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/13.png)
 
 <center>图10：softmax回归方程的向量化表示</center> 
 
@@ -264,7 +264,7 @@ input_values_train, target_values_train = train_size(55000)
 
 &#8195;&#8195;target_values_train目标训练集数据是所有的input_values_train输入训练集数据标签的样本。 在以下示例中，数组代表7的one-hot编码格式：
 
-![image.png](./14.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/14.png)
 
 <center>图11：数字7的one—hot编码</center> 
 
@@ -279,7 +279,7 @@ visualize_digit(ran.randint(0, input_values_train.shape[0]))
     
 
 
-![png](output_90_1.png)
+![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/23.png)
 
 
 <center>图12：可视化模型的输出数字</center> 
@@ -295,7 +295,7 @@ visualize_mult_imgs_flat(0,400)
 ```
 
 
-![png](output_94_0.png)
+![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/24.png)
 
 
 <center>图13：前400个训练样本</center> 
@@ -358,11 +358,11 @@ softmax_layer = tf.nn.softmax(tf.matmul(input_values,weights) + biases)
 
 &#8195;&#8195;首先，让我们忽略softmax并查看softmax函数内部的内容。matmul是用于乘法矩阵的TensorFlow函数。如果你知道矩阵乘法（*https://en.wikipedia.org/wiki/Matrix_multiplication*），你会明白这样计算的恰到好处。
 
-![image.png](./11.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/11.png)
 
 &#8195;&#8195;将导致一些训练样例（m）*类别数（n）的矩阵：
 
-![image.png](./17.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/17.png)
 
 <center>图14：简单矩阵乘法</center> 
 
@@ -434,7 +434,7 @@ sess.run(tf.nn.softmax(tf.constant([0.1, 0.005, 2])))
 
 &#8195;&#8195;交叉熵定义为：
 
-![image.png](./18.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/18.png)
 
 其中：
 +    y 是我们预测的概率分布
@@ -456,7 +456,7 @@ model_cross_entropy = tf.reduce_mean(-tf.reduce_sum(output_values * tf.log(softm
 
 &#8195;&#8195;此函数从softmax层（其值范围从0到1）中获取所有预测的对数，并通过示例的真值将它们与元素相乘(*https://en.wikipedia.org/wiki/Hadamard_product_%287matrices%29*)。如果每个值的log函数接近于零，则它将使此值为一个大的负数（-np.log(0.01)=4.6），如果它接近于1，则它将使值为小一个的负数（-np.log(0.09)=0.1）：
 
-![image.png](./19.png)
+![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/19.png)
 
 <center>图15：y=log(x)的可视化</center>
 
@@ -637,7 +637,7 @@ for i in range(10):
 ```
 
 
-![png](output_164_0.png)
+![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/25.png)
 
 
 <center>图16：可视化数字0-9的权重</center> 
@@ -667,7 +667,7 @@ visualize_digit(0)
     
 
 
-![png](output_170_1.png)
+![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/26.png)
 
 
 <center>图17：第0个样本的标签和它的可视化</center> 
@@ -734,7 +734,7 @@ display_result(ran.randint(0, 55000))
 ```
 
 
-![png](output_182_0.png)
+![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/27.png)
 
 
 <center>图18：随机样本的预测值、标签和它的可视化</center> 
