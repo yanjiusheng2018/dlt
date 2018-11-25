@@ -55,4 +55,12 @@ sess.run(h,{x:np.random.random((100,784))})  #生成100*784的0-1之间的随机
 &emsp;&emsp;运行我们的计算图之后通过sess对象，我们应该得到和下面类似的输出：<br>
 &emsp;&emsp;如你所见，在上面的代码片段的第二行中，我们初始化了变量，这是TensorFlow中的一个概念称为延后计算。这意味着你的计算图的计算只在运
 行时发生，而在TensorFlow中运行时意味着会话。所以，调用这个函数global_variables_initializer()实际上会初始化图表中的变量，如在我们的例子中的W和b。<br>
-
+&emsp;&emsp;我们还可以使用会话变量，以确保在执行计算图之后它将被关闭：<br>
+#使用会话变量确保在执行完流程图后将其关闭
+```
+ph_var1 = tf.placeholder(tf.float32,shape=(2,3)) 
+ph_var2 = tf.placeholder(tf.float32,shape=(3,2)) 
+result = tf.matmul(ph_var1,ph_var2) 
+with tf.Session() as sess: 
+    print(sess.run([result],feed_dict={ph_var1:[[1.,3.,4.],[1.,3.,4.]],ph_var2:[[1., 3.],[3.,1.],[.1,4.]]})) 
+```
