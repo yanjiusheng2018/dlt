@@ -114,7 +114,8 @@
 &emsp;&emsp;为了安装TensorFlow的CPU版本，可以发出以下命令，这些命令还将安装TensorFlow需要的任何依赖库：<br>
 `(tensorflow)$ pip install --upgrade tensorflow   #for python 2.7`<br>
 `(tensorflow)$ pip3 install --upgrade tensorflow   #for python 3.n`<br>
-
+### Windows的TensorFlow GPU/CPU安装
+&emsp;&emsp;我们假设您的系统已经安装了Python 3。若要安装TensorFlow，请按如下方式启动管理员。打开起点菜单，搜索CMD，然后右键点击它并点击作为管理员运行:<br>
 
 
 
