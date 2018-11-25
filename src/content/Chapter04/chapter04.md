@@ -22,9 +22,9 @@
 &emsp;&emsp;然后您会在终端中获得以下输出：<br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/GPU%E7%9A%84%E6%9F%A5%E7%9C%8B.png)
 &emsp;&emsp;接下来，我们需要添加一个专有的NVIDIA驱动程序库来安装驱动程序。使用apt-get:<br>
-`Sudo add-apt-repository ppa:graphics-drivers/ppa`<br>
-`Sudo apt-get updata`<br>
-`Sudo apt-get install nvidia-375`<br>
+```Sudo add-apt-repository ppa:graphics-drivers/ppa
+Sudo apt-get updata
+Sudo apt-get install nvidia-375```
 &emsp;&emsp;在成功安装NVIDIA驱动程序后，重新启动机器。为了验证驱动程序是否正确安装，在终端中发出以下命令：<br>
 `Cat /proc/driver/nvidia/versio`<br>
 &emsp;&emsp;然后您会在终端中获得以下输出：<br>
@@ -122,6 +122,21 @@
 `pip3 install --upgrade tensorflow-gpu`<br>
 &emsp;&emsp;发出以下命令来在CPU模式下安装TensorFlow:<br>
 `pip3 install --upgrade tensorflow`<br>
+
+## TensorFlow环境
+&emsp;&emsp;TensorFlow是谷歌的另一个深度学习框架，名为TensorFlow意味着，它来自神经网络基于多维数据数组或张量执行的操作。从字面上看，它是张量的流动。但是首先要知道，我们为什么要在这本书中使用一个深度的学习框架？<br>
+&emsp;&emsp;（1）**它缩放机器学习代码**大部分关于深度学习和 机器学习的研究都可以应用于这些学习框架。他们允许数据科学家非常快速地迭代，并使得深层学习和其他ML算法更容易被实践者访问。诸如谷歌、脸谱网等大公司正在使用这样的深度学习框架来扩展到数十亿用户。<br>
+&emsp;&emsp;（2）**它计算梯度。**深度学习框架也可以 自动地计算梯度。如果您一步一步地进行梯度计算，您会发现梯度计算并不简单，而且您自己实现它的无bug版本可能很棘手。<br>
+&emsp;&emsp;（3）**它规范了机器学习应用程序的共享。**同样地，预先训练模型可以在线获得，可以跨不同的深度学习框架使用，并且这些预先训练的模型可以帮助在GPU方面资源有限的人，从而不必每次都从头开始。我们可以站在巨人的肩膀上，从那里夺走它。<br>
+&emsp;&emsp;（4）**有很多可用的深度学习框架。**这些深度学习框架具有不同的优势， 范式、抽象层次、编程语言等等。<br>
+&emsp;&emsp;（5）**用于并行处理的GPU接口。**使用GPU进行计算是一个有吸引力的的特点，因为GPU加速你的代码比CPU快很多，因为核的数量和并行化。<br>
+&emsp;&emsp;这就是为什么Tensorflow在深度学习方面取得进步几乎是必要的，因为它可以促进你的项目。<br>
+&emsp;&emsp;简言之，TensorFlow是什么？<br>
+&emsp;&emsp;（1）TensorFlow是谷歌的一个深度学习框架，它是使用数据流图进行数值计算的开放源代码。<br>
+&emsp;&emsp;（2）它最初是由谷歌大脑团队开发的，以便于他们的机器学习研究。<br>
+&emsp;&emsp;（3）TensorFlow是表示机器学习算法的接口和执行这些算法的实现。<br>
+&emsp;&emsp;TensorFlow是如何工作的以及潜在的范式是什么？<br>
+
 
 # 一级标题
 ## 二级标题
