@@ -1,7 +1,5 @@
-# TensorFlow的启动和运行  
-<br>
-
-
+# TensorFlow的启动和运行
+&emsp;&emsp;在《Deep Learning》一书的第四章中，我们要学习广泛使用的深度学习框架——TensorFlow。
 # 一级标题
 ## 二级标题
 ### 三级标题
