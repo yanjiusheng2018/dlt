@@ -106,7 +106,7 @@
 &emsp;&emsp;既然已经创建了虚拟环境，可以通过发出以下命令来访问它：<br>
 
 `source ~/tensorflow/bin/activate`<br>
-&emsp;&emsp;发出此命令后，您将访问刚刚创建的虚拟机，并且可以安装仅安装在此环境中且不会影响正在使用的底层或主机系统的任何包。<br>
+?&emsp;&emsp;发出此命令后，您将访问刚刚创建的虚拟机，并且可以安装仅安装在此环境中且不会影响正在使用的底层或主机系统的任何包。<br>
 &emsp;&emsp;为了从环境中退出，可以发出以下命令：<br>
 `deactivate`<br>
 &emsp;&emsp;请注意，现在我们确实希望处于虚拟环境中，所以现在就把它打开。一旦你完成了TensorFlow的游戏，你就应该停用它：<br>
@@ -147,7 +147,7 @@
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E5%85%AC%E5%BC%8F.gif)<br>
 &emsp;&emsp;因此，我们有一些试图计算的隐藏层，一些参数矩阵W乘以一些输入值x加上偏倚项b作为激活函数。 Relu函数取输入值和零中最大的数值。下面的图表展示了TensorFlow计算图：<br>
 <div align="center">
-![image]<https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%AE%A1%E7%AE%97%E5%9B%BE.jpg>
+<image="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%AE%A1%E7%AE%97%E5%9B%BE.jpg?raw=true">
 </div>
 
 &emsp;&emsp;在这个图中，我们有变量b和W以及一个叫做占位符的x；我们也让计算图图中的每个操作都有节点。因此，让我们更加详细地了解那些节点类型。<br>
