@@ -182,6 +182,194 @@ plot_imgs(imgs=imgs, true_class=true_class)
 （这里是240页第Incepthon Model上面行，这句话用来标记已经翻译到的位置，下次再续写的话记得删除这句话）
  
  
+ （这里是240页第Incepthon Model上面行，这句话用来标记已经翻译到的位置，下次再续写的话记得删除这句话）
+ ## 先启模型传输值
+ &emsp;&emsp;如前所述，我们将在ImageNet数据集上使用预先训练好的初始化模型。所以，我们需要从互联网上下载这个预先训练好的模型:<br>
+ &emsp;&emsp;让我们首先为inception模型定义<br>
+ ```python
+#下载预训练的inception v3模型
+inception.maybe_download()
+```
+ &emsp;&emsp;预训练的先启模型的权重约为85MB，如果在之前定义的EBUB@EJS中不存在，下面的代码行将下载它:
+  ```python
+inception.maybe_download() 
+Downloading Inception v3 Model ...
+-download progress:100%
+```
+&emsp;&emsp;我们将加载inception模型，这样我们就可以把它作为CIFAR-10图像的特征提取器:
+#我们将加载初始模型，以便将其用作CIFAR-10图像的特征提取器 
+#这样我们就可以用预先训练过的权重将其最小化，并为我们的模型定制
+ ```python
+inception_model = inception.Inception()
+```
+&emsp;&emsp;正如我们前面提到的，计算CIFAR-10数据集的传输值需要一些时间，因此我们需要缓存它们以备将来使用。值得庆幸的是，JODFQUJPO模块中有一个帮助函数可以帮助我们做到这一点:
+```python
+from inception import transfer_values_cache
+```
+&emsp;&emsp;接下来，我们需要为缓存的培训和测试文件设置文件路径
+```python
+file_path_train = os.path.join(cifar10.data_path, 
+                               'inception_cifar10_train.pkl')
+file_path_test = os.path.join(cifar10.data_path, 
+                              'inception_cifar10_test.pkl')
+print(file_path_train,file_path_test,sep='\n')
+print("Cifar-10训练图像的初始化处理转换值…")
+#首先，我们需要缩放img来满足初始模型的要求，因为模型要求所有像素都在0到255之间，
+#我们的CIFAR-10像素的训练示例在0.0到1.0之间
+imgs_scaled = training_images * 255.0
+#下面这个函数是检查我们的训练图像的传输值是否已经计算并加载，如果没有则计算并保存它们
+transfer_values_training = transfer_values_cache(cache_path=file_path_train,
+                                              images=imgs_scaled,
+                                              model=inception_model)
+#训练数据相同，首先，我们需要缩放img来满足初始模型的要求，要所有像素都在0到255之间，
+#我们的CIFAR-10像素的训练示例在0.0到1.0之间
+imgs_scaled = testing_images * 255.0
+#检查我们的训练图像的传输值是否已经计算并加载，如果没有则计算并保存它们。
+transfer_values_testing = transfer_values_cache(cache_path=file_path_test,
+                                             images=imgs_scaled,
+                                             model=inception_model)                                            
+```
+&emsp;&emsp;如前所述，我们在CIFAR-10数据集的训练集中有50,000张图像。我们来检查一下这些图像的传输值的形状。训练集中的每个图像应该是2048:
+```python
+transfer_values_training.shape
+```
+&emsp;&emsp;输出:
+```python
+(50000, 2048)
+```
+&emsp;&emsp;我们需要对测试集做同样的事情:
+```python
+transfer_values_training.shape
+```
+&emsp;&emsp;输出:
+```python
+(10000, 2048)
+```
+&emsp;&emsp;为了直观地理解转换值是什么样子的，我们将定义一个辅助函数，使我们能够使用来自训练或测试集的特定图像的转换值的图形:
+```python
+def plot_transferValues(ind):
+    print("原始输入图像:")
+
+    # 在测试集的索引处绘制图像.
+    plt.imshow(testing_images[ind], interpolation='nearest')
+    plt.show()
+
+    print("使用Inception model传输值:")
+
+    #将传输值可视化为图像.
+    transferValues_img = transfer_values_testing[ind]
+    transferValues_img = transferValues_img.reshape((32, 64))
+
+    # 绘制传输值图像
+    plt.imshow(transferValues_img, interpolation='nearest', cmap='Reds')
+    plt.show()
+    plot_transferValues(i=16)
+```
+&emsp;&emsp;输入图像:<br>
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Five.png?raw=true) <br>
+&emsp;&emsp;使用先启模型传输图像的值:<br>
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Eight.png?raw=true) <br>  
+```python 
+plot_transferValues(i=17)
+```
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Seven.png?raw=true) <br>
+&emsp;&emsp;使用先启模型传输图像的值:<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Six.png?raw=true) <br>  
+
+## 转让值分析
+&emsp;&emsp;在这一节中，我们将对刚刚得到的训练图像的传输值进行一些分析。这个分析的目的是看看这些传输值是否足以对我们在CIFAR-10中的图像进行分类。
+
+&emsp;&emsp;对于每个输入图像，我们有2048个传输值。为了绘制这些传递值并对其进行进一步分析，我们可以使用来自scikit-learn的主成分分析(PCA)等降维技术。我们将把传输值从2048减少到2，以便能够直观地看到它，并看看它们是否能够成为区分不同类别CIFAR-10的好特性:
+```python
+from sklearn.decomposition import PCA
+```
+&emsp;&emsp;接下来，我们需要创建一个PCA对象，其中组件的数量只有2个
+```python
+pca_obj = PCA(n_components=2)
+```
+&emsp;&emsp;将传输值从2048减少到2需要很多时间，所以我们将在5000张具有传输值的图像中只选取3000张作为子集:
+```python
+subset_transferValues = transfer_values_training[0:3000]
+```
+&emsp;&emsp;我们还需要得到这些图像的类号:
+```python
+cls_integers = testing_cls_integers[0:3000]
+```
+&emsp;&emsp;我们可以通过打印传输值的形状来再次检查我们的子设置:接下来，我们使用PCA对象将传输值从2048减少到2:
+```python
+subset_transferValues.shape
+```
+&emsp;&emsp;输出:
+```python
+(3000, 2048)
+```
+&emsp;&emsp;接下来，我们使用PCA对象将传输值从2048减少到2:
+```python
+reduced_transferValues = pca_obj.fit_transform(subset_transferValues)
+```
+&emsp;&emsp;现在，让我们看看PCA约简过程的输出:
+```python
+reduced_transferValues.shape
+```
+&emsp;&emsp;输出:
+```python
+(3000, 2)
+```
+&emsp;&emsp;将传递值的维数降为2后，将这些值作图:
+#导入颜色映射图，以用不同的颜色绘制每个类。
+```python
+import matplotlib.cm as color_map
+```
+```python
+def plot_reduced_transferValues(transferValues, cls_integers):
+    #为每一个类创建一个颜色不同的颜色图
+    c_map = color_map.rainbow(np.linspace(0.0, 1.0, num_classes))
+
+    # 获得每个样本的颜色
+    colors = c_map[cls_integers]
+
+    # 获得X,y的值
+    x_val = transferValues[:, 0]
+    y_val = transferValues[:, 1]
+
+    # 在散点图中绘制传输值
+    plt.scatter(x_val, y_val, color=colors)
+    plt.show()
+```
+&emsp;&emsp;这里，我们绘制的是训练集子集的约简传递值。在CIFAR-10中，我们有10个类，所以我们要用不同的颜色绘制它们对应的传递值。从下图可以看出，传输值是根据相应的类分组的。组与组之间的重叠是由于主成分分析的约简过程不能很好地分离转移值:
+```python
+plot_reduced_transferValues(reduced_transferValues, cls_integers)
+```
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Ten.png?raw=true)   
+&emsp;&emsp;我们可以使用不同的降维方法t-SNE对传递值进行进一步的分析:
+```python
+from sklearn.manifold import TSNE
+```
+&emsp;&emsp;再一次，我们将降低传递值的维度，也就是2048，但是这次是50个值，而不是2:
+```python
+pca_obj = PCA(n_components=50)
+transferValues_50d = pca_obj.fit_transform(subset_transferValues)
+```
+&emsp;&emsp;接下来，我们将第二维度约简技术叠加起来，将主成分分析过程的输出反馈给它:
+```python
+tsne_obj = TSNE(n_components=2)
+```
+&emsp;&emsp;最后，我们使用PCA方法的约简值，并将t-SNE方法应用于它:
+```python
+reduced_transferValues = tsne_obj.fit_transform(transferValues_50d) 
+```
+&emsp;&emsp;输出:
+```python
+(3000, 2)
+```
+&emsp;&emsp;让我们用t-SNE方法画出减少的传输值。正如您在下一幅图像中看到的，t-SNE能够比PCA更好地分离分组传输值。
+&emsp;&emsp;从这个分析中得出的结论是，我们通过将输入图像输入到预先训练的初始化模型中得到的提取的传输值可以用于将训练图像分离到10个类中。这种分离并不是100%准确的，因为在下面的图中有少量的重叠，但是我们可以通过对我们预先训练的模型做一些微调来消除这种重叠:
+```python
+plot_reduced_transferValues(reduced_transferValues, cls_integers)
+```
+ 
+ 
+ 
  
 # 金灵大大写的 <br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Ten.png?raw=true) <br>
