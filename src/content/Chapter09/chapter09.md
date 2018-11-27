@@ -51,9 +51,134 @@ from cifar10 import num_classes
 如果您还没有这样做，则需要为CIFAR-10设置路径。cifar-10.py脚本将使用此路径保存数据集:
 ```python
 cifar10.data_path = "data/CIFAR-10/"
-
+```
+输出：
+```python
+The CIFAR-10 dataset is about 170MB, the next line checks if the dataset is alredy downloaded if not it downloads the dataset and store in the previous ata_path:
+```
+```python
 cifar10.maybe_download_and_extract()
-```<br>
+```
+输出:
+```python
+- Download progress: 100.0%
+Download finished.Extracting files.
+Done.
+```
+让我们看看CIFAR-10数据集中的类别:
+```python
+#下载名为CIFAR-10的数据集
+class_names = cifar10.load_class_names()
+```
+输出:
+```python
+Loading data: data/CIFAR-10/cifar-10-batches-py/batches.meta
+['airplane',
+'automobile',
+'bird',
+'cat',
+'deer',
+'dog',
+'frog',
+'horse',
+'ship',
+'truck']
+Load the training-set.
+```
+这些返回的值里面，class-numbers 是整型的，那么我们接下来就要对其进行One-Hot编码处理形成lables：
+```python
+training_images, training_cls_integers, trainig_one_hot_labels = cifar10.load_training_data()
+cifar10.load_training_data()
+```
+输出：
+```python
+Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_1
+Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_2
+Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_3
+Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_4
+Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_5
+```
+现在，让我们对测试集做同样的事情，加载目标类的图像及其对应的整数表示，使用One-Hot编码:
+```python
+testing_images, testing_cls_integers, testing_one_hot_labels = cifar10.load_test_data()
+cifar10.load_test_data()
+```
+输出：
+```python
+Loading data: data/CIFAR-10/cifar-10-batches-py/test_batch
+```
+让我们来看看CIFAR-10中培训和测试集的分布:
+```python
+print("-Number of images in the training set:\t\t{}".format(len(training_images)))
+print("-Number of images in the testing set:\t\t{}".format(len(testing_images)))
+```
+输出：
+```python
+-Number of images in the training set:		50000
+-Number of images in the testing set:		10000
+```
+让我们定义一些帮助函数，使我们能够探索数据集。下面的辅助函数在网格中绘制了一组九幅图像:
+```python
+def plot_imgs(imgs, true_class, predicted_class=None):
+    assert len(imgs) == len(true_class)
+
+    # 为9个字节创建一个占位符
+    fig, axes = plt.subplots(3, 3) 
+
+    # 调整间距
+    if predicted_class is None:
+        hspace = 0.3
+    else:
+        hspace = 0.6
+    fig.subplots_adjust(hspace=hspace, wspace=0.3)
+
+    for i, ax in enumerate(axes.flat):
+        # 可能只有不到9张图片，确保不会崩溃
+        if i < len(imgs):
+            # 画图
+            ax.imshow(imgs[i],
+                      interpolation='nearest')
+
+            # 从class_names数组中获取真实类的实际名称
+            true_class_name = class_names[true_class[i]]
+
+            #显示预测类和真实类的标签
+            if predicted_class is None:
+                xlabel = "True: {0}".format(true_class_name)
+            else:
+                # 预测类的名称
+                predicted_class_name = class_names[predicted_class[i]]
+
+                xlabel = "True: {0}\nPred: {1}".format(true_class_name, predicted_class_name)
+
+            ax.set_xlabel(xlabel)
+
+        # 从图画中移除ticks.
+        ax.set_xticks([])
+        ax.set_yticks([])
+        
+    plt.show()
+```
+让我们继续，将来自测试集的一些图像及其对应的实际类可视化:
+```python
+# 获得测试集中的前9个图像
+imgs = testing_images[0:9]
+
+#获得真实类的整数表现形式
+true_class = testing_cls_integers[0:9]
+
+#画图
+plot_imgs(imgs=imgs, true_class=true_class)
+```
+输出：
+
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Four.png?raw=true)  
+
+
+
+
+
+
 （这里是237页第8行，这句话用来标记已经翻译到的位置，下次再续写的话记得删除这句话）
  
  
