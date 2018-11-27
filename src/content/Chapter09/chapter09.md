@@ -183,8 +183,243 @@ plot_imgs(imgs=imgs, true_class=true_class)
  
  
  
- 
- 
+# 金灵大大写的 <br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Ten.png?raw=true) <br>
+&emsp;&emsp;现在我们有了从训练图像中提取的传输值，我们知道这些值在某种程度上能够区分CIFAR-10的不同类。接下来，我们需要构建一个线性分类器，并将这些传递值提供给它来执行实际的分类。<br>
+## 建模和训练
+&emsp;&emsp;因此，让我们从指定输入占位符变量开始，这些变量将被输入到我们的神经网络模型中。第一个输入变量的形状（将包含提取的传输值）将是[None,transfer_len]。第二占位符变量将以一个热向量格式保存训练集的实际类标签。<br>
+```python
+transferValues_arrLength = inception_model.transfer_len
+input_values = tf.placeholder(tf.float32,shape=[None,transferValues_arrLength],name=’input_values’)
+y_actual = tf.placeholder(tf.float32,shape=[None,num_classes],name=’y_actual’)
+```
+第249页
+&emsp;&emsp;我们还可以通过定义另一个占位符变量，得到每个类的对应整数值，从1到10: <br>
+```python
+y_actual_cal = tf.argmax(y_actual,axis=1)
+```
+&emsp;&emsp;接下来，我们需要构建一个实际的分类神经网络来获取这些输入占位符并生成预测类: <br>
+```python
+def new_weights(shape):
+    return tf.Variable(tf.truncated_normal(shape,stddev=0.05))
+def new_biases(length):
+    return tf.Variable(tf.constant(0.05,shape=[length]))
+def new_fc_layer(input,num_inputs,num_outputs,use_relu=True):
+#参数1：前一层；参数2：Num.inputs from prev.layer；参数3：Num.outputs;
+#参数4:采用整流线形单元
+    #创建新权重和偏差值
+    weights = new_weights(shape=[num_inputs,num_outputs])
+    biases = new_biases(length=num_outputs)
+    #将层计算为输入和权重的矩阵乘法，并添加偏值
+    layer = tf.matmul(input,weights)+biases
+    #使用relu?
+    if use_relu:
+        layer = tf.nn.relu(layer)
+    return layer
+#第一个全连接层：
+layer+fc1 = new_fc_layer(input=input_values,num_inputs=2048,
+num_outputs=1024,use_relu=True)
+#第二个全连接层：
+layer_fc2 = new_fc_layer(input=layer_fc1,num_inputs=1024,
+num_outputs=num_classes,use_relu=False)
+#预测类标签
+y_predicted = tf.nn.softmax(layer_fc2)
+第250页
+#为了每个图像分类的交叉熵
+cross_entropy = \
+tf.nn.softmax_cross_entropy_with_logits(logits=layer_fc2,labels=y_actual)
+#损失 aka. 成本计量
+#这是必须最小化的标量值
+loss = tf.reduce_mean(cross_entropy)
+```
+
+&emsp;&emsp;然后，我们需要定义一个优化准则，用于分类器的训练。在这个实现中，我们将使用AdamOptimizer。这个分类器的输出将是一个10个概率得分的数组，对应于CIFAR-10数据集中的类数。然后，我们将对这个数组应用argmax操作，将最大得分的类分配给这个输入示例: <br>
+```python
+step = tf.Variable(initial_value=0,name=’step’,trainable=False)
+optimizer = tf.train.AdamOptimizer(learning_rate=1e-4).minimize(loss,step)
+y_predicted_cls = tf.argmax(y_predicted,axis=1)
+#比较预测类和真实类
+correct_prediction = tf.equal(y_predicted_cls,y_actual_cls)
+#将boolearn值转换为float
+model_accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
+```
+&emsp;&emsp;接下来，我们需要定义一个将实际执行图形的TensorFlow会话，然后初始化我们在此实现中早先定义的变量: <br>
+```python
+session = tf.Session()
+session.run(tf.global_variables_initializer())
+```
+&emsp;&emsp;在这个实现中，我们将使用随机梯度下降(SGD)，因此我们需要定义一个函数来从50,000张图像的训练集中随机生成特定大小的批。<br>
+&emsp;&emsp;因此，我们将定义一个助手函数，用于从传输值的输入训练集生成一个随机批处理:<br>
+```python
+#定义训练批次的大小
+train_batch_size = 64
+#定义一个从数据集中随机选择一批图像的函数
+def select_random_batch():
+    #训练集中的图像数(传输值)
+    num_imgs = len(transfer_values_training)
+    #创建一个随机8索引
+
+第251页
+ind = np.random.choice(num_imgs,size=training_batch_size,replace=False) 
+#使用随机索引去选择一些随机的x和y的值
+#我们用transfer-values 代替 图像作为 x-values
+x_batch = transfer_values_training[ind]
+y_batch = training_one_hot_labels[ind]
+    return x_batch,y_batch
+```
+&emsp;&emsp;接下来，我们需要定义一个助手函数来执行实际的优化过程，这将细化网络的权重。它将在每次迭代中生成一个批处理，并根据该批处理优化网络: <br>
+```python
+def optimize(num_iterations):
+    for i in range(num_iterations):
+        #随机的选一批图像去训练
+        #在input_batch中存储图像传输值
+        #其他图像的真实值将会储存在y_actual_batch
+        input_batch,y_actual_batch = select_random_batch()
+        #存储这批数据在一个字典里再给它取一个适当的名字
+        #像我们在上面定义且输入的占位符变量
+        feed_dict = {input_values:input_batch,y_actual:y_actual_batch}
+        #现在我们调用这批图像的优化器
+        #TensorFlow 将自动提供我们上面创建的dict的值
+        #在我们上面定义的模型输入占位符变量
+        i_global,_=session.run([step,optimizer],feed_dict=feed_dict)
+        #打印每100步的精度
+        if (i_global % 100 == 0) or (I == num_iterations - 1):
+            #计算在training_batch中的精确值
+            batch_accuracy = session.run(model_accuracy,feed_dict=feed_dict)
+            msg = “step:{0:>6},Training Accuracy:{1:>6.1%}”
+            print(mag.format(i_global,batch_accuracy))
+```
+
+第252页
+&emsp;&emsp;我们将定义一些辅助函数来显示前一个神经网络的结果，并显示预测结果的混淆矩阵: <br>
+```python
+def plot_errors(cls_predicted,cls_correct):
+    #cls_predicted 是一个数组它里面是测试集中所有图像的预测类
+    #cls_correct 是一个具有布尔值的数组，用于指示模型是否预测了正确的类
+    
+    #否定布尔数组
+    incorrect = (cls_correct == False)
+    #从测试集中获得图片这是错误的分类
+    incorrectly_classified_images = testing_images[incorrect]
+    #从那些图片中获得预测类
+    cls_predicted = cls_predicted[incorrect]
+    
+    #从那些图像获得真实的类
+    true_class = testing_cls_integers[incorrect]
+
+    n = min(9,len(incorrectly_classified_images))
+    #画第一个 n 图像
+    plot_imgs(imgs=incorrectly_classified_images[0:n],true_class=true_class[0:n],
+predicted_class=cls_predicted[0:n])
+```
+
+&emsp;&emsp;接下来，我们需要定义辅助函数来绘制混淆矩阵<br>
+```python
+from sklearn.metrics import confusion_matrix
+def plot_confusionMatrix(cls_predicted):
+    #所有预测值的cls_predicted 数组
+    #测试中的类编号
+
+    #从sklearn 调用混淆矩阵
+    cm =confusion_matrix(y_true=testing_cls_integers,y_pred=cls_predicted)
+    #打印混淆矩阵
+    for I in range(num_classes):
+        #将类名加入每一排
+        class_name = “({}) {}”.format(i,class_names[i])
+        print(cm[I,:],class_name)
+    #用类号标记混淆矩阵的每一列
+    cls_numbers = [“ ({0})”.format(i) for i in range(num_classes)]
+    print(“”.join(cls_numbers))
+```
+    
+    第253页
+&emsp;&emsp;另外，我们将定义另一个辅助函数来运行经过训练的分类器在测试集之上，并测量经过训练的模型在测试集之上的准确性: <br>
+```python
+#将数据集分批分类，以限制RAM的使用
+batch_size = 128
+def predict_class(transferValues,labels,cls_true):
+    #图片的编号
+    num_imgs = len(transferValues)
+    #为预测类分配一个数组，这些类将分批计算并填充到这个数组中
+    cls_predicted = np.zeros(shape=num_imgs,dtype=np.int)
+    #现在计算批次的预测类，我们将遍历所有批次，也许有一种更聪明、更毕达哥拉斯
+#的方法来解决这个问题
+    
+    #下一批的起始指标记为i
+    i = 0
+    while i < num_imgs:
+        #下一批结束指标记为j
+        j = min(i + batch_size,num_imgs)
+        #用索引i 和j之间的图像和标签创建一个feed-dict
+        feed_dict = {input_values:transferValues[i:j],y_actual:labels[i:j]}
+        #使用TensorFlow计算预测类
+        cls_predicted[i:j] = session.run(y_predicted_cls,feed_dict = feed_dict)
+        #将下一批的开始索引设置为当前批的结束索引
+        i = j
+        #创建一个布尔数组，每一个图像是否正确分类
+    correct = [a == p for a,p in zip(cls_true,cls_predicted)]
+    return correct,cls_predicted
+#调用之前的函数对test做预测
+def predict_cls_test():
+    return predict_class(transferValues = transfer_values_test,labels = labels_test,
+cls_true = cls_test)
+第254页
+def classification_accuracy(correct):
+    #定平均一个布尔数列时，False代表0，True代表1。所以我们在计算：True/len(correct) 的个数，这和分类精度是一样
+的
+
+    #返回这个分类精度，和正确分类数量
+    return np.mean(correct),np.sum(correct)
+
+def test_accuracy(show_example_errors=False,show_confusion_matrix=False)：
+    #再测试集中的所有数据，计算预测类和是否他们正确
+    correct,cls_pred = predict_class_test()
+    #分类 accuracy predict_class_test 和正确分类数量
+    accuracy,num_correct = classification_accuracy(correct)
+    #正确分类图像的数量
+    num_images = len(correct)
+
+     #打印accuracy
+    mag = “Test set accuracy:{0:.1%} ({1}/{2})”
+    print(msg.format(accuracy,num_correct,num_images))
+    #画一些mis-classifications的例子，若需要的话
+    if show_example_errors:
+        print(‘Example errors:’)
+        plot_erroes(cls_predicted=cls_pred,cls_correct=correct)
+    #画混淆矩阵，如果需要的话
+    if show_confusion_matrix:
+        print(“confusion matrix:”)
+        plot_confusionMatrix(cls_predicted=cls_pred)
+```
+&emsp；&emsp；在进行任何优化之前，让我们看看前面的神经网络模型的性能: <br>
+```python
+test_accuracy(show_example_errors=True,show_confusion_matrix=True)
+Accuracy on Test-Set:9.4%(939/10000)
+```
+第255页
+&emsp;&emsp;正如您所看到的，网络的性能非常低，但是在基于我们已经定义的优化标准进行一些优化之后，它会变得更好。因此，我们将运行优化器进行10000次迭代，然后测试模型的准确性: <br>
+```python
+optimize(num_iterations=10000)
+test_accuracy(show_example_errors=True,show_confusion_matrix=True)
+Accuracy on Test-Set:90.7%(9069/10000)
+```
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Four.png?raw=true)  
+
+confusion Matrix:
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Twelve.png?raw=true)  
+
+第256页
+&emsp;&emsp;最后，我们将结束开放的会议: <br>
+
+```python
+ model.close()
+session.close()
+```
+
+
+## 摘要
+&emsp;&emsp;在本章中，我们介绍了最广泛使用的深度学习最佳实践之一。TL是一个非常令人兴奋的工具，您可以使用它来获得深度学习体系结构，从您的小数据集中学习，但要确保以正确的方式使用它<br>
+&emsp;&emsp;接下来，我们将介绍一种用于自然语言处理的广泛使用的深度学习体系结构。这些递归式架构在大多数NLP领域都取得了突破:机器翻译、语音识别、语言建模和情绪分析。<br>
  
  
  
