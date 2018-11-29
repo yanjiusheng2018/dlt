@@ -11,6 +11,7 @@
 -  每个成员都可以参与项目编辑，即拥有修改、上传、删除文件的权限，请不要随意删除公共项目中的文件夹
 
 -  正确的上传内容，如下图所示哟<(＾－＾)>  
+
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/image/right.png)
 
 
