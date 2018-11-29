@@ -419,7 +419,7 @@ df_titanic_data.drop(features_to_drop, axis=1, inplace=True)
 
 这些描述性特征不足以得到性能良好的分类，所以我们可以决定增加更多的特征，以提高模型的预测性，以区别猫和狗。例如，我们可以考虑通过计算图像的X和Y两个维度的平均边缘或梯度强度来增加一些特征，例如图像的纹理。我们甚至可以通过添加越来越多的基于颜色、纹理直方图、统计矩等特征使模型/分类器获得更精确的分类能力。我们可以很容易地添加几百个这些特征来增强模型的预测性。但在超过一定限度后，反直观结果会更差。从图1看，你会更好地理解这一点：
 
-![image1.png](attachment:image.png)
+![image1.png](attachment:chapter03_image.png)
 
 <center>模型特征数的性能对比</center>
 
@@ -954,7 +954,7 @@ if __name__ == '__main__':
 输出图将包含表示训练和测试误差的两条曲线，它将是图2所示的四种可能形状之一。不同形状的来源是Andrew Ng在CurSera上的机器学习课程（https://www.coursera.org/learn/machine-learning）。 这是一个很棒的课程，有很多关于机器学习新手的见解和最佳实践：
     
     
-![image2.png](attachment:image2.png)
+![image2.png](attachment:chapter03_image.png)
 <center>绘制不同训练集大小的训练和测试误差的可能形状</center>
 
 那么，我们什么时候应该接受我们的模型并投入生产？ 我们何时才知道我们的模型在测试集上表现不佳，因此不会出不好的泛化错误？ 这些问题的答案取决于你在绘制训练误差曲线与不同训练集大小的测试误差曲线时得到的形状：
