@@ -7,7 +7,7 @@
 
 本章将介绍以下主题：
 
-   + **<font size=3>隐藏单元和架构设计</font>**
+   + ** <font size=3>隐藏单元和架构设计</font> **
    + **<font size=3>MNIST数据集分析</font>**
    + **<font size=3>数字分类 - 模型构建和训练</font>**
 
