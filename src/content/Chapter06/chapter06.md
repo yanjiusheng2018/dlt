@@ -7,7 +7,7 @@
 
 本章将介绍以下主题：
 
-   + ** <font size=3>隐藏单元和架构设计</font> **
+   + **<font size=3>隐藏单元和架构设计</font>**
    + **<font size=3>MNIST数据集分析</font>**
    + **<font size=3>数字分类 - 模型构建和训练</font>**
 
@@ -267,6 +267,7 @@ input_values_train, target_values_train = train_size(55000)
 ![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/14.png)
 
 <center>图11：数字7的one—hot编码</center> 
+**加粗文本** 
 
 &#8195;&#8195;因此，让我们可视化数据集中的随机图像并查看其外观，我们将使用前面的辅助函数来显示数据集中的随机数字：
 
