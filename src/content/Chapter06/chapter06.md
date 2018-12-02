@@ -1,4 +1,3 @@
-
 # <center> 6、深度前馈神经网络- 实施数字分类</center>
 
 &#8195;&#8195;前馈神经网络（FNN）是一种特殊类型的神经网络，其中神经元之间的链接/连接不形成循环。因此，它与其他神经网络中的体系结构不同，我们在本书后面将进行研究（递归型神经网络）。FNN是一种广泛使用的架构，它是第一个并且最简单的神经网络。
@@ -138,18 +137,18 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 ![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/8.png)
 
-其中: 
-+      **W**i代表权重
-+      **b**i代表数字 i 类的偏置量
-+      **j**&#8194;代表给定图片 x 的像素索引用于像素求和.
+其中:
++    **W**i代表权重
++    **b**i  代表数字 i 类的偏置量
++    **j**&#8194;&#8194;代表给定图片 x 的像素索引用于像素求和.
 
 &#8195;&#8195;softmax函数可以把这些证据转换成我们预测的概率 y：
 
-<center> **<font size=5>y = softmax(evidence)</font>**</center>
+**<center> **<font size=5>y = softmax(evidence)</font>**</center>**
 
 &#8195;&#8195;这里的softmax可以看成是一个激励（activation）函数或者链接（link）函数，把我们定义的线性函数的输出转换成我们想要的格式，也就是关于10个数字类的概率分布。因此，给定一张图片，它对于每一个数字的吻合度可以被softmax函数转换成为一个概率值。softmax函数可以定义为：
 
-<center> **<font size=5>softmax(evidence) = normalize(exp(evidence))</font>**</center>
+**<center> **<font size=5>softmax(evidence) = normalize(exp(evidence))</font>**</center>**
 
 &#8195;&#8195;展开等式右边的子式，可以得到：
 
@@ -177,7 +176,7 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 &#8195;&#8195;更进一步，可以写成更加紧凑的方式：
 
-<center> **<font size=5>y = softmax(Wx + b)</font>**</center>
+**<center> **<font size=5>y = softmax(Wx + b)</font>**</center>**
 
 &#8195;&#8195;现在，让我们把它转变成TensorFlow可以使用的东西。
 
@@ -267,7 +266,6 @@ input_values_train, target_values_train = train_size(55000)
 ![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/14.png)
 
 <center>图11：数字7的one—hot编码</center> 
-**加粗文本** 
 
 &#8195;&#8195;因此，让我们可视化数据集中的随机图像并查看其外观，我们将使用前面的辅助函数来显示数据集中的随机数字：
 
@@ -357,7 +355,7 @@ softmax_layer = tf.nn.softmax(tf.matmul(input_values,weights) + biases)
 #我们用tf.matmul(X，W)表示矩阵x乘以W，对应之前等式里面的X*W ,然后再加上b，把和输入到tf.nn.softmax函数里面。
 ```
 
-&#8195;&#8195;首先，让我们忽略softmax并查看softmax函数内部的内容。matmul是用于乘法矩阵的TensorFlow函数。如果你知道矩阵乘法（*https://en.wikipedia.org/wiki/Matrix_multiplication*），你会明白这样计算的恰到好处。
+&#8195;&#8195;首先，让我们忽略softmax并查看softmax函数内部的内容。matmul是用于乘法矩阵的TensorFlow函数。如果你知道矩阵乘法（**https://en.wikipedia.org/wiki/Matrix_multiplication**），你会明白这样计算的恰到好处。
 
 ![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/11.png)
 
@@ -754,5 +752,3 @@ display_result(ran.randint(0, 55000))
 201802210502|郭力博|应用统计
 201802210517|雒&#8195;腾|应用统计
 <br>
-
-
