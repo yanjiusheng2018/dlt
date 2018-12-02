@@ -50,7 +50,7 @@
 
 ## The MNIST data
 
-&#8195;&#8195;MNIST数据集的官网是Yann LeCun's website(*http://yann.lecun.com/exdb/mnist/*)。幸运的是，TensorFlow提供了一些辅助函数来下载MNIST数据集，以至于可以通过使用以下两行代码来下载数据集：
+&#8195;&#8195;MNIST数据集的官网是Yann LeCun's website(* http://yann.lecun.com/exdb/mnist/ )。幸运的是，TensorFlow提供了一些辅助函数来下载MNIST数据集，以至于可以通过使用以下两行代码来下载数据集：
 
 
 ```python
