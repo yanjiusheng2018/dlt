@@ -52,14 +52,14 @@ from cifar10 import num_classes
 ```python
 cifar10.data_path = "data/CIFAR-10/"
 ```
-输出：
+&emsp;&emsp;输出：
 ```python
 The CIFAR-10 dataset is about 170MB, the next line checks if the dataset is alredy downloaded if not it downloads the dataset and store in the previous ata_path:
 ```
 ```python
 cifar10.maybe_download_and_extract()
 ```
-输出:
+&emsp;&emsp;输出:
 ```python
 - Download progress: 100.0%
 Download finished.Extracting files.
@@ -70,7 +70,7 @@ Done.
 #下载名为CIFAR-10的数据集
 class_names = cifar10.load_class_names()
 ```
-输出:
+&emsp;&emsp;输出:
 ```python
 Loading data: data/CIFAR-10/cifar-10-batches-py/batches.meta
 ['airplane',
@@ -90,7 +90,7 @@ Load the training-set.
 training_images, training_cls_integers, trainig_one_hot_labels = cifar10.load_training_data()
 cifar10.load_training_data()
 ```
-输出：
+&emsp;&emsp;输出：
 ```python
 Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_1
 Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_2
@@ -103,7 +103,7 @@ Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_5
 testing_images, testing_cls_integers, testing_one_hot_labels = cifar10.load_test_data()
 cifar10.load_test_data()
 ```
-输出：
+&emsp;&emsp;输出：
 ```python
 Loading data: data/CIFAR-10/cifar-10-batches-py/test_batch
 ```
@@ -112,7 +112,7 @@ Loading data: data/CIFAR-10/cifar-10-batches-py/test_batch
 print("-Number of images in the training set:\t\t{}".format(len(training_images)))
 print("-Number of images in the testing set:\t\t{}".format(len(testing_images)))
 ```
-输出：
+&emsp;&emsp;输出：
 ```python
 -Number of images in the training set:		50000
 -Number of images in the testing set:		10000
@@ -170,7 +170,7 @@ true_class = testing_cls_integers[0:9]
 #画图
 plot_imgs(imgs=imgs, true_class=true_class)
 ```
-输出：
+&emsp;&emsp;输出：
 
  ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Four.png?raw=true)  <br>
  ## 先启模型传输值
@@ -187,9 +187,10 @@ Downloading Inception v3 Model ...
 -download progress:100%
 ```
 &emsp;&emsp;我们将加载inception模型，这样我们就可以把它作为CIFAR-10图像的特征提取器:
+ ```python
 #我们将加载初始模型，以便将其用作CIFAR-10图像的特征提取器 
 #这样我们就可以用预先训练过的权重将其最小化，并为我们的模型定制
- ```python
+
 inception_model = inception.Inception()
 ```
 &emsp;&emsp;正如我们前面提到的，计算CIFAR-10数据集的传输值需要一些时间，因此我们需要缓存它们以备将来使用。值得庆幸的是，JODFQUJPO模块中有一个帮助函数可以帮助我们做到这一点:
@@ -306,8 +307,9 @@ reduced_transferValues.shape
 (3000, 2)
 ```
 &emsp;&emsp;将传递值的维数降为2后，将这些值作图:
-#导入颜色映射图，以用不同的颜色绘制每个类。
 ```python
+#导入颜色映射图，以用不同的颜色绘制每个类。
+
 import matplotlib.cm as color_map
 ```
 ```python
@@ -554,7 +556,7 @@ def test_accuracy(show_example_errors=False,show_confusion_matrix=False)：
         print(“confusion matrix:”)
         plot_confusionMatrix(cls_predicted=cls_pred)
 ```
-&emsp；&emsp；在进行任何优化之前，让我们看看前面的神经网络模型的性能: <br>
+&emsp;&emsp;在进行任何优化之前，让我们看看前面的神经网络模型的性能: <br>
 ```python
 test_accuracy(show_example_errors=True,show_confusion_matrix=True)
 Accuracy on Test-Set:9.4%(939/10000)
@@ -572,11 +574,9 @@ confusion Matrix:
 &emsp;&emsp;最后，我们将结束开放的会议: <br>
 
 ```python
- model.close()
+model.close()
 session.close()
 ```
-
-
 ## 摘要
 &emsp;&emsp;在本章中，我们介绍了最广泛使用的深度学习最佳实践之一。TL是一个非常令人兴奋的工具，您可以使用它来获得深度学习体系结构，从您的小数据集中学习，但要确保以正确的方式使用它<br>
 &emsp;&emsp;接下来，我们将介绍一种用于自然语言处理的广泛使用的深度学习体系结构。这些递归式架构在大多数NLP领域都取得了突破:机器翻译、语音识别、语言建模和情绪分析。<br>
