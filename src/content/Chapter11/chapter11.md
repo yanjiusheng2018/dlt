@@ -55,13 +55,19 @@
 &emsp;&emsp;通过训练这些模型，建立了一种逻辑回归的二元分类方法，将实际目标词wt和h噪声或想象词分离开来上下文。下面的图表使用CBOW技术简化了这个想法:这种最大似然方法将用softmax函数表示:
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204130206630.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+
 &emsp;&emsp;下一个图显示了构建Word2Vec模型时可以使用的两种架构:
 
+
+
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204130232489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+
 &emsp;&emsp;说的更正式些，这些技术的目标函数最大化了以下几点:
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204131031190.png)
+
 &emsp;&emsp;在这里:
+
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204131109268.png)
 
@@ -83,6 +89,7 @@ the quick brown fox jumped over the lazy dog
 &emsp;&emsp;现在，我们可以继续计算实对和噪声对之间的损失为:
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204132141214.png)
+
 &emsp;&emsp;在这种情况下，目标是更新参数以改进前面的目标函数。通常，我们可以使用梯度。因此，我们将尝试计算相对于目标函数参数损失的梯度，它将被表示为
 
  ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204132232378.png)
@@ -96,6 +103,7 @@ the quick brown fox jumped over the lazy dog
 在这本书的前几章中，我们介绍了一种叫做one-hot编码的东西，它产生了一个0的向量，除了这个向量表示的单词的索引。所以,您可能想知道我们为什么不在这里使用它。这种方法效率很低，因为通常你会有一大堆不同的单词，可能大概有50000个单词，使用一热编码就会产生一个49,999个向量集合为0，只有一个条目设置为1。这样一个非常稀疏的输入将会导致巨大的计算浪费，因为我们会在神经网络的隐层中做矩阵乘法。
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204132647226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+
 &emsp;&emsp;正如我们前面提到的，使用one-hot编码的结果将是非常稀疏的向量，尤其是当你有大量不同的单词需要编码的时候。
 &emsp;&emsp;下图显示，当我们将除一项以外的所有0的稀疏向量乘以一个权重矩阵时，输出将仅是该矩阵的一行对应于稀疏向量的一个值:
 
@@ -106,6 +114,7 @@ the quick brown fox jumped over the lazy dog
 &emsp;&emsp;查找特定单词的对应嵌入值称为嵌入查找。如前所述，嵌入层将只是一个完全连接的层，其中单位数表示嵌入维数。
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204132736834.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+
 &emsp;&emsp;你可以看到这个过程是非常直观和直接的;我们只需要遵循以下步骤:
 1、将查找表定义为权重矩阵。
 2、将嵌入层定义为具有特定的完全连接的隐藏层。单位数量(嵌入维数)
