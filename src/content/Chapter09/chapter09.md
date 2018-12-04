@@ -29,7 +29,7 @@
 &emsp;&emsp;同样，我们将替换预先训练的先启模型的最后一个完全连接的层，然后使用先启模型的其余部分作为特征提取器。因此，我们首先在inception模型中提供原始图像，它将从这些图像中提取特性，然后输出所谓的传输值。<br>
 &emsp;&emsp;在获得从inception模型中提取的特性的传输值之后，您可能需要将它们保存到您的办公桌上，因为如果您是动态地执行这些操作，那么将会花费一些时间，因此将它们保存到您的办公桌上以节省时间是非常有用的。在TensorFlow教程中，他们使用术语瓶颈值而不是传输值，但它只是完全相同事物的不同名称。<br>
 &emsp;&emsp;在获取传输值或从桌面加载它们之后，我们可以将它们提供给任何为新任务定制的线性分类器。在这里，我们将提取的传输值输入另一个神经网络，然后针对CIFAR-10的新类进行培训。<br>
-如下图所示，为我们将要进行的通解大纲:<br>
+&emsp;&emsp;如下图所示，为我们将要进行的通解大纲:<br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Three.png?raw=true) <br>
 ## 装载和探索CIFAR-10
 &emsp;&emsp;让我们从导入这个实现所需的包开始:<br>
@@ -48,7 +48,7 @@ import inception
 import cifar10
 from cifar10 import num_classes
 ```
-如果您还没有这样做，则需要为CIFAR-10设置路径。cifar-10.py脚本将使用此路径保存数据集:
+&emsp;&emsp;如果您还没有这样做，则需要为CIFAR-10设置路径。cifar-10.py脚本将使用此路径保存数据集:
 ```python
 cifar10.data_path = "data/CIFAR-10/"
 ```
@@ -65,7 +65,7 @@ cifar10.maybe_download_and_extract()
 Download finished.Extracting files.
 Done.
 ```
-让我们看看CIFAR-10数据集中的类别:
+&emsp;&emsp;让我们看看CIFAR-10数据集中的类别:
 ```python
 #下载名为CIFAR-10的数据集
 class_names = cifar10.load_class_names()
@@ -85,7 +85,7 @@ Loading data: data/CIFAR-10/cifar-10-batches-py/batches.meta
 'truck']
 Load the training-set.
 ```
-这些返回的值里面，class-numbers 是整型的，那么我们接下来就要对其进行One-Hot编码处理形成lables：
+&emsp;&emsp;这些返回的值里面，class-numbers 是整型的，那么我们接下来就要对其进行One-Hot编码处理形成lables：
 ```python
 training_images, training_cls_integers, trainig_one_hot_labels = cifar10.load_training_data()
 cifar10.load_training_data()
@@ -98,7 +98,7 @@ Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_3
 Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_4
 Loading data: data/CIFAR-10/cifar-10-batches-py/data_batch_5
 ```
-现在，让我们对测试集做同样的事情，加载目标类的图像及其对应的整数表示，使用One-Hot编码:
+&emsp;&emsp;现在，让我们对测试集做同样的事情，加载目标类的图像及其对应的整数表示，使用One-Hot编码:
 ```python
 testing_images, testing_cls_integers, testing_one_hot_labels = cifar10.load_test_data()
 cifar10.load_test_data()
@@ -107,7 +107,7 @@ cifar10.load_test_data()
 ```python
 Loading data: data/CIFAR-10/cifar-10-batches-py/test_batch
 ```
-让我们来看看CIFAR-10中培训和测试集的分布:
+&emsp;&emsp;让我们来看看CIFAR-10中培训和测试集的分布:
 ```python
 print("-Number of images in the training set:\t\t{}".format(len(training_images)))
 print("-Number of images in the testing set:\t\t{}".format(len(testing_images)))
@@ -117,7 +117,7 @@ print("-Number of images in the testing set:\t\t{}".format(len(testing_images)))
 -Number of images in the training set:		50000
 -Number of images in the testing set:		10000
 ```
-让我们定义一些帮助函数，使我们能够探索数据集。下面的辅助函数在网格中绘制了一组九幅图像:
+&emsp;&emsp;让我们定义一些帮助函数，使我们能够探索数据集。下面的辅助函数在网格中绘制了一组九幅图像:
 ```python
 def plot_imgs(imgs, true_class, predicted_class=None):
     assert len(imgs) == len(true_class)
@@ -159,7 +159,7 @@ def plot_imgs(imgs, true_class, predicted_class=None):
         
     plt.show()
 ```
-让我们继续，将来自测试集的一些图像及其对应的实际类可视化:
+&emsp;&emsp;让我们继续，将来自测试集的一些图像及其对应的实际类可视化:
 ```python
 # 获得测试集中的前9个图像
 imgs = testing_images[0:9]
@@ -172,17 +172,7 @@ plot_imgs(imgs=imgs, true_class=true_class)
 ```
 输出：
 
- ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Four.png?raw=true)  
-
-
-
-
-
-
-（这里是240页第Incepthon Model上面行，这句话用来标记已经翻译到的位置，下次再续写的话记得删除这句话）
- 
- 
- （这里是240页第Incepthon Model上面行，这句话用来标记已经翻译到的位置，下次再续写的话记得删除这句话）
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Four.png?raw=true)  <br>
  ## 先启模型传输值
  &emsp;&emsp;如前所述，我们将在ImageNet数据集上使用预先训练好的初始化模型。所以，我们需要从互联网上下载这个预先训练好的模型:<br>
  &emsp;&emsp;让我们首先为inception模型定义<br>
@@ -367,11 +357,6 @@ reduced_transferValues = tsne_obj.fit_transform(transferValues_50d)
 ```python
 plot_reduced_transferValues(reduced_transferValues, cls_integers)
 ```
- 
- 
- 
- 
-# 金灵大大写的 <br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Ten.png?raw=true) <br>
 &emsp;&emsp;现在我们有了从训练图像中提取的传输值，我们知道这些值在某种程度上能够区分CIFAR-10的不同类。接下来，我们需要构建一个线性分类器，并将这些传递值提供给它来执行实际的分类。<br>
 ## 建模和训练
@@ -381,7 +366,6 @@ transferValues_arrLength = inception_model.transfer_len
 input_values = tf.placeholder(tf.float32,shape=[None,transferValues_arrLength],name=’input_values’)
 y_actual = tf.placeholder(tf.float32,shape=[None,num_classes],name=’y_actual’)
 ```
-第249页
 &emsp;&emsp;我们还可以通过定义另一个占位符变量，得到每个类的对应整数值，从1到10: <br>
 ```python
 y_actual_cal = tf.argmax(y_actual,axis=1)
@@ -420,7 +404,6 @@ tf.nn.softmax_cross_entropy_with_logits(logits=layer_fc2,labels=y_actual)
 #这是必须最小化的标量值
 loss = tf.reduce_mean(cross_entropy)
 ```
-
 &emsp;&emsp;然后，我们需要定义一个优化准则，用于分类器的训练。在这个实现中，我们将使用AdamOptimizer。这个分类器的输出将是一个10个概率得分的数组，对应于CIFAR-10数据集中的类数。然后，我们将对这个数组应用argmax操作，将最大得分的类分配给这个输入示例: <br>
 ```python
 step = tf.Variable(initial_value=0,name=’step’,trainable=False)
@@ -446,8 +429,6 @@ def select_random_batch():
     #训练集中的图像数(传输值)
     num_imgs = len(transfer_values_training)
     #创建一个随机8索引
-
-第251页
 ind = np.random.choice(num_imgs,size=training_batch_size,replace=False) 
 #使用随机索引去选择一些随机的x和y的值
 #我们用transfer-values 代替 图像作为 x-values
@@ -477,8 +458,6 @@ def optimize(num_iterations):
             msg = “step:{0:>6},Training Accuracy:{1:>6.1%}”
             print(mag.format(i_global,batch_accuracy))
 ```
-
-第252页
 &emsp;&emsp;我们将定义一些辅助函数来显示前一个神经网络的结果，并显示预测结果的混淆矩阵: <br>
 ```python
 def plot_errors(cls_predicted,cls_correct):
@@ -500,7 +479,6 @@ def plot_errors(cls_predicted,cls_correct):
     plot_imgs(imgs=incorrectly_classified_images[0:n],true_class=true_class[0:n],
 predicted_class=cls_predicted[0:n])
 ```
-
 &emsp;&emsp;接下来，我们需要定义辅助函数来绘制混淆矩阵<br>
 ```python
 from sklearn.metrics import confusion_matrix
@@ -519,8 +497,6 @@ def plot_confusionMatrix(cls_predicted):
     cls_numbers = [“ ({0})”.format(i) for i in range(num_classes)]
     print(“”.join(cls_numbers))
 ```
-    
-    第253页
 &emsp;&emsp;另外，我们将定义另一个辅助函数来运行经过训练的分类器在测试集之上，并测量经过训练的模型在测试集之上的准确性: <br>
 ```python
 #将数据集分批分类，以限制RAM的使用
@@ -550,11 +526,10 @@ def predict_class(transferValues,labels,cls_true):
 #调用之前的函数对test做预测
 def predict_cls_test():
     return predict_class(transferValues = transfer_values_test,labels = labels_test,
-cls_true = cls_test)
-第254页
+                                         cls_true = cls_test)
 def classification_accuracy(correct):
-    #定平均一个布尔数列时，False代表0，True代表1。所以我们在计算：True/len(correct) 的个数，这和分类精度是一样
-的
+    #定平均一个布尔数列时，False代表0，True代表1。
+    #所以我们在计算：True/len(correct) 的个数，这和分类精度是一样的
 
     #返回这个分类精度，和正确分类数量
     return np.mean(correct),np.sum(correct)
@@ -584,7 +559,6 @@ def test_accuracy(show_example_errors=False,show_confusion_matrix=False)：
 test_accuracy(show_example_errors=True,show_confusion_matrix=True)
 Accuracy on Test-Set:9.4%(939/10000)
 ```
-第255页
 &emsp;&emsp;正如您所看到的，网络的性能非常低，但是在基于我们已经定义的优化标准进行一些优化之后，它会变得更好。因此，我们将运行优化器进行10000次迭代，然后测试模型的准确性: <br>
 ```python
 optimize(num_iterations=10000)
@@ -595,8 +569,6 @@ Accuracy on Test-Set:90.7%(9069/10000)
 
 confusion Matrix:
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter09/chapter09_image/Twelve.png?raw=true)  
-
-第256页
 &emsp;&emsp;最后，我们将结束开放的会议: <br>
 
 ```python
