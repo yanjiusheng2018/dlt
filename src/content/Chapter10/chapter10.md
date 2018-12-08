@@ -38,10 +38,10 @@
 ### 使用莎士比亚数据建立语言模型
 &emsp;&emsp;从上述例子中，我们可以通过模型生成文本。但另我们惊奇的是，神经网络不仅会生成文本，还会学习训练数据的风格和结构。我们可以通过对某一具有结构和风格的特定文本进行RNN型模型的训练来阐明这个有趣的过程，比如下面莎士比亚的作品:<br>
 &emsp;&emsp;让我们来看看通过训练网络生成输出的作品：
-Second Senator: 　<br>
-    They are away this miseries, produced upon my soul,<br>
-    Breaking and strongly should be buried, when I perish<br>
-    The earth and thoughts of many states.<br>
+&emsp;&emsp;Second Senator: 　<br>
+    &emsp;&emsp;They are away this miseries, produced upon my soul,<br>
+    &emsp;&emsp;Breaking and strongly should be buried, when I perish<br>
+    &emsp;&emsp;The earth and thoughts of many states.<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
