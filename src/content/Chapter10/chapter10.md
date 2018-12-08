@@ -11,12 +11,13 @@
 &emsp;&emsp;我们已经了解到，以前的体系结构为其输入分配权重；RNNs遵循相同的优化过程，为其多个输入分配权重，即当前的输入和过去的输入。所以在这个案例中，神经网络将会对当输入前和上一时刻的输出作为这一时刻的输入分配两个不同的权重矩阵。为了做到这一点，我们将使用梯度下降和重配比的反向传播，即基于时间的反向传播算法（BPTT）。<br>
 ## 循环神经网络体系结构
 &emsp;&emsp;基于我们之前使用的深度学习体系结构的背景，你会发现RNNs的特别之处。我们之前学习的结构体系在输入或训练方面并不灵活。这些结构体系接收固定大小的序列、向量、图像作为输入并产生另一个固定大小的序列、向量、图像作为输出。RNN体系结构在某种程度上是不同的，因为它可以输入一个序列但输出另一个序列，或者如图一所示，输入序列但是单输出，或单输入但是输出为序列。这种灵活性对于如语言建模和情绪分析的多种应用程序非常有用:<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE1.jpg )
-<center>图1：在输入或输出形状方面RNNs的灵活性"<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE1.jpg )<br>
+&emsp;&emsp;图1：在输入或输出形状方面RNNs的灵活性"<br>
 &emsp;&emsp;这类体系结构的本质是模仿人类处理信息的方式。在任何谈话过程中，你对对方话语的理解完全取决于他之前所讲的话，你甚至可以根据对方刚才讲的话预测他接下来会将什么。<br>
 &emsp;&emsp;RNN在运用过程中也应该遵循完全相同的过程。例如，假设你想要翻译某一个句子中的一个特定的单词。你不会使用传统的前馈神经网络，因为传统的神经网络没有将之前接收到的单词的翻译的输出作为我们想要翻译的当前单词的输入的能力，并且也会因为缺少单词的上下文的信息而导致翻译错误。<br>
 &emsp;&emsp;RNNs保留过去的信息，并具有某种循环方式，允许在任何给定的点上使用之前学习到的信息进行当前预测：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE2.jpg)图2：RNNs体系结构具有保留过去步骤的信息的循环<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE2.jpg)<br>
+&emsp;&emsp;图2：RNNs体系结构具有保留过去步骤的信息的循环<br>
 &emsp;&emsp;在图2中，A是接收X(t)作为输入的一些神经网络，并产生和输出h(t)。此外，在这个循环的辅助下接收前一个步骤的信息。<br>
 &emsp;&emsp;这个循环看上去不是那么清晰，但是如果我们把循环展开，如图2所示，你会发现循环非常简单和直观，RNN只不过是同一个网络（可能是普通FNN）的重复，如图3所示：<br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE3.jpg)图3：RNN体系结构展开图<br>
@@ -54,26 +55,40 @@
 &emsp;&emsp;在这种情况下，具有短期依赖性的一般RNN模型便可以处理，如图6显示：<br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE6.jpg)
 &emsp;&emsp;图6：展示文本中的短期依赖<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
+&emsp;&emsp;进一步举例，如果一个人一开始就说“I used to live in France..”，然后他/她开始描述在法国的美好生活，最后以“I learned to speak French”结尾。因此，要想用模型预测他/她在句子结束时说的所学到的语言，模型就需要用到前面说的关于live 和French的信息。如果模型无法追踪文本中的长时依赖关系，那么该模型则无法处理此类情况：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE7.jpg)<br>
+&emsp;&emsp;图7：文本中长时依赖问题的挑战<br>
+&emsp;&emsp;为了处理文本中的梯度消失和长时依赖问题，研究者引入了一般RNN模型的变体，即长短期记忆网络（LSTM）。<br>
+## LSTM网络
+&emsp;&emsp;LSTM，RNN模型的变体，用于帮助学习文本中的长时依赖关系。早在1997年，Hochreiter & Schmidhuber就介绍了LSTM网络（http://www.bioinf.jku.at/publications/older/2604.pdf） ，很多研究者也对此进行了研究并在很多领域取得了有趣的成果。<br>
+&emsp;&emsp;因为LSTM网络的内部结构，因此这类型的体系结构能够处理文本中的长时依赖关系的问题。<br>
+&emsp;&emsp;LSTM网络与常规的RNN模型类似，因为随着时间的推移，它有一个重复的模块，但这个重复部件的内部结构不同于常规的RNN。它包括很多用于遗忘和更新信息的图层：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE8.jpg)<br>
+&emsp;&emsp;图8：标准RNN的重复模块包含一个层<br>
+&emsp;&emsp;正如上文提到的，常规RNN只有一个非常简单的结构，例如一个tanh层，但是LSTMs神经网络有四个不同的层并以某种特殊的方式进行相互作用。这种特殊的相互作用的方式使得LSTM在很多领域能很好地工作，我们将在建立语言模型的示例中看到这一点：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE9.jpg)
+&emsp;&emsp;图9：LSTM的重复模块包含四个相互作用的层<br>
+&emsp;&emsp;有关数学细节以及四个层之间实际相互作用方式的更多详细信息，可以查阅以下网址：http://colah.github.io/posts/2015-08-Understanding-LSTMs/<br>
+##  LSTM工作原理
+&emsp;&emsp;常规的LSTM体系结构的第一步是决定哪些信息是不必要的，它将通过扔掉不必要的信息来为更重要的信息留下更多的空间来发挥作用。为此，模型中有一个层叫做遗忘门(forget gate layer)，它会根据上一时刻的输出h(t-1)和当前时刻的输入x(t)来产生一个0-1的值，来决定哪些信息是要丢弃的。<br>
+&emsp;&emsp;1．第一步是经过输入门(input gate layer)，它用来决定神经元的上一个状态的哪些值需要更新<br>
+&emsp;&emsp;2．第二步是生成一组新的候选值，这些值将添加到神经元中，对细胞状态进行更新<br>
+&emsp;&emsp;最后，需要决定LSTM的神经元需要输出的内容。这些输出的内容将基于我们的细胞状态，但将是一个筛选过的版本。<br>
+## 语言模型的实现
+&emsp;&emsp;在这一部分中，我们将建立对字符进行操作的语言模型。为了演示模型的实现，我们将使用安娜•卡列尼娜的一本小说，并了解神经网络是如何学习文本的结构和风格并实现生成类似的文本：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE10.jpg)
+&emsp;&emsp;图10：字符级RNN的一般结构<br>
+&emsp;&emsp;*这个神经网络是根据Andrej Karpathy的关于RNNs的帖子( http://karpathy.github.io/2015/05/21/rnn-effectiveness/ )和Troch (http://github.com/karpathy/char-rnn) 的实现为基础的。*<br>
+&emsp;&emsp;*同样，在r2rt(http://r2rt.com/recurrent-neural-networks-in-tensorflow-ii.html) 以及在github上Sherjil Ozairp(http://github.com/sherjilozair/char-rnn-tensorflow) 写的关于神经网络的信息。下面是字符级RNN的一般体系结构。*<br>
+&emsp;&emsp;我们将建立一个字符级的RNN模型用来训练安娜•卡列尼娜的小说(链接：https://en.wikipedia.org/wiki/Anna_Karenina) 。它将根据书中的文本生成一个新的文本。链接上包含txt文本和实现的代码。<br>
+&emsp;&emsp;让我们从导入此字符级模型实现所需的库开始：<br>
+```import numpy as np
+import tensorflow as tf
+
+from collections import namedtuple
+```
+
+
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
