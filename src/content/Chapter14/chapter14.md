@@ -85,8 +85,8 @@ name = “generator_input_z”)
 使生成器工作背后的整个想法是从判别器接受梯度值, 如果网络陷入垂死的情况下, 学习过程不会发生。
 
 下图说明了传统的ReLU与其Leaky版本之间的区别：
-![](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/conte)
-![]()
+![deep](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter14/chapter14_image/deep.PNG)
+![deeo](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter14/chapter14_image/deeo.PNG)
 Leaky ReLU激活函数没有在TensorFlow中实现, 因此我们需要自己来实现它。如果输入是正值，此激活函数的输出将是正的,如果输入为负值, 则为受控负值。我们将控制一个名为alpha的参数的负值, 这将通过允许一些负值引入网络的容差。
 
 下面的公式表示我们正在执行的Leaky ReLU:
