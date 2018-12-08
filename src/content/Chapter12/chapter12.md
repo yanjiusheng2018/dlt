@@ -7,7 +7,7 @@
 &emsp;&emsp;在本节中，我们将重点介绍可用于情感分析的一般深度学习体系结构。下图显示了构建情感分析模型所需的处理步骤。<br>
 &emsp;&emsp;因此，首先，我们将讨论自然人类语言：<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter12/chapter12_image/picture1.png)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1：情感分析解决方案的一般传递途径，甚至是基于序列的自然语言解决方案<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1：情感分析解决方案的一般传递途径，甚至是基于序列的自然语言解决方案<br>
 &emsp;&emsp;我们将使用电影评论来构建这个情感分析应用程序。此应用程序的目标是根据输入的原始文本生成正面和负面的评论。例如，如果原始文本是这样的，“this movie is good”，那么我们需要模型来产生一个积极的情感。如果原始文本是“this is not a good movie”，那么我们就需要模型来产生一个消极的情感。情感分析应用程序将带领我们完成许多处理步骤，这些步骤是在神经网络(如嵌入)中使用自然人类语言所需要的。在这类应用中有几个困难：<br>
 &emsp;&emsp;其中之一是序列可能有不同的长度。<br>
 &emsp;&emsp;另一个问题是，如果我们只看单个单词(例如，good)，就会显示出一种积极的情感。然而，它的前面是“not”一词，那么它就是一种负面情感。这会使得我们的分析变得更加复杂，稍后我们会看到一个例子。<br>
@@ -18,12 +18,12 @@
 ### 1、RNNs——情感分析背景
 &emsp;&emsp;让我们回顾一下RNNs的基本概念，并在情感分析应用中讨论它们。正如我们在RNN章中提到的，RNN的基本构造块是一个循环单元，如下图所示：<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter12/chapter12_image/picture2.png)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图2：RNN单位的抽象概念<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图2：RNN单位的抽象概念<br>
 &emsp;&emsp;这个图是循环单元内部所发生的事情的抽象。我们在这里得到的是输入，因此这将是一个词，例如，good；当然，它必须转换为嵌入向量。然而，我们现在将忽视这一点。此外，这个单元有一种记忆状态，根据该state（状态）的内容和input（输入），我们将更新此状态并将新数据写入状态。例如，假设我们以前在输入中看到了单词not；我们将它写入状态，这样当我们在后面的输入中看到good一词时，由于我们从状态中知道我们刚刚看到了not这个词，我们就必须把它们写在一起，看到not good一词的状态，这样才可能表明整个输入文本可能有一种消极情感。<br>
 &emsp;&emsp;从旧的状态和输入到状态的新内容的映射是通过一个所谓的gate（闸门）来完成的，不同版本的循环单元实现这些映射的方式不同。它基本上是一个带有激活函数的矩阵运算，但是我们稍后会看到，反向传播梯度有一个问题。因此，RNN必须以一种特殊的方式来设计，这样梯度就不会被太大的扭曲。<br>
 &emsp;&emsp;在一个循环单元中，我们有一个类似的gate（闸门）来产生输出，而循环单元的输出又一次依赖于状态的当前内容和我们所看到的输入。因此，我们可以尝试将一个循环单元内部发生的处理进行展开，如下图所示：<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter12/chapter12_image/picture3.png)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图3：循环神经网络的展开图<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图3：循环神经网络的展开图<br>
 &emsp;&emsp;现在，我们这里只有一个循环单元，但是流程图显示了它在不同的时间步骤中发生了什么。因此：<br>
 &emsp;&emsp;在时间步骤一中，我们将单词this输入到循环单元，它的内部记忆状态首先初始化为0。每当我们开始处理新的数据序列时，TensorFlow就会这样做。所以，我们看到单词this，循环单位状态是0。因此，我们使用内部gate（闸门）更新记忆状态，在时间步骤二中输入单词is，然后this在这个时间步骤二中使用，记忆状态就有了一些内容。然而This个词没有太多的意义，所以状态可能仍然是在0左右。而且is也没有太多的意义，所以也许这个状态仍然是0。<br>
 &emsp;&emsp;在下一个时间步骤中，我们看到单词not，这是我们最终想要预测的整个输入文本的情感。它是我们需要存储在记忆中的东西以便循环单元内的gate（闸门）可以看到状态可能已经包含了接近于零的值。但是现在它想存储我们刚刚看到的单词not，所以它在这种状态下保存了一些非零值。<br>
@@ -34,7 +34,7 @@
 &emsp;&emsp;接下来，我们使用循环单元内的另一个gate（闸门）输出记忆状态的内容，然后用Sigmoid函数(这里不显示)处理它。我们得到0到1之间的输出值。<br>
 &emsp;&emsp;我们的想法是，我们想通过网络电影数据库中成千上万的电影评论来训练这个网络，在这里，对于每一个输入文本，我们都给出了正反两方面的真实情感价值。然后，我们希望TensorFlow找出循环单元内部的gate（闸门）应该是什么，以便它们能够准确地将这个输入文本映射到正确的情感：<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter12/chapter12_image/picture4.png)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图4：本章实现使用的架构<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图4：本章实现使用的架构<br>
 &emsp;&emsp;我们将在这个实现中使用的RNN的体系结构是一个RNN类型的三层体系结构。在第一层，我们刚才解释的那部分已经发生了，只是现在我们需要在每个时间步骤输出循环单元的值。然后，我们收集了一个新的数据序列，即第一个循环层的输出。接下来，我们可以将它输入到第二层，因为循环单元需要输入数据的序列(我们从第一层得到的输出和我们想要输入到第二层的输出是一些浮点值，我们并不真正理解这些浮点值的含义)。这在RNN中有意义，但这不是我们人类所能理解的。然后，在第二层进行类似的处理。<br>
 &emsp;&emsp;因此，首先，我们将这个循环单元的内部记忆状态初始化为0，然后，我们从第一个循环层获取第一个输出，并输入它。我们用这个循环单元内的gate（闸门）处理它，更新状态，将第一层的循环单元的输出作为第二个单词is，并使用它作为输入和内部记忆状态。我们继续这样做，直到我们处理完整个序列，然后我们收集第二个循环层的所有输出。我们使用它们作为第三个循环层的输入，在那里我们进行类似的处理。但是在这里，我们只需要最后一步的输出，这是对到目前为止所提供的所有内容的一种总结。然后，我们把它输出到一个完全连接的层，我们在这里不显示。最后，我们有Sigmoid激活函数，因此我们得到了一个介于0和1之间的值，它分别代表消极情感和积极情感。<br>
 ### 2、梯度爆炸和消失——回顾
