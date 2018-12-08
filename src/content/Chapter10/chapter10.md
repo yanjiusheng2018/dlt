@@ -18,7 +18,50 @@
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE2.jpg)图2：RNNs体系结构具有保留过去步骤的信息的循环<br>
 &emsp;&emsp;在图2中，A是接收X(t)作为输入的一些神经网络，并产生和输出h(t)。此外，在这个循环的辅助下接收前一个步骤的信息。<br>
 &emsp;&emsp;这个循环看上去不是那么清晰，但是如果我们把循环展开，如图2所示，你会发现循环非常简单和直观，RNN只不过是同一个网络（可能是普通FNN）的重复，如图3所示：<br>
-
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE3.jpg)图3：RNN体系结构展开图<br>
+&emsp;&emsp;RNNs这种直观的结构及其在输入输出形状方面的灵活性使其非常适用于基于序列的学习任务，例如机器翻译、语言建模、情绪分析、图像字幕等。<br>
+## RNNs的案例
+&emsp;&emsp;现在，我们对RNNs的工作原理以及它在不同的基于序列的示例中的有用性有了直观的了解。让我们进一步了解其中一些有趣的例子。<br>
+### 字符级语言模型
+&emsp;&emsp;语言建模是语音识别、机器翻译等许多应用的一项必要且重要的任务。在本节中，我们尝试模拟RNN的训练过程，并深入了解这些网络的工作原理。我们将建立一个对字符进行操作的语言模型。因此，我们将一堆文本信息作为对神经网络的输入，目的是试图建立下一个字符的概率分布，因为前面输出的字符将允许我们生成与在培训过程中作为输入提供的文本相似的文本。<br>
+&emsp;&emsp;例如，假设我们有一种语言，它只有四个字母作为其词汇，helo。<br>
+&emsp;&emsp;我们要做的任务是输入特定的字符序列（如HELLO）来训练循环神经网络。在这个特殊示例中，我们有四个训练样本：<br>
+&emsp;&emsp;1.根据输入的第一个字符h的上下文计算字符e的概率，<br>
+&emsp;&emsp;2.根据给定的he的上下文计算字符l的概率，<br>
+&emsp;&emsp;3.根据给定的hel的上下文计算字符l的概率，<br>
+&emsp;&emsp;4.最后根据给定的hell的上下文计算字符0的概率。<br>
+&emsp;&emsp;正如我们前几章学到的，机器学习技术通常是深度学习的一部分，只接受实值数字作为输入。所以，我们需要以某种方式转换或编码或输入字符为数字形式。为此，我们使用独热（one-hot）向量编码，这是一种通过具有零向量的方法对文本进行编码, 向量中除了词汇中字符的索引是1，其余位置均是0（本例词汇helo）。在对训练样本进行编码后，我们将一次性把编码后的训练样本输入到RNN类型的模型中。对每个给定的字符，RNN类型的模型的输出结果都是一个四维的向量（向量的维度对应于词汇数量），它表示词汇中每个字符作为给定输入字符之后的下一个字符的概率。图4表明了该过程：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE4.jpg)图4：以独热编码字符作为RNN类型的网络的输入以及输出是基于当前输入之后最有可能出现的字符的概率分布示例<br>
+&emsp;&emsp;正如图4所示，你会发现我们将输入序列中的第一个字符h输入模型，输出的四维向量表示下一个字符的置信度。因此，在输入h之后，出现的下一个字符是h的置信度是1，出现下一个字符是e的置信度是2.2，出现下一个字符是l的置信度是-3.0，出现下一个字符是o的置信度4.1。在这个特殊示例中，基于我们得训练样本的序列是hello，我们知道正确的下一个字符是e。因此，我们在训练这个RNN型网络的同时，主要目标是增加e作为下一个字符的可信度，降低其他字符的可信度。为了达到优化目的，我们将使用梯度下降和反向传播算法进行权重的更新并影响网络，以便对下个出现的准确的字符e生成更高的可信度，以此类推，对其他三个训练样本也进行权重更新以降低损失。<br>
+&emsp;&emsp;正如你所看到的，RNN型网络的输出会对词汇中的所有字符作为下一个字符出现生成置信分布。我们可以将这种置信分布转化为概率分布，这样某一个字符作为下一个字符出现的概率增加会导致其他字符出现的概率，因为概率和恒为1。对于这种特殊优化，我们可以对每个输出向量进行标准softmax函数的转换。<br>
+&emsp;&emsp;为了从这类网络中生成文本，我们可以对这个模型输入一个初始字符并得到接下来有可能出现的字符的概率分布，然后可以从这些字符中进行采样，并将其作为输入字符返回输入到模型中。通过一遍又一遍的重复这个过程我们可以得到一系列字符，也就是我们想要生成的固定长度的文本。<br>
+### 使用莎士比亚数据建立语言模型
+&emsp;&emsp;从上述例子中，我们可以通过模型生成文本。但另我们惊奇的是，神经网络不仅会生成文本，还会学习训练数据的风格和结构。我们可以通过对某一具有结构和风格的特定文本进行RNN型模型的训练来阐明这个有趣的过程，比如下面莎士比亚的作品:<br>
+&emsp;&emsp;让我们来看看通过训练网络生成输出的作品：
+Second Senator: 　
+They are away this miseries, produced upon my soul,
+Breaking and strongly should be buried, when I perish
+The earth and thoughts of many states.<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
