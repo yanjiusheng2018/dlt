@@ -11,7 +11,7 @@
 &emsp;&emsp;我们已经了解到，以前的体系结构为其输入分配权重；RNNs遵循相同的优化过程，为其多个输入分配权重，即当前的输入和过去的输入。所以在这个案例中，神经网络将会对当输入前和上一时刻的输出作为这一时刻的输入分配两个不同的权重矩阵。为了做到这一点，我们将使用梯度下降和重配比的反向传播，即基于时间的反向传播算法（BPTT）。<br>
 ## 循环神经网络体系结构
 &emsp;&emsp;基于我们之前使用的深度学习体系结构的背景，你会发现RNNs的特别之处。我们之前学习的结构体系在输入或训练方面并不灵活。这些结构体系接收固定大小的序列、向量、图像作为输入并产生另一个固定大小的序列、向量、图像作为输出。RNN体系结构在某种程度上是不同的，因为它可以输入一个序列但输出另一个序列，或者如图一所示，输入序列但是单输出，或单输入但是输出为序列。这种灵活性对于如语言建模和情绪分析的多种应用程序非常有用:<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE1.jpg)图1：在输入或输出形状方面RNNs的灵活性<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE1.jpg"图1：在输入或输出形状方面RNNs的灵活性")<br>
 &emsp;&emsp;这类体系结构的本质是模仿人类处理信息的方式。在任何谈话过程中，你对对方话语的理解完全取决于他之前所讲的话，你甚至可以根据对方刚才讲的话预测他接下来会将什么。<br>
 &emsp;&emsp;RNN在运用过程中也应该遵循完全相同的过程。例如，假设你想要翻译某一个句子中的一个特定的单词。你不会使用传统的前馈神经网络，因为传统的神经网络没有将之前接收到的单词的翻译的输出作为我们想要翻译的当前单词的输入的能力，并且也会因为缺少单词的上下文的信息而导致翻译错误。<br>
 &emsp;&emsp;RNNs保留过去的信息，并具有某种循环方式，允许在任何给定的点上使用之前学习到的信息进行当前预测：<br>
@@ -52,7 +52,7 @@
 &emsp;&emsp;研究者们面对的另一个具有挑战性的问题是人们可以在文本中找到的长时依赖问题。例如，假设某一句子，“I used to live in France and I learned how to speak...”，很显然该句子的后一个单词是French。<br>
 &emsp;&emsp;在这种情况下，具有短期依赖性的一般RNN模型便可以处理，如图6显示：<br>
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE6.jpg)
-&emsp;&emsp;<br>
+&emsp;&emsp;图6：展示文本中的短期依赖<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
