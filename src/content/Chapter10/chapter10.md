@@ -37,17 +37,21 @@
 &emsp;&emsp;为了从这类网络中生成文本，我们可以对这个模型输入一个初始字符并得到接下来有可能出现的字符的概率分布，然后可以从这些字符中进行采样，并将其作为输入字符返回输入到模型中。通过一遍又一遍的重复这个过程我们可以得到一系列字符，也就是我们想要生成的固定长度的文本。<br>
 ### 使用莎士比亚数据建立语言模型
 &emsp;&emsp;从上述例子中，我们可以通过模型生成文本。但另我们惊奇的是，神经网络不仅会生成文本，还会学习训练数据的风格和结构。我们可以通过对某一具有结构和风格的特定文本进行RNN型模型的训练来阐明这个有趣的过程，比如下面莎士比亚的作品:<br>
-&emsp;&emsp;让我们来看看通过训练网络生成输出的作品：
+&emsp;&emsp;让我们来看看通过训练网络生成输出的作品：<br>
 &emsp;&emsp;Second Senator: 　<br>
-    &emsp;&emsp;They are away this miseries, produced upon my soul,<br>
-    &emsp;&emsp;Breaking and strongly should be buried, when I perish<br>
-    &emsp;&emsp;The earth and thoughts of many states.<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
+&emsp;&emsp;They are away this miseries, produced upon my soul,<br>
+&emsp;&emsp;Breaking and strongly should be buried, when I perish<br>
+&emsp;&emsp;The earth and thoughts of many states.<br>
+&emsp;&emsp;尽管神经网络一次只生成一个字符，但它能生成一些有意义的文本和名字，这些文本和名字实际上都具有莎士比亚作品的结构和风格。<br>
+## 梯度消失问题
+&emsp;&emsp;在训练这类RNN型结构体系时，我们使用梯度下降和基于时间的反向传播算法，这为许多基于序列的学习工作带来了一些成功。但是因为梯度的性质和使用快速训练策略的原因，可以证明梯度价值会变小甚至会消失。这个过程说明了许多学习者陷入的梯度消失的问题。<br>
+&emsp;&emsp;在本章的后面部分，我们将讨论研究者是如何处理这类问题并产生一般RNN（vanilla RNNs）算法的变体来克服这些问题：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE5.jpg)
+&emsp;&emsp;图5：梯度消失问题 <br>
+## 长时依赖问题
+&emsp;&emsp;研究者们面对的另一个具有挑战性的问题是人们可以在文本中找到的长时依赖问题。例如，假设某一句子，“I used to live in France and I learned how to speak...”，很显然该句子的后一个单词是French。<br>
+&emsp;&emsp;在这种情况下，具有短期依赖性的一般RNN模型便可以处理，如图6显示：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE6.jpg)
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
