@@ -18,7 +18,7 @@
 ### 1、RNNs——情感分析背景
 &emsp;&emsp;让我们回顾一下RNNs的基本概念，并在情感分析应用中讨论它们。正如我们在RNN章中提到的，RNN的基本构造块是一个循环单元，如下图所示：<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter12/chapter12_image/picture2.png)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图2：RNN单位的抽象概念<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图2：RNN单位的抽象概念<br>
 &emsp;&emsp;这个图是循环单元内部所发生的事情的抽象。我们在这里得到的是输入，因此这将是一个词，例如，good；当然，它必须转换为嵌入向量。然而，我们现在将忽视这一点。此外，这个单元有一种记忆状态，根据该state（状态）的内容和input（输入），我们将更新此状态并将新数据写入状态。例如，假设我们以前在输入中看到了单词not；我们将它写入状态，这样当我们在后面的输入中看到good一词时，由于我们从状态中知道我们刚刚看到了not这个词，我们就必须把它们写在一起，看到not good一词的状态，这样才可能表明整个输入文本可能有一种消极情感。<br>
 &emsp;&emsp;从旧的状态和输入到状态的新内容的映射是通过一个所谓的gate（闸门）来完成的，不同版本的循环单元实现这些映射的方式不同。它基本上是一个带有激活函数的矩阵运算，但是我们稍后会看到，反向传播梯度有一个问题。因此，RNN必须以一种特殊的方式来设计，这样梯度就不会被太大的扭曲。<br>
 &emsp;&emsp;在一个循环单元中，我们有一个类似的gate（闸门）来产生输出，而循环单元的输出又一次依赖于状态的当前内容和我们所看到的输入。因此，我们可以尝试将一个循环单元内部发生的处理进行展开，如下图所示：<br>
@@ -43,3 +43,26 @@
 &emsp;&emsp;我们知道，神经网络的训练方式是使用梯度的反向传播，所以我们有一些损失函数，它得到神经网络的输出，然后得到我们对给定输入文本的真正输出。我们希望最小化这个损失值，以便神经网络的实际输出与这个特定输入文本的期望输出相对应。因此，我们需要取这个损失函数的梯度，相对于这些循环单元内的权重，这些权重用于更新内部状态并最终输出值的gates（闸门）。<br>
 &emsp;&emsp;现在，gate（闸门）被应用了大约500次，如果其中有一个乘法，我们得到的实质是一个指数函数。所以，你用它自己乘以500倍，如果这个值略小于1，那么它就会很快消失或者失去。同样，如果一个略大于1的值与其自身相乘500倍，它就会爆炸。<br>
 &emsp;&emsp;唯一能活过500次乘法的值是0和1。它们将保持不变，因此循环单位实际上比你在这里看到的要复杂得多。这是一个抽象的想法，我们想要以某种方式映射内部记忆状态和输入，以更新内部记忆状态并输出一些值——但实际上，我们需要非常小心地通过这些gates（闸门）向后传播梯度，这样我们就不会在许多时间步骤中出现指数乘法。我们也鼓励你们看一些关于循环单位的数学定义的教程。<br>
+## 二、情感分析——模型实现
+&emsp;&emsp;我们已经看到了如何实现RNNs的LSTM变体的所有细节和部分。为了让事情变得更令人兴奋，我们将使用一个名为Keras的更高级别的API。<br>
+&emsp;&emsp;"Keras"是一个高级的神经网络API（应用程序编程接口），用Python编写，能够运行在TensorFlow、CNTK或Theano之上。它是以快速试验为重点开发的。能够在尽可能短的时间内从一个想法到另一个结果是做好研究的关键。”—Keras网站<br>
+&emsp;&emsp;所以，Keras只是TensorFlow和其他深度学习框架的包装器。它非常适合于原型开发和快速构建，但另一方面，它使您对代码的控制更少。我们将借此机会在Keras中实现这个情感分析模型，这样您就可以在TensorFlow和Keras中得到一个手动实现。您可以使用keras进行快速原型开发，而tensorFlow用于生产准备系统。<br>
+&emsp;&emsp;对你来说，更有趣的消息是，你不必切换到一个完全不同的环境。现在可以将Keras作为TensorFlow中的一个模块访问，并导入包，如下所示：<br>
+&emsp;&emsp;from tensorflow.python.keras.models import sequential<br>
+&emsp;&emsp;from tensorflow.python.keras.layers import dense GRU Embedding<br>
+&emsp;&emsp;from tensorflow.python.keras.optimizers import Adam<br>
+&emsp;&emsp;from tensorflow.python.keras.preprocession.sequence import pad_sequences<br>
+&emsp;&emsp;因此，让我们继续使用我们现在所称的TensorFlow中一个更抽象的模块，它将帮助我们非常快地创建深度学习解决方案。这是因为我们将用几行代码编写完整的深度学习解决方案。<br>
+### 1、数据分析和预处理
+#### （1）导入所需模块
+''''''''''import matplotlib.pyplot as plt
+import tensorflow as tf
+import numpy as np
+from scipy.spatial.distance import cdist
+# from tf.keras.models import Sequential  # This does not work!
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense, GRU, Embedding
+from tensorflow.python.keras.optimizers import Adam
+from tensorflow.python.keras.preprocessing.text import Tokenizer
+from tensorflow.python.keras.preprocessing.sequence import pad_sequences
+''''''''''
