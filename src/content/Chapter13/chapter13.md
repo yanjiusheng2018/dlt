@@ -47,6 +47,762 @@
 ## MNIST数据集
 &emsp;&emsp;我们将通过获取MNIST数据集，使用TensorFlow的辅助函数开始实现。
 &emsp;&emsp;让我们导入这个实现所需的包:
-""import numpy as np
+```%matplotlib inline
+import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import tensorflow.examples.tutorials.mnist.input_data as input_data
+mnist_dataset = input_data.read_data_sets("MNIST_data/",validation_size=0)
+```
+Output:
+```Extracting MNIST_data/train-labels-idx1-ubyte.gz
+Extracting MNIST_data/t10k-images-idx3-ubyte.gz
+Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
+```
+&emsp;&emsp;让我们从MNIST数据集的一些例子开始:
+```#从训练集中选取一个图像画出来
+image = mnist_dataset.train.images[2]
+plt.imshow(image.reshape((28,28)),cmap = 'Greys_r')
+```
+Outpout:
+
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%9C1.png)
+```#从训练集中选取一个图像画出来
+image = mnist_dataset.test.images[2]
+plt.imshow(image.reshape((28,28)), cmap= 'Greys_r')
+```
+Output:
+
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%9C2.png)
+## 建立模型
+&emsp;&emsp;为了构建编码器，我们需要计算出每个MNIST图像将有多少像素，这样我们就可以计算出编码器的输入层的大小。来自MNIST数据集的每张图像都是28×28像素，因此我们将把这个矩阵重塑为一个28×28 = 784像素值的向量。我们不需要标准化MNIST的图像因为它们已经标准化了。<br>
+&emsp;&emsp;让我们开始构建模型的三个组件。在这个实现中，我们将使用一个非常简单的架构，即一个隐藏层，后面是ReLU激活 如下图所示:
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%9B%BE%E5%9B%9B.jpg)
+&emsp;&emsp;让我们按照前面的解释来实现这个简单的编码器-解码器架构:
+```#编码层或者隐藏层的大小
+encoding_layer_dim = 32
+img_size =  mnist_dataset.train.images.shape[1]
+```
+```#定义输入和目标值的占位符变量,
+#img_size就是图像的大小，是28x28的
+inputs_values = tf.placeholder(tf.float32,(None,img_size),name = "inputs_values")
+targets_values = tf.placeholder(tf.float32,(None,img_size),name = "targets_values")
+```
+```#定义一个接受输入值并对其进行编码的编码层
+encoding_layer = tf.layers.dense(inputs_values, encoding_layer_dim,activation = tf.nn.relu)
+```
+```#定义logit层，这是一个完全连接的层，但是它的输出没有任何激活函数
+logits_layer = tf.layers.dense(encoding_layer, img_size, activation = None)
+```
+```#在logit层后面添加一个sigmoid层
+decoding_layer = tf.sigmoid(logits_layer,name = "decoding_layer")
+```
+```#用sigmoid函数交叉熵作为一个损失函数
+model_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=logits_layer,labels=targets_values)
+```
+```#平均输入数据的损失值
+model_cost = tf.reduce_mean(model_loss)
+```
+```#现在我们有了一个损失函数，我们需要使用Adam优化器来优化它
+model_optimizier = tf.train.AdamOptimizer().minimize(model_cost)
+```
+&emsp;&emsp;现在我们已经定义了我们的模型并且使用了二进制交叉熵作为损失函数，并且图像值已经标准化了。<br>
+## 模型训练
+&emsp;&emsp;在本节中，我们将开始训练过程。我们将使用mnist_dataset对象的辅助函数，以便从具有特定大小的数据集中获得随机批处理;然后我们将对这批图像运行优化器。<br>
+&emsp;&emsp;让我们从创建会话变量开始这一节，它将负责执行我们前面定义的计算图:<br>
+```#创建会话
+sess = tf.Session()
+```
+&emsp;&emsp;接下来，让我们开始训练过程:
+```#现在让我们开始训练过程
+num_epochs = 20 #执行20个周期
+train_batch_size = 200 #每一批次200数据
+
+sess.run(tf.global_variables_initializer())#初始化所有tensorflow全局变量
+for e in range(num_epochs):  #使e循环遍历num_epcohs 即20个周期
+    for ii in range(mnist_dataset.train.num_examples//train_batch_size): #使用60000项数据进行训练，分为每一批次200项数据，所以有300个批次
+        input_batch = mnist_dataset.train.next_batch(train_batch_size)  #调用.next_batch函数，每次拿取200个数据进行训练
+        feed_dict = {inputs_values: input_batch[0], targets_values:input_batch[0]} 
+        input_batch_cost, _ = sess.run([model_cost, model_optimizier],feed_dict=feed_dict)# 运行这些代码    
+        
+        print("Epoch:{}/{}...".format(e+1, num_epochs),"Training loss: {:.3f}".format(input_batch_cost)) #保留小数点后三位
+ ```
+  Outpout:
+  ```
+  .
+  .
+  .
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.089
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.089
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.098
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.099
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.098
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.098
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.089
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.089
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.098
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.089
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.089
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.088
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.088
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.089
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.096
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.093
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.097
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.095
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.094
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.091
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.092
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.090
+Epoch:20/20... Training loss: 0.091
+```
+&emsp;&emsp;在运行前面的代码片段20个epoch之后，我们将得到一个经过训练的模型，它能够从MNIST数据的测试集生成或重构图像。 请记住，如果我们输入的图像与模型所训练的图像不相似，那么重构过程就无法工作，因为自动编码器是特定于数据的<br>
+&emsp;&emsp;让我们从测试集中获取一些图像，对训练好的模型进行测试，看看模型在解码器部分是如何进行重构的:
+```fig, axes = plt.subplots(nrows=2, ncols = 10, sharex=True, sharey=True, figsize=(20,4))
+input_images = mnist_dataset.test.images[:10]#先取出mnist训练图像的前十个值   
+reconstructed_images, compressed_images = sess.run([decoding_layer, encoding_layer], 
+feed_dict={inputs_values:input_images})
+for imgs, row in zip([input_images, reconstructed_images], axes):
+    for img, ax in zip(imgs, row):  
+        ax.imshow(img.reshape((28, 28)), cmap='Greys_r')
+        ax.get_xaxis().set_visible(True) #True代表显示坐标轴，False代表隐藏坐标轴
+        ax.get_yaxis().set_visible(True)
+
+    fig.tight_layout(pad=0.1)#调整多个图之间的间隔来减少堆叠，pad值越大，间隔越大
+ ```
+ Output:
+ ![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%9B%BE%E4%BA%94.jpg)
+ &emsp;&emsp;正如你所看到的，重构的图像与输入的图像非常接近，但是我们可以在编码器-解码器部分使用卷积层得到更好的图像<br>
+ ## 卷积神经网络自动编码器
+ &emsp;&emsp;前面的简单实现在尝试从MNIST数据集重构输入图像时做得很好，但是我们可以通过编码器中的卷积层和自动编码器的解码器部分获得更好的性能。这种替换的结果网络称为卷积自动编码器(CAE)。能够替换层的这种灵活性是自动编码器的一大优点，使它们适用于不同的领域。<br>
+ &emsp;&emsp;我们将用于CAE的架构将在网络的解码器部分包含上采样层，以获得图像的重构版本。<br>
+ 
+ ## 数据集
+  &emsp;&emsp;在这个代码实现中，我们可以使用任何类型的成像数据集，看看如何自动编码器的卷积版本会有所不同。我们仍然会使用MNIST为此数据集，所以让我们从使用TensorFlow助手获取数据集开始:
+  ```
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+```
+ ```
+import tensorflow.examples.tutorials.mnist.input_data as input_data
+mnist_dataset = input_data.read_data_sets("MNIST_data/",validation_size=0)
+```
+Output：
+```
+Extracting MNIST_data/train-images-idx3-ubyte.gz
+Extracting MNIST_data/train-labels-idx1-ubyte.gz
+Extracting MNIST_data/t10k-images-idx3-ubyte.gz
+Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
+```
+&emsp;&emsp;让我们从一个数据集中选择一个数字
+```
+#从训练集中选取一个图像画出来
+image = mnist_dataset.train.images[2]
+plt.imshow(image.reshape((28,28)),cmap = 'Greys_r')
+```
+Output:
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%9C1.png)
+## 建立模型
+&emsp;&emsp;在这个实现中，我们将使用步长为1的卷积层，pading = same。这样，我们就不会改变图像的高度或宽度。另外，我们使用一组最大池化层来减少图像的宽度和高度，从而构建图像的压缩较低的表示形式。<br>
+&emsp;&emsp;所以让我们继续构建我们网络的核心:
+```learning_rate = 0.001 #设置学习率为0.001
+```
+```#为输入和目标值定义占位符变量，1为黑白色
+inputs_values = tf.placeholder(tf.float32, (None, 28, 28, 1), name='inputs_values')
+targets_values = tf.placeholder(tf.float32, (None, 28, 28, 1), name='targets_values')
+```
+```
+#定义netowrk的编码器部分
+##在编码器parrt中定义第一个卷积层
+#输出的张量将会是28x28x16 
+#让卷积运算产生的图像大小不变 激活函数为relu
+conv_layer_1 = tf.layers.conv2d(inputs=inputs_values, filters=16, kernel_size=(3,3), padding='same', 
+                                activation=tf.nn.relu)
+```
+```
+#输出张量的形状为14x14x16   
+maxpool_layer_1 = tf.layers.max_pooling2d(conv_layer_1, pool_size=(2,2), strides=(2,2), padding='same')
+```
+```
+#输出张量的形状为14x14x8
+conv_layer_2 = tf.layers.conv2d(inputs=maxpool_layer_1, filters=8, kernel_size=(3,3),
+                                padding='same', activation=tf.nn.relu)
+```
+```
+#输出张量的形状为7x7x8 
+maxpool_layer_2 = tf.layers.max_pooling2d(conv_layer_2, pool_size=(2,2), strides=(2,2), padding='same')
+```
+```
+#输出张量的形状为7x7x8
+conv_layer_3 = tf.layers.conv2d(inputs = maxpool_layer_2, filters=8,kernel_size=(3,3),
+                               padding='same',activation=tf.nn.relu)
+```
+```
+#输出张量的形状为7x7x8
+conv_layer_3 = tf.layers.conv2d(inputs = maxpool_layer_2, filters=8,kernel_size=(3,3),
+                               padding='same',activation=tf.nn.relu)
+```
+```
+#输出张量的形状为4x4x8，池化大小为2x2
+encoded_layer = tf.layers.max_pooling2d(conv_layer_3, pool_size=(2,2), strides=(2,2),padding='same')
+```
+```
+#定义第一个上采样层
+#输出张量的形状为7x7x8
+upsample_layer_1 = tf.image.resize_images(encoded_layer, size=(7,7), 
+                                         method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+```
+```
+#输出张量的结果是7x7x8 
+conv_layer_4 = tf.layers.conv2d(inputs=upsample_layer_1, filters=16, kernel_size=(3,3), 
+                                padding='same', activation=tf.nn.relu)
+```
+```
+#输出张量的形状为14x14x8 定义第二个上采样层
+upsample_layer_2 = tf.image.resize_images(conv_layer_4, size=(14,14),
+                                         method= tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+```
+```
+#输出张量的结果是14x14x8  定义第二个卷积层
+conv_layer_5 = tf.layers.conv2d(inputs=upsample_layer_2, filters=8,
+                               kernel_size = (3,3), padding='same', activation=tf.nn.relu)
+```
+```
+#输出张量的形状为28x28x8 定义第三个上采样层
+upsample_layer_3 =  tf.image.resize_images(conv_layer_4, size=(28,28),
+                                         method= tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+```
+```
+#输出张量的形状为28x28x16 定义第三个卷积层
+conv6 = tf.layers.conv2d(inputs=upsample_layer_3, filters=16, kernel_size=(3,3), padding='same', 
+                        activation=tf.nn.relu)
+```
+```
+#输出张量的形状为28x28x1
+logits_layer = tf.layers.conv2d(inputs=conv6, filters=1, kernel_size=(3,3),padding='same', activation=None)
+```
+```
+#将logits值赋给sigmoid激活函数函数，得到重建的图像
+decoded_layer = tf.nn.sigmoid(logits_layer)
+```
+```
+#把目标值和逻辑层喂给交叉熵，得到损失函数
+model_loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=targets_values,logits=logits_layer)
+```
+```
+#得到模型的损失并且定义优化器来优化
+model_cost = tf.reduce_mean(model_loss)
+model_optimizer = tf.train.AdamOptimizer(learning_rate).minimize(model_cost)
+```
+&emsp;&emsp;现在我们已经做得很好了，我们构建了卷积神经网络的解码器-解码器部分，同时展示了如何在解码器部分重建输入图像的尺寸。
+## 模型训练
+&emsp;&emsp;现在我们已经构建了模型，那么我们可以通过生成启动学习过程 随机批量形成MNIST数据集，并将它们提供给前面所定义的优化器。<br>
+&emsp;&emsp;让我们从创建会话变量开始吧，它将负责执行我们之前所定义的计算图:<br>
+```
+sess = tf.Session()
+num_epochs = 20 
+train_batch_size = 200 
+sess.run(tf.global_variables_initializer()) 
+
+for e in range(num_epochs): #e遍历20个周期
+    for ii in range(mnist_dataset.train.num_examples//train_batch_size):
+        input_batch = mnist_dataset.train.next_batch(train_batch_size) 
+        input_images = input_batch[0].reshape((-1,28,28,1))
+        input_batch_cost, _ =sess.run([model_cost,model_optimizer],
+        feed_dict={inputs_values:input_images,targets_values:input_images}) 
+        
+        print("Epoch: {}/{}...".format(e+1, num_epochs),
+               "Training loss: {:.3f}".format(input_batch_cost))
+```
+Output:
+```
+.
+.
+.
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.103
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.103
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.093
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.104
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.103
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.103
+Epoch: 20/20... Training loss: 0.094
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.105
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.103
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.096
+Epoch: 20/20... Training loss: 0.102
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.095
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.099
+Epoch: 20/20... Training loss: 0.100
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.103
+Epoch: 20/20... Training loss: 0.098
+Epoch: 20/20... Training loss: 0.101
+Epoch: 20/20... Training loss: 0.097
+Epoch: 20/20... Training loss: 0.099
+```
+&emsp;&emsp;在运行前面的代码片段20个阶段后，我们可以训练得到CAE， 所以让我们继续测试这个模型，从MNIST数据集中输入类似的图像<br>
+```
+fig, axes = plt.subplots(nrows=2, ncols=10, sharex=True, sharey=True, figsize=(20,4))
+input_images = mnist_dataset.test.images[:10] #先取出mnist训练图像的前十个值  
+reconstructed_images = sess.run(decoded_layer, 
+                                feed_dict={inputs_values:input_images.reshape((10,28,28,1))})
+ 
+for imgs, row in zip([input_images, reconstructed_images], axes): 
+    for img, ax in zip(imgs, row):#然后用img遍历imgs
+        ax.imshow(img.reshape((28, 28)), cmap='Greys_r')
+        ax.get_xaxis().set_visible(False)#True代表显示坐标轴，False代表隐藏坐标轴
+        ax.get_yaxis().set_visible(False)
+fig.tight_layout(pad=0.1)
+```
+Output:
+![image.png]()
