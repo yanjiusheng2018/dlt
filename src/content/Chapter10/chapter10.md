@@ -139,24 +139,94 @@ Output:
 &emsp;&emsp;典型的批由N×M个字符组成，N是序列数，M是序列阶数。为了得到数据集中可能的批数（the number of batches），我们只需要将数据长度除以希望的批规模（batch size），在得到可能的批的数量后，我们可以得到每个批中应该有多少字符。<br>
 &emsp;&emsp;之后，我们需要将数据集拆分成所需数量（N）的序列。我们可以使用arr.reshape(size)。我们知道我们需要N个序列(代码中可以使用num_seqs)，将其作为第一维度的大小。对于第二维度，可以使用-1作为规模占位符，系统会为数组填充适当的数据。之后，会得到一个N×（M×K）的数组，其中K是批次数。<br>
 &emsp;&emsp;进行上述运算后，我们得到了这个数组，我们可以通过循环访问来获得训练批次，每个批都含有N×M个字符。对于每一个后续批次，窗口以num_step设置的参数为步长移动。最后，我们还需要对我们的输入和输出创建数组，以便用作模型输入。创建输出值的步骤非常简单，但是记住我们需要的目标是在一个字符上移动的输入。你会发现第一个输入的字符被用来作为最后一个目标字符，类似于以下内容：<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
+&emsp;&emsp;y[：，：-1]，y[：，-1] = x[：，1，：]，x[：，0]<br>
+&emsp;&emsp;在这里x是输入的批，y是目标批。<br>
+&emsp;&emsp;在这一部分我常使用num_steps来控制批的步骤长度，从0开始到arr.shape[1]，即每个序列的总阶长数。这样，从范围中得到的整数总是指向批处理的开头，每部分都是num_steps设置的宽度。<br>
+```
+def generate_character_batches(data, num_seq, num_steps):
+    '''Create a function that returns batches of size
+       num_seq x num_steps from data.
+    '''
+    # Get the number of characters per batch and number of batches
+    num_char_per_batch = num_seq * num_steps
+    num_batches = len(data) // num_char_per_batch
+    # Keep only enough characters to make full batches
+    data = data[:num_batches * num_char_per_batch]
+    # Reshape the array into n_seqs rows
+    data = data.reshape((num_seq, -1))
+    for i in range(0, data.shape[1], num_steps):
+        # The input variables
+        input_x = data[:, i:i + num_steps]
+        # The output variables which are shifted by one
+        output_y = np.zeros_like(input_x)
+        output_y[:, :-1], output_y[:, -1] = input_x[:, 1:], input_x[:, 0]
+        yield input_x, output_y
+```
+&emsp;&emsp;因此，让我们通过生成一个含有15个序列和50序列阶长的批来演示这个函数：<br>
+```
+generated_batches = generate_character_batches(encoded_vocab, 15, 50)
+input_x, output_y = next(generated_batches)
+print('input\n', input_x[:10, :10])
+print('\ntarget\n', output_y[:10, :10])
+Output:
+
+input
+ [[79  6 58 52 77 67  9 35 13 56]
+ [35 67 40 43 63 43  4 40 67 35]
+ [44 35 40 43 63  6 77 64  6 67]
+ [35  6 58 10 35  4 67 67 70 35]
+ [35 44 70 67 35 54 70 67 14 56]
+ [61 67 58  9  1 35 40 58  1 77]
+ [35  2 67 35 63 44 35 43 70 77]
+ [44 14 35 77 44 35 41 58 54 67]
+ [ 4 67 42 44  9 67 35  7 67 70]
+ [ 1 58 63 67 35 40 43 54 67 35]]
+
+target
+ [[ 6 58 52 77 67  9 35 13 56 56]
+ [67 40 43 63 43  4 40 67 35 63]
+ [35 40 43 63  6 77 64  6 67 58]
+ [ 6 58 10 35  4 67 67 70 35  4]
+ [44 70 67 35 54 70 67 14 56 14]
+ [67 58  9  1 35 40 58  1 77 35]
+ [ 2 67 35 63 44 35 43 70 77 44]
+ [14 35 77 44 35 41 58 54 67 47]
+ [67 42 44  9 67 35  7 67 70 77]
+ [58 63 67 35 40 43 54 67 35 77]]
+```
+&emsp;&emsp;接下来，我们将建立这个例子的核心，即LSTM记忆单元的建模。<br>
+## 建立模型
+&emsp;&emsp;在使用LSTMs深入构建字符级模型之前，有必要提及栈式长短期记忆神经网络(Stacked LSTM)。<br>
+&emsp;&emsp;栈式LSTM可用于查看不同时间尺度下的信息。<br>
+### 栈式LSTMs（Stacked LSTMs）
+&emsp;&emsp;*“通过将多个循环的隐藏层堆叠起来构建深度RNN。这种方法在潜意识里允许不同隐藏层下的隐藏状态在不同的时间尺度上操作。”《如何构建深度RNN》一书中说到(http://arxiv.org/abs/1312.6026 )，2013。*<br>
+&emsp;&emsp;*“因为他们的隐藏状态是之前所有隐藏状态的函数，RNN在本质上是在时间深处进行模型运作。从这篇论文得到启发的一个问题是是否RNN也可以从空间的深度中受益；这就是堆叠多个循环隐藏层，就像在传统的深层网络中堆叠前馈层一样”《深度RNNs中的语音识别》(https://arxiv.org/abs/1303.5778 )，2013。*<br>
+&emsp;&emsp;很多研究者尝试用栈式LSTMs解决序列预测问题。栈式LSTM的结构被定义为有多个LSTM层构成的LSTM模型。之前介绍的LSTM层提供序列的输出，而不是单值输出到下一个LSTM层，如下所示。<br>
+&emsp;&emsp;具体而言，它是每一个时间节点上的单一输出，而不是所有输入时间步长上的输出。<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE12.jpg)
+&emsp;&emsp;图12：栈式LSTMs <br>
+&emsp;&emsp;因此在本例中，我们将使用这种多层LSTM结构，以获得更好的效果。<br>
+### 模型结构
+&emsp;&emsp;我们将在此建立模型，我们会把它分成几个部分，这样就更容易对每个点进行推理。然后，我们可以将它们连接到整个神经网络：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE13.jpg)
+&emsp;&emsp;图13：字符级模型体系结构 <br>
+## 输入
+&emsp;&emsp;我们从对模型的初始输入定义一个占位符开始建模。模型的输入将是训练数据和目标。在dropout层使用keep_probability的参数，避免模型数据的过度拟合：<br>
+```
+def build_model_inputs(batch_size, num_steps):
+    # Declare placeholders for the input and output variables
+    inputs_x = tf.placeholder(tf.int32, [batch_size, num_steps], name='inputs')
+    targets_y = tf.placeholder(tf.int32, [batch_size, num_steps], name='targets')
+    # define the keep_probability for the dropout layer
+    keep_probability = tf.placeholder(tf.float32, name='keep_prob')
+    return inputs_x, targets_y, keep_probability
+```
+## 建立LSTM细胞单元
+&emsp;&emsp;在本部分中，我们将编写一个用于创建LSTM细胞单元的函数并作用于模型的隐藏层。这个细胞单元是模型的组成部分。以此，我们将用Tensorflow构建记忆单元。让我们了解我们是如何用Tensorflow构建基本的LSTM细胞单元。<br>
+&emsp;&emsp;我们调用下面的代码创建LSTM细胞单元，参数num_units代表隐藏层的细胞单元数：<br>  
+lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units)<br>  
+&emsp;&emsp;为了防止过度拟合，我们可以使用dropout层，它可以通过降低模型的复杂性防止数据过度拟合：<br>  
+tf.contrib.rnn.DropoutWrapper(lstm, output_keep_prob=keep_probability)<br>  
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
