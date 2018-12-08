@@ -346,7 +346,8 @@ with open('train_generator_samples.pkl', 'rb') as f:
 ```
 _ = view_generated_samples(-1, gen_samples)
 ```
-![1](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter14/chapter14_image/4.1.PNG)
+![4.1](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter14/chapter14_image/4.1.PNG)
+
 我们甚至可以看到在不同的时代发电机的设计技巧。 因此，让我们在每10个时期可视化由它生成的图像：
 
 ```
@@ -361,7 +362,9 @@ for gen_sample, ax_row in zip(gen_samples[::int(len(gen_sample)/rows)], axes):
        ax.xaxis.set_visible(False)
        ax.yaxis.set_visible(False)
 ````
-    
+
+![4.2](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter14/chapter14_image/4.2.PNG)
+
 正如您所看到的，发生器的设计技能及其生成假图像的能力起初非常有限，然后在培训过程结束时得到了增强。
 
 ## 从生成器中获取样本
@@ -380,6 +383,9 @@ with tf.Session() as sess:
             feed_dict={generator_input_z:gen_sample_z})
     view_generated_samples(0, [generated_samples])
 ```
+
+![4.3](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter14/chapter14_image/4.3.PNG)
+
 在实现此示例时，您可以提出一些观察结果。在训练过程的第一个时期，生成器没有任何技能来产生与真实相似的图像，因为它不知道它们的样子。甚至鉴别器也不知道如何区分由发生器产生的假图像和。 在训练开始时，会出现两种有趣的情况。首先，生成器不知道如何创建像我们最初馈送到网络的真实图像。 其次，鉴别器不知道真实图像和假图像之间的区别。
 
 在那之后，生成器开始伪造在某种程度上有意义的图像，这是因为生成器将学习来自原始输入图像的数据分布。 同时，鉴别器将能够区分假图像和真实图像，并且在训练过程结束时将被欺骗。
