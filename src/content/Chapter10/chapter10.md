@@ -227,16 +227,224 @@ def build_model_inputs(batch_size, num_steps):
 lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units)<br>  
 &emsp;&emsp;为了防止过度拟合，我们可以使用dropout层，它可以通过降低模型的复杂性防止数据过度拟合：<br>  
 tf.contrib.rnn.DropoutWrapper(lstm, output_keep_prob=keep_probability)<br>  
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
+&emsp;&emsp;正如我们前面所提及的，我们将使用栈式LSTM结构；它将帮助我们从不同角度理解数据，实践证明，它也比单层LSTM表现的更好。为了在Tensorflow中定义多层LSTM，可以使用tf.contrib.rnn.MultiRNNCell函数(http://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/rnn/MultiRNNCell):<br>  
+tf.contrib.rnn.MultiRNNCell([cell] * num_layers)<br>
+&emsp;&emsp;对于第一个细胞单元的初始状态，没有先前的信息，所以需要将第一个细胞单元初始为零。可以用以下函数来执行此操作：<br>  
+initial_state = cell.zero_state(batch_size, tf.float32)<br>  
+&emsp;&emsp;最后，把所有的模块都放在一起构建LSTM记忆单元：<br>
+```
+def build_lstm_cell(size, num_layers, batch_size, keep_probability):
+    ### Building the LSTM Cell using the tensorflow function
+    lstm_cell = tf.contrib.rnn.BasicLSTMCell(size)
+    # Adding dropout to the layer to prevent overfitting
+    drop_layer = tf.contrib.rnn.DropoutWrapper(lstm_cell, output_keep_prob=keep_probability)
+    # Add muliple cells together and stack them up to oprovide a level of more understanding
+    stakced_cell = tf.contrib.rnn.MultiRNNCell([drop_layer] * num_layers)
+    initial_cell_state = lstm_cell.zero_state(batch_size, tf.float32)
+    return lstm_cell, initial_cell_state
+```
+## RNN输出
+&emsp;&emsp;接下来，我们需要创建输出层，该层负责读取单个LSTM细胞单元的输出并通过与其完全连接的层输出。这一层使用softmax函数用于生成在输出一个字符后可能出现的字符的概率分布，进而输出结果。<br>
+&emsp;&emsp;我们已经了解到对神经网络输入的批（batch）含有N×M 个字符，N是批包含的序列数，M是序列阶数。在创建模型时，我们还在隐藏层使用L个隐藏单元。由于批的规模和隐藏单元的数量，网络的输出是一个N×M×L 的三维张量，对于每一个序列，我们调用M次LSTM的细胞单元。每一次调用LSTM细胞单元都产生规模为L的输出。最后，由于批含有N个序列，因此需要重复操作N次。<br>
+&emsp;&emsp;我们将NML的输出传递到与LSTM细胞单元完全连接的层（对于所有的输出具有相同的权重）。但是在输出之前，我们将该输出结果重组成2维的张量，维度为（NM）L。因为重组的2维对我们而言更简单，也会使模型在执行输出时更容易。每一行的值代表LSTM细胞单元的L个输出，因此行代表一个序列和一个步骤。<br>
+&emsp;&emsp;对数组重组后，可以通过将矩阵与权重相乘并运用softmax函数将结果通过神经网络传到输出层。默认情况下，在LSTM细胞单元中创建的权重和我们要在此创建的权重具有相同的名称，在这种情况下，Tensorflow会产生错误。为了避免此类错误，可以使用Tensorflow中的tf.variable_scope()函数使创建的权重和偏置项在一个可变范围内变动。<br>
+&emsp;&emsp;再解释了输出形状和如何重组数组之后，模型运作就会变得更加容易，让我们进一步用build_model_output函数编写输出层:<br>
+```
+def build_model_output(output, input_size, output_size):
+    # Reshaping output of the model to become a bunch of rows, where each row correspond for each step in the seq
+    sequence_output = tf.concat(output, axis=1)
+    reshaped_output = tf.reshape(sequence_output, [-1, input_size])
+    # Connect the RNN outputs to a softmax layer
+    with tf.variable_scope('softmax'):
+        softmax_w = tf.Variable(tf.truncated_normal((input_size, output_size), stddev=0.1))
+        softmax_b = tf.Variable(tf.zeros(output_size))
+    # the output is a set of rows of LSTM cell outputs, so the logits will be a set
+    # of rows of logit outputs, one for each step and sequence
+    logits = tf.matmul(reshaped_output, softmax_w) + softmax_b
+    # Use softmax to get the probabilities for predicted characters
+    model_out = tf.nn.softmax(logits, name='predictions')
+    return model_out, logits
+```
+## 训练损失
+&emsp;&emsp;接下来是训练损失。通过模型的运算，我们已经得到了逻辑运算和目标函数，并计算softmax的交叉熵损失。首先，对需要的目标进行独热编码，得到已经编码好的字符。其次，重组热编码之后的目标，得到规格为（MN）C的2维张量，其中C是类或字符数。由于我们重组了LSTM输出结果并通过具有C个单元的完全连接层运行。因此，我们的逻辑运算也是（MN）C。<br>
+&emsp;&emsp;之后，通过tf.nn.softmax_cross_entropy_with_logits运行logits和targets并得到损失的平均值：<br>
+```
+def model_loss(logits, targets, lstm_size, num_classes):
+    # convert the targets to one-hot encoded and reshape them to match the logits, one row per batch_size per step
+    output_y_one_hot = tf.one_hot(targets, num_classes)
+    output_y_reshaped = tf.reshape(output_y_one_hot, logits.get_shape())
+    # Use the cross entropy loss
+    model_loss = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=output_y_reshaped)
+    model_loss = tf.reduce_mean(model_loss)
+    return model_loss
+```
+## 优化
+&emsp;&emsp;最后，我们需要用某种优化方法以帮助我们从数据集中学习新的东西。众所周知，一般RNN存在梯度爆炸和梯度消失的问题。LSTM仅仅解决了梯度消失的问题，但即使在使用LSTM之后，有些梯度值会在没有边界的情况下爆炸和增长。为了解决这个问题，我们可以引入梯度裁剪（gradient clipping）,这是一种将梯度裁剪到特定阈值的技术。<br>
+&emsp;&emsp;因此，我们使用Adam优化器定义我们学习过程要用的优化器：<br>
+```
+def build_model_optimizer(model_loss, learning_rate, grad_clip):
+    # define optimizer for training, using gradient clipping to avoid the exploding of the gradients
+    trainable_variables = tf.trainable_variables()
+    gradients, _ = tf.clip_by_global_norm(tf.gradients(model_loss, trainable_variables), grad_clip)
+    # Use Adam Optimizer
+    train_operation = tf.train.AdamOptimizer(learning_rate)
+    model_optimizer = train_operation.apply_gradients(zip(gradients, trainable_variables))
+    return model_optimizer
+```
+## 构建网络
+&emsp;&emsp;现在我们将所有的部分放在一起构建神经网络。通过LSTM细胞单元单元实际运行数据时我们使用tf.nn.drnamic_rnn (http://www.tensorflow.org/version/r1.0/api_docs/python/tf/nn/dynamic_rnn )。这个函数会为我们适当的传递LSTM细胞中的隐藏状态和细胞状态。它对批（mini-batch）中的每个序列进行操作，并在每一个步骤中返回每个LSTM细胞单元的输出并提供最终的LSTM状态。我们把这个状态存为final_state，因此在下一个批运行时，可以将最终状态传给第一个LSTM细胞单元。我们将从build_lstm得到的初始状态以及输入的序列传递到细胞单元，并通过tf.nn.dynamic_rnn运行。同样，将数据输入到RNN模型中时也需要进行独热编码：<br>
+```
+class CharLSTM:
+    def __init__(self, num_classes, batch_size=64, num_steps=50,
+                 lstm_size=128, num_layers=2, learning_rate=0.001,
+                 grad_clip=5, sampling=False):
+        # When we're using this network for generating text by sampling, we'll be providing the network with
+        # one character at a time, so providing an option for it.
+        if sampling == True:
+            batch_size, num_steps = 1, 1
+        else:
+            batch_size, num_steps = batch_size, num_steps
+        tf.reset_default_graph()
+        # Build the model inputs placeholders of the input and target variables
+        self.inputs, self.targets, self.keep_prob = build_model_inputs(batch_size, num_steps)
+        # Building the LSTM cell
+        lstm_cell, self.initial_state = build_lstm_cell(lstm_size, num_layers, batch_size, self.keep_prob)
+        ### Run the data through the LSTM layers
+        # one_hot encode the input
+        input_x_one_hot = tf.one_hot(self.inputs, num_classes)
+        # Runing each sequence step through the LSTM architecture and finally collectting the outputs
+        outputs, state = tf.nn.dynamic_rnn(lstm_cell, input_x_one_hot, initial_state=self.initial_state)
+        self.final_state = state
+        # Get softmax predictions and logits
+        self.prediction, self.logits = build_model_output(outputs, lstm_size, num_classes)
+        # Loss and optimizer (with gradient clipping)
+        self.loss = model_loss(self.logits, self.targets, lstm_size, num_classes)
+        self.optimizer = build_model_optimizer(self.loss, learning_rate, grad_clip)
+```
+## 模型超参数
+&emsp;&emsp;正如其他深度学习的体系结构，RNN也有一些超参数可以用来控制模型并对其进行微调。下面是此结构体系中使用的一组超参数：<br>
+*   批的大小是在一次传递中通过网络运行的序列数。
+*   步骤数是网络训练的序列所含的字符数。步骤数多通常更好，网络会学习更多的长远依赖关系，但需要更长的时间进行网络训练，100通常较合理。
+*   LSTM的规模是隐藏层的单元数。
+*   步骤数是网络训练的序列所含的字符数。步骤数多通常更好，网络会学习更多的长远依赖关系，但需要更长的时间进行网络训练，100通常较合理。
+*   LSTM的规模是隐藏层的单元数。
+*   结构体系编号图层是要使用的隐藏LSTM层的数量。
+*   学习率是训练的标准学习率。
+*   最后，dropout层可以保持概率，以避免网络的数据过度拟合。因此如果神经网络运行过度拟合，尝试降低隐藏层的神经元。
+## 训练模型
+&emsp;&emsp;现在，通过向建立的模型提供输入和输出开始训练网络，然后优化训练网络。在开始预测当前状态时切记使用上一个状态的输出。因此，我们需要将输出状态重新返回到神经网络中，以便在预测下一个状态时是使用。<br>
+&emsp;&emsp;我们需要对超参数设置初始值（之后可以根据用于训练这个体系结构的数据集对其进行调整）：<br>
+```
+batch_size = 100        # Sequences per batch
+num_steps = 100         # Number of sequence steps per batch
+lstm_size = 512         # Size of hidden layers in LSTMs
+num_layers = 2          # Number of LSTM layers
+learning_rate = 0.001   # Learning rate
+keep_probability = 0.5         # Dropout keep probability
+print('Starting the training process...')
+epochs = 5
+
+# Save a checkpoint N iterations
+save_every_n = 100
+LSTM_model = CharLSTM(len(language_vocab), batch_size=batch_size, num_steps=num_steps,
+                      lstm_size=lstm_size, num_layers=num_layers,
+                      learning_rate=learning_rate)
+saver = tf.train.Saver(max_to_keep=100)
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+    # Use the line below to load a checkpoint and resume training
+    # saver.restore(sess, 'checkpoints/______.ckpt')
+    counter = 0
+    for e in range(epochs):
+        # Train network
+        new_state = sess.run(LSTM_model.initial_state)
+        loss = 0
+        for x, y in generate_character_batches(encoded_vocab, batch_size, num_steps):
+            counter += 1
+            start = time.time()
+            feed = {LSTM_model.inputs: x,
+                    LSTM_model.targets: y,
+                    LSTM_model.keep_prob: keep_probability,
+                    LSTM_model.initial_state: new_state}
+            batch_loss, new_state, _ = sess.run([LSTM_model.loss,
+                                                 LSTM_model.final_state,
+                                                 LSTM_model.optimizer],
+                                                feed_dict=feed)
+            end = time.time()
+            print('Epoch number: {}/{}... '.format(e + 1, epochs),
+                  'Step: {}... '.format(counter),
+                  'loss: {:.4f}... '.format(batch_loss),
+                  '{:.3f} sec/batch'.format((end - start)))
+            if (counter % save_every_n == 0):
+                saver.save(sess, "checkpoints/i{}_l{}.ckpt".format(counter, lstm_size))
+    saver.save(sess, "checkpoints/i{}_l{}.ckpt".format(counter, lstm_size))
+```
+&emsp;&emsp;训练过程的最后，会得到接近以下内容的错误：<br>
+```
+.
+.
+.
+Epoch number: 5/5...  Step: 978...  loss: 1.7151...  0.050 sec/batch
+Epoch number: 5/5...  Step: 979...  loss: 1.7428...  0.051 sec/batch
+Epoch number: 5/5...  Step: 980...  loss: 1.7151...  0.050 sec/batch
+Epoch number: 5/5...  Step: 981...  loss: 1.7236...  0.050 sec/batch
+Epoch number: 5/5...  Step: 982...  loss: 1.7314...  0.051 sec/batch
+Epoch number: 5/5...  Step: 983...  loss: 1.7369...  0.051 sec/batch
+Epoch number: 5/5...  Step: 984...  loss: 1.7075...  0.065 sec/batch
+Epoch number: 5/5...  Step: 985...  loss: 1.7304...  0.051 sec/batch
+Epoch number: 5/5...  Step: 986...  loss: 1.7128...  0.049 sec/batch
+Epoch number: 5/5...  Step: 987...  loss: 1.7107...  0.051 sec/batch
+Epoch number: 5/5...  Step: 988...  loss: 1.7351...  0.051 sec/batch
+Epoch number: 5/5...  Step: 989...  loss: 1.7260...  0.049 sec/batch
+Epoch number: 5/5...  Step: 990...  loss: 1.7144...  0.051 sec/batch
+```
+## 检查点
+&emsp;&emsp;现在，加载checkpoints。为了更好的了解存储和加载checkpoints，可以查看Tensorflow文档(http://www.tensorflow.org/programmers_guide/variables):<br>  
+tf.train.get_checkpoint_state('checkpoints')<br>
+## 生成文本
+&emsp;&emsp;我们的训练模型是基于输入的数据集的。下一步是使用这个训练模型生成文本并了解这个模型是如何学习输入文本的风格和结构。为此，我们可以从一些初始字符开始，然后将新的预测字符作为下一步的输入。我们会重复这个步骤直到得到具有特定长度的文本。<br>
+&emsp;&emsp;通过以下代码，我们还可以对函数添加额外的语句，以便使用一些初始文本为网络提供支持，并从初始文本开始运行。<br>
+&emsp;&emsp;神经网络为我们提供词汇中每个字符的预测或概率。为了减少干扰并且只使用置信度更有可能的字符，我们将只从最有可能输出的前N个字符中选择一个新字符：<br>
+```
+def pick_top_n_characters(preds, vocab_size, top_n_chars=4):
+    p = np.squeeze(preds)
+    p[np.argsort(p)[:-top_n_chars]] = 0
+    p = p / np.sum(p)
+    c = np.random.choice(vocab_size, 1, p=p)[0]
+    return c
+
+def sample_from_LSTM_output(checkpoint, n_samples, lstm_size, vocab_size, prime="The "):
+    samples = [c for c in prime]
+    LSTM_model = CharLSTM(len(language_vocab), lstm_size=lstm_size, sampling=True)
+    saver = tf.train.Saver()
+    with tf.Session() as sess:
+        saver.restore(sess, checkpoint)
+        new_state = sess.run(LSTM_model.initial_state)
+        for char in prime:
+            x = np.zeros((1, 1))
+            x[0, 0] = vocab_to_integer[char]
+            feed = {LSTM_model.inputs: x,
+                    LSTM_model.keep_prob: 1.,
+                    LSTM_model.initial_state: new_state}
+            preds, new_state = sess.run([LSTM_model.prediction, LSTM_model.final_state],
+                                        feed_dict=feed)
+        c = pick_top_n_characters(preds, len(language_vocab))
+        samples.append(integer_to_vocab[c])
+        for i in range(n_samples):
+            x[0, 0] = c
+            feed = {LSTM_model.inputs: x,
+                    LSTM_model.keep_prob: 1.,
+                    LSTM_model.initial_state: new_state}
+            preds, new_state = sess.run([LSTM_model.prediction, LSTM_model.final_state],
+                                        feed_dict=feed)
+            c = pick_top_n_characters(preds, len(language_vocab))
+            samples.append(integer_to_vocab[c])
+    return ''.join(samples)
+```
+&emsp;&emsp;我们使用最新的存储的checkpoint开始取样过程：<br>  
+tf.train.latest_checkpoint('checkpoints')<br> 
+&emsp;&emsp;现在，是时候使用最新的checkpoints进行采样：<br>  
+checkpoint = tf.train.latest_checkpoint('checkpoints') print('Sampling text frm the trained model....') sampled_text = sample_from_LSTM_output(checkpoint, 2000, lstm_size, len(language_vocab), prime="Far") print(sampled_text)<br> 
+&emsp;&emsp;你可以看到，我们会产生一些有意义的词和一些毫无意义的词。为了获得更多的结果，你可以多次运行模型，并尝试使用超参数。<br>
+## 总结
+&emsp;&emsp;我们已经学习了RNNs，它的工作原理，以及RNNs的广泛运用。我们用一部有趣的小说作为数据集，训练了基于字符水平的RNN模型，以及RNN的应用走向。我们足够期待RNN领域的巨大创新，我相信它将成为智能系统的一个普遍却关键的组成部分。<br>
