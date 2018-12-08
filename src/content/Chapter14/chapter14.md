@@ -346,7 +346,7 @@ with open('train_generator_samples.pkl', 'rb') as f:
 ```
 _ = view_generated_samples(-1, gen_samples)
 ```
-![1](C:/Users/Administrator/Desktop/1.png)
+![1](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter14/chapter14_image/4.1.PNG)
 我们甚至可以看到在不同的时代发电机的设计技巧。 因此，让我们在每10个时期可视化由它生成的图像：
 
 ```
