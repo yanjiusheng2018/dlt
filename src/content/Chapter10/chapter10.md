@@ -82,13 +82,87 @@
 &emsp;&emsp;*同样，在r2rt(http://r2rt.com/recurrent-neural-networks-in-tensorflow-ii.html) 以及在github上Sherjil Ozairp(http://github.com/sherjilozair/char-rnn-tensorflow) 写的关于神经网络的信息。下面是字符级RNN的一般体系结构。*<br>
 &emsp;&emsp;我们将建立一个字符级的RNN模型用来训练安娜•卡列尼娜的小说(链接：https://en.wikipedia.org/wiki/Anna_Karenina) 。它将根据书中的文本生成一个新的文本。链接上包含txt文本和实现的代码。<br>
 &emsp;&emsp;让我们从导入此字符级模型实现所需的库开始：<br>
-```import numpy as np
+```
+import numpy as np
 import tensorflow as tf
 
 from collections import namedtuple
 ```
+&emsp;&emsp;首先，我们需要通过加载数据集并将其转换为整数来为模型的实现做准备。因此，我们将把字符转换为整数，然后将他们编码成整数。这使得数据显得直观并可作为模型的输入量：<br>
+```
+#reading the Anna Karenina novel text file
+with open('Anna_Karenina.txt', 'r') as f:
+    textlines=f.read()	
 
-
+#Building the vocan and encoding the characters as integers
+language_vocab = set(textlines)
+vocab_to_integer = {char: j for j, char in enumerate(language_vocab)}
+integer_to_vocab = dict(enumerate(language_vocab))
+encoded_vocab = np.array([vocab_to_integer[char] for char in textlines], dtype=np.int32)
+```
+&emsp;&emsp;让我们先来看安娜•卡列尼娜文本的前200个字符:<br>
+```
+textlines[:200]
+Output:
+"Chapter 1\n\n\nHappy families are all alike; every unhappy family is unhappy in its own\nway.\n\nEverything was in confusion in the Oblonskys' house. The wife had\ndiscovered that the husband was carrying on"
+```
+&emsp;&emsp;我们需把字符转换成整数形式，这种形式对神经网络而言直观且方便。因此，让我们来看看编码后的字符形式：<br>
+```
+encoded_vocab[:200]
+Output:
+array([79,  6, 58, 52, 77, 67,  9, 35, 13, 56, 56, 56, 12, 58, 52, 52, 61,
+       35, 42, 58, 41, 43, 40, 43, 67,  1, 35, 58,  9, 67, 35, 58, 40, 40,
+       35, 58, 40, 43, 54, 67, 37, 35, 67, 74, 67,  9, 61, 35, 76, 70,  6,
+       58, 52, 52, 61, 35, 42, 58, 41, 43, 40, 61, 35, 43,  1, 35, 76, 70,
+        6, 58, 52, 52, 61, 35, 43, 70, 35, 43, 77,  1, 35, 44, 14, 70, 56,
+       14, 58, 61,  0, 56, 56, 39, 74, 67,  9, 61, 77,  6, 43, 70, 63, 35,
+       14, 58,  1, 35, 43, 70, 35,  5, 44, 70, 42, 76,  1, 43, 44, 70, 35,
+       43, 70, 35, 77,  6, 67, 35, 38,  4, 40, 44, 70,  1, 54, 61,  1, 60,
+       35,  6, 44, 76,  1, 67,  0, 35, 73,  6, 67, 35, 14, 43, 42, 67, 35,
+        6, 58, 10, 56, 10, 43,  1,  5, 44, 74, 67,  9, 67, 10, 35, 77,  6,
+       58, 77, 35, 77,  6, 67, 35,  6, 76,  1,  4, 58, 70, 10, 35, 14, 58,
+        1, 35,  5, 58,  9,  9, 61, 43, 70, 63, 35, 44, 70])
+```
+&emsp;&emsp;因为神经网络使用的是单个字符，因此它类似于分类问题，在该问题中，我们试图从上一个文本中预测下一个字符。这就是我们的神经网络要将文本分成多少类的问题。<br>
+&emsp;&emsp;因此，每一次我们将为模型提供一个字符，并且模型将通过接下来可能出现的字符数生成概率分布来预测下一个字符，相当于神经网络需要从许多类中进行挑选。<br>
+```
+len(language_vocab)
+Output:
+83
+```
+&emsp;&emsp;由于我们将使用随机梯度下降来训练我们的模型，我们需要将我们的整个数据转换成训练批次。<br>
+## 生成小批次训练                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+&emsp;&emsp;在本节中，我们将把我们的数据分成小的批次用于训练。因此，批由所需序列步骤数的许多序列组成。图11是一个可视化示例：<br>
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE11.jpg)
+&emsp;&emsp;图11：批次和序列的外观示例<br>
+&emsp;&emsp;因此，我们现在需要定义一个函数，该函数将遍历编码的文本并生成各个批。在这个函数中，我们将使用python机制，yield(http://jeffknupp.com/blog/2013/04/07/improve-your-python-yield-and-generators-explained )。<br>
+&emsp;&emsp;典型的批由N×M个字符组成，N是序列数，M是序列阶数。为了得到数据集中可能的批数（the number of batches），我们只需要将数据长度除以希望的批规模（batch size），在得到可能的批的数量后，我们可以得到每个批中应该有多少字符。<br>
+&emsp;&emsp;之后，我们需要将数据集拆分成所需数量（N）的序列。我们可以使用arr.reshape(size)。我们知道我们需要N个序列(代码中可以使用num_seqs)，将其作为第一维度的大小。对于第二维度，可以使用-1作为规模占位符，系统会为数组填充适当的数据。之后，会得到一个N×（M×K）的数组，其中K是批次数。<br>
+&emsp;&emsp;进行上述运算后，我们得到了这个数组，我们可以通过循环访问来获得训练批次，每个批都含有N×M个字符。对于每一个后续批次，窗口以num_step设置的参数为步长移动。最后，我们还需要对我们的输入和输出创建数组，以便用作模型输入。创建输出值的步骤非常简单，但是记住我们需要的目标是在一个字符上移动的输入。你会发现第一个输入的字符被用来作为最后一个目标字符，类似于以下内容：<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
