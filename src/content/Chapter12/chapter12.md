@@ -1,4 +1,4 @@
 # Chapter12  神经情感分析
 &emsp;&emsp;在本章中，我们将讨论自然语言处理中的热点和流行应用之一，即情感分析。如今，大多数人都通过社交媒体平台来表达自己对某件事的看法，而利用这一庞大的文本来追踪顾客对某件事的满意程度，对于公司甚至政府来说都是至关重要的。<br>
 &emsp;&emsp;在本章中，我们将使用循环神经网络来建立一个情感分析的解决方案。本章将讨论以下主题：<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/image/tupian2.jpg)
+![](dlt/src/content/Chapter12/chapter12_image/picture1.png)
