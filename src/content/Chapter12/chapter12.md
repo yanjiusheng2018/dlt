@@ -55,14 +55,3 @@
 &emsp;&emsp;因此，让我们继续使用我们现在所称的TensorFlow中一个更抽象的模块，它将帮助我们非常快地创建深度学习解决方案。这是因为我们将用几行代码编写完整的深度学习解决方案。<br>
 ### 1、数据分析和预处理
 #### （1）导入所需模块
-''''''''''import matplotlib.pyplot as plt
-import tensorflow as tf
-import numpy as np
-from scipy.spatial.distance import cdist
-# from tf.keras.models import Sequential  # This does not work!
-from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Dense, GRU, Embedding
-from tensorflow.python.keras.optimizers import Adam
-from tensorflow.python.keras.preprocessing.text import Tokenizer
-from tensorflow.python.keras.preprocessing.sequence import pad_sequences
-''''''''''
