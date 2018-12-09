@@ -308,6 +308,9 @@ plt.legend()
 ```
 
 输出：
+
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter14/chapter14_image/图6.png)
+
 如上图所示, 你可以看到模型损失, 这是表示判别器和生成器的曲线是收敛的。
 
  
