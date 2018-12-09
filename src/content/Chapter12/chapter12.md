@@ -347,7 +347,7 @@ input_test_pad = pad_sequences(input_test_tokens, maxlen=max_num_tokens,
 ```
 填充之后，这个示例如下所示：<br>
 `input_train_pad[1]`<br>
-**output**
+**output**<br>
 ```
 array([   0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -489,7 +489,7 @@ rnn_type_model.fit(input_train_pad, target_train,
  #epochs=3表示执行3个训练周期
  #batch_size=64表示每一批次64项数据
 ```
-**output**
+**output**<br>
 ```
 Train on 23750 samples, validate on 1250 samples
 Epoch 1/3
@@ -514,9 +514,9 @@ target_predicted = rnn_type_model.predict(x=input_test_pad[0:1000])
 target_predicted = target_predicted.T[0]
 ```
 使用截止阈值表示上述所有值都为正值，其他值将被认为负值：<br>
-`class_predicted = np.array([1.0 if prob>0.5 else 0.0 for prob in target_predicted])`
+`class_predicted = np.array([1.0 if prob>0.5 else 0.0 for prob in target_predicted])`<br>
 现在，让我们得到这1000条序列的实际类：<br>
-`class_actual = np.array(target_test[0:1000])`
+`class_actual = np.array(target_test[0:1000])`<br>
 接下来让我们从输出中获取不正确的样本，代码及结果如下<br>
 ```
 incorrect_samples = np.where(class_predicted != class_actual)
@@ -562,7 +562,7 @@ test_samples_tokens_pad = pad_sequences(test_samples_tokens, maxlen = max_num_to
 ```
 然后填充它们：<br>
 `test_samples_tokens_pad.shape`<br>
-**output**:(8,544)
+**output**:(8,544)<br>
 最后，针对它们运行模型，得到如下结果：<br>
 `rnn_type_model.predict(test_samples_tokens_pad)`<br>
 ```
