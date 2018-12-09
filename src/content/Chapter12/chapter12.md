@@ -55,4 +55,8 @@
 &emsp;&emsp;因此，让我们继续使用我们现在所称的TensorFlow中一个更抽象的模块，它将帮助我们非常快地创建深度学习解决方案。这是因为我们将用几行代码编写完整的深度学习解决方案。<br>
 ### 1、数据分析和预处理
 #### （1）导入所需模块
-
+'''import matplotlib.pyplot as plt
+import tensorflow as tf
+import numpy as np
+from scipy.spatial.distance import cdist
+'''
