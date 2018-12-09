@@ -1140,7 +1140,8 @@ Film是数字19<br>
 'Homelessness (or Houselessness as George Carlin stated) has been an issue for years but never a plan to help those on the street that were once considered human who did everything from going to school, work, or vote for the matter. Most people think of the homeless as just a lost cause while worrying about things such as racism, the war on Iraq, pressuring kids to succeed, technology, the elections, inflation, or worrying if they\'ll be next to end up on the streets.<br /><br />But what if you were given a bet to live on the streets for a month without the luxuries you once had from a home, the entertainment sets, a bathroom, pictures on the wall, a computer, and everything you once treasure to see what it\'s like to be homeless? That is Goddard Bolt\'s lesson.<br /><br />Mel Brooks (who directs) who stars as Bolt plays a rich man who has everything in the world until deciding to make a bet with a sissy rival (Jeffery Tambor) to see if he can live in the streets for thirty days without the luxuries; if Bolt succeeds, he can do what he wants with a future project of making more buildings. The bet\'s on where Bolt is thrown on the street with a bracelet on his leg to monitor his every move where he can\'t step off the sidewalk. He\'s given the nickname Pepto by a vagrant after it\'s written on his forehead where Bolt meets other characters including a woman by the name of Molly (Lesley Ann Warren) an ex-dancer who got divorce before losing her home, and her pals Sailor (Howard Morris) and Fumes (Teddy Wilson) who are already used to the streets. They\'re survivors. Bolt isn\'t. He\'s not used to reaching mutual agreements like he once did when being rich where it\'s fight or flight, kill or be killed.<br /><br />While the love connection between Molly and Bolt wasn\'t necessary to plot, I found "Life Stinks" to be one of Mel Brooks\' observant films where prior to being a comedy, it shows a tender side compared to his slapstick work such as Blazing Saddles, Young Frankenstein, or Spaceballs for the matter, to show what it\'s like having something valuable before losing it the next day or on the other hand making a stupid bet like all rich people do when they don\'t know what to do with their money. Maybe they should give it to the homeless instead of using it like Monopoly money.<br /><br />Or maybe this film will inspire you to help others.'
 ```
 ```
-input_train_tokens = tokenizer_obj.texts_to_sequences(input_text_train)   #将文本转换为整数tokens时，它将变成一个整数数组
+input_train_tokens = tokenizer_obj.texts_to_sequences(input_text_train)  
+                                            #将文本转换为整数tokens时，它将变成一个整数数组
 np.array(input_train_tokens)
 ```
 **output**
@@ -1182,6 +1183,7 @@ max_num_tokens
 `np.sum(total_num_tokens < max_num_tokens)/len(total_num_tokens)  #小于544个单词的序列个数占所有序列个数的比例`<br>
 **output**:0.9453
 从这里我们可以看到，大约有95%的文本长度均为544，只有5%的文本比544个单词长。<br>
+
 &emsp;&emsp;现在我们知道，在Keras中称这些为函数。它们要么填充太短的序列(所以它们只添加零)，要么截断太长的序列(如果文本太长，基本上只需要切断一些单词)。 然而，需要注意的是：我们到底是在序列前还是在序列后模式下进行填充和截断呢？<br>
 &emsp;&emsp;因此，假设我们有一个整数tokens序列，因为它太短了，我们想要填充它。我们可以：要么在开头放置这些零，以便在结尾处有实际的整数tokens。或者用相反的方式来做，这样我们所有的数据都在开始，所有的零在结尾。但是，如果我们回到前面的RNN流程图，我们知道它是一步步地处理序列，所以如果我们开始处理零，它可能没有任何意义，内部状态可能只是保持为零。因此，每当它看到一个特定单词的整数token时，它就会知道，好的，现在我们开始处理数据。然而，如果所有的零都在末尾，我们就会开始处理所有的数据；那么我们就会在循环单元中有一些内部状态。现在，我们看到了大量的零，这可能会破坏我们刚刚计算出来的内部状态。这就是为什么在开始时填充零可能是个好主意。<br>
 &emsp;&emsp;另一个问题是关于截断文本。如果文本很长，我们将截断它，以使它适合于文字，或任何数字。现在，想象一下，我们在中间的某个地方抓住了一个句子，它写的是this very good movie，或者this is not。当然，我们只在很长的序列中这样做，但是我们有可能失去正确分类这篇文章所必需的信息。因此，这是我们在截断输入文本时需要做出妥协。一个比较好的方法是创建一个批处理并在批处理中填充文本。因此，当我们看到一个很长的序列时，我们会把其他序列放置在相同的长度上。但我们不需要将所有这些数据存储在内存中，因为大部分数据都是浪费的。<br>
@@ -1321,3 +1323,58 @@ def convert_tokens_to_string(input_tokens):
 "or as george stated has been an issue for years but never a plan to help those on the street that were once considered human who did everything from going to school work or vote for the matter most people think of the homeless as just a lost cause while worrying about things such as racism the war on iraq kids to succeed technology the or worrying if they'll be next to end up on the streets br br but what if you were given a bet to live on the streets for a month without the you once had from a home the entertainment sets a bathroom pictures on the wall a computer and everything you once treasure to see what it's like to be homeless that is lesson br br mel brooks who directs who stars as plays a rich man who has everything in the world until deciding to make a bet with a sissy rival to see if he can live in the streets for thirty days without the if succeeds he can do what he wants with a future project of making more buildings the on where is thrown on the street with a on his leg to his every move where he can't step off the sidewalk he's given the by a after it's written on his forehead where meets other characters including a woman by the name of molly ann warren an ex dancer who got divorce before losing her home and her pals sailor howard morris and teddy wilson who are already used to the streets they're survivors isn't he's not used to reaching mutual like he once did when being rich where it's fight or flight kill or be killed br br while the love connection between molly and wasn't necessary to plot i found life stinks to be one of mel films where prior to being a comedy it shows a tender side compared to his slapstick work such as blazing young frankenstein or for the matter to show what it's like having something valuable before losing it the next day or on the other hand making a stupid bet like all rich people do when they don't know what to do with their money maybe they should give it to the homeless instead of using it like money br br or maybe this film will inspire you to help others"
 ```
 可以看到，除了标点符号和其他符号，其他基本一样。<br>
+### 2、构建模型
+&emsp;&emsp;现在，我们需要创建RNN，我们将在Keras中用所谓的sequential模型来实现。<br>
+&emsp;&emsp;这个体系结构的第一层是所谓的嵌入层。如果我们回顾一下图1中的流程图，我们刚才所做的就是将原始输入文本转换为整数tokens。但是我们仍然不能将它输入到RNN，因此我们必须将其转换为嵌入向量，即介于-1和1之间的值。它们可以在一定程度上超过这个范围，但通常在-1到1之间，这是我们可以在神经网络中处理的数据。<br>
+&emsp;&emsp;我们需要决定每个向量的长度，例如，token11被转换成一个实值向量，我们可以将长度设置为10（这个长度实际上是非常短的，通常，它在100到300之间)。<br>
+#### （1）加入嵌入层
+ 这里，我们将嵌入大小设置为8，然后使用Keras将该嵌入层添加到RNN中。这必须是网络的第一层：<br>
+```
+rnn_type_model = Sequential()
+ embedding_layer_size = 8 #typical value for this should be between 200 and 300
+rnn_type_model.add(Embedding(input_dim=num_top_words,
+                    output_dim=embedding_layer_size,
+                    input_length=max_num_tokens,
+                    name='embedding_layer'))
+```
+#### （2）建立RNN模型
+&emsp;&emsp;然后，我们可以添加第一个循环层，我们将使用所谓的gated recurrent unit(GRU)。通常情况下，我们看到人们会使用所谓的LSTM，但其他人似乎认为GRU更好，因为LSTM内部有多余的gates。实际上，更简单的代码在更少的gates上工作更好。因此，我们这里采用GRU，让我们定义我们的GRU架构，我们希望输出维数为16，我们需要返回序列：<br>
+```
+rnn_type_model.add(GRU(units=16, return_sequences=True))   #添加第一个循环层
+
+rnn_type_model.add(GRU(units=8, return_sequences=True))   #添加第二个循环层
+
+rnn_type_model.add(GRU(units=4))              #添加第三个循环层
+
+rnn_type_model.add(Dense(1, activation='sigmoid'))     #添加输出层，用Sigmoid激活函数处理，得到0~1之间的值
+
+model_optimizer = Adam(lr=1e-3)
+
+rnn_type_model.compile(loss='binary_crossentropy',    #设置损失函数
+              optimizer=model_optimizer,           #使用Adam优化器
+              metrics=['accuracy'])         #设置评估模型的方式是准确率
+```
+&emsp;&emsp;这里我们添加了三个循环层，最后一个dense层只给出GRU的最终输出，而不是一个完整的输出序列。这里的输出将被输入到一个完全连接或dense层中，该层应该为每个输入序列输出一个值。因为使用Sigmoid激活函数处理，所以它会输出一个介于0到1之间的值。我们在这里使用的是ADAM优化器，并且损失函数是RNN的输出和训练集的实际类值之间的二进制交叉熵，这个值要么是0，要么是1：<br>
+&emsp;&emsp;现在，我们查看模型的外观，如下：<br>
+`rnn_type_model.summary()`     #查看模型的外观
+**output**<br>
+```
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+embedding_layer (Embedding)  (None, 544, 8)            80000     
+_________________________________________________________________
+gru (GRU)                    (None, 544, 16)           1200      
+_________________________________________________________________
+gru_1 (GRU)                  (None, 544, 8)            600       
+_________________________________________________________________
+gru_2 (GRU)                  (None, 4)                 156       
+_________________________________________________________________
+dense (Dense)                (None, 1)                 5         
+=================================================================
+Total params: 81,961
+Trainable params: 81,961
+Non-trainable params: 0
+_________________________________________________________________
+```
+从该模型我们可以知道，我们有一个嵌入层，三个循环单元和一个dense层。注意，这没有太多的参数。<br>
