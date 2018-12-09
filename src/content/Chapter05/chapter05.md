@@ -36,13 +36,13 @@
 
 生物模型有相应的基本数学模型:
 
-![图二](./2.jpg)
+![图二](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter05/chapter05_image/2.jpg?raw=true)
 
 &#8195;&#8195;神经网络的基本计算单位是神经元，通常称为节点或单位。它从其他节点或外部源接收输入并计算输出。每个输入都有一个相关的权重(w)，它是根据相对于其他输入的重要性来分配的。该节点用函数f(我们稍后定义)计算其输入的加权和。
 
 &#8195;&#8195;因此，神经网络的基本计算单元一般称为神经元/节点/单元。这个神经元从前一个神经元甚至外部源接收它的输入，然后它对这个输入做一些处理就是所谓的激活。这个神经元的每个输入都与它自己的权重w相关联，权重w代表这个神经元的强度、连接以及输入的重要性。因此，神经网络的这个基本构件的最终输出是输入的以其重要性w加权一个加总，然后神经元通过一个激活函数传递加总输出。
 
-![图三](./3.png)
+![图三](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter05/chapter05_image/3.png?raw=true)
 
 ## 2.激活函数
 
@@ -61,7 +61,7 @@
 
 <center>f(x) = 1 / (1 + exp(-x))</center>
 
-![图四](./4.png)
+![图四](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter05/chapter05_image/4.png?raw=true)
 
 ### Tanh（双曲正切）激活函数
 
@@ -69,7 +69,7 @@
 
 <center>tanh(x) = 2/(1+exp(-2x))-1</center>
 
-![图五](./5.png)
+![图五](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter05/chapter05_image/5.png?raw=true)
 
 ### ReLU激活函数
 
@@ -77,7 +77,7 @@
 
 <center>f(x) = max(0, x)</center>
 
-![图六](./6.png)
+![图六](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter05/chapter05_image/6.png?raw=true)
 
 &#8195;&#8195;偏差的重要性:偏差的主要功能是为每个节点提供一个可训练的常量值(除了节点接收到的正常输入之外)请参阅https://stackoveflow.com/questions/2480650/role-of-bias-in-neural-networks 了解更多关于偏差在神经元中的作用。
 
@@ -87,7 +87,7 @@
 
 &#8195;&#8195;前向神经网络的一个例子下图所示:
 
-![图七](./7.png)
+![图七](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter05/chapter05_image/7.png?raw=true)
 
 &#8195;&#8195;在前向网络中，信息每次只能向前移动一个方向，从输入节点、通过隐藏节点(如果有的话)并最终输出节点。在前向网络中没有循环(前向网络的这种特性不同于在节点之间的连接形成一个循环的循环神经网络)。
 
@@ -99,7 +99,7 @@
 
 &#8195;&#8195;隐藏层:隐藏层也有三个节点，偏差节点的输出为1。隐藏层中其他两个节点的输出取决于输入层(1、X1和X2)的数值以及与连接(边)相关的权重。记住，f指的是激活函数。然后将这些输出发送到输出层的节点。
 
-![图八](./8.png)
+![图八](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter05/chapter05_image/8.png?raw=true)
 
 &#8195;&#8195;输出层:输出层有两个节点;它们从隐藏层获取输入，并对突出显示的隐藏节点执行类似的计算。这些计算结果的计算值(Y1和Y2)作为多层神经网络的输出。
 
@@ -185,7 +185,7 @@ BackProp算法:
 
 &#8195;&#8195;要运行这些操作，我们需要将图形启动到session（会话控制）中。会话控制将操作转换并将其传递给执行设备。例如，下面的图像表示TensorFlow中的一个图形。W，x，b是这个图边缘上的张量。矩阵是对张量W和x的运算;在此之后，调用Add，并将前面操作符的结果与b相加。每个操作的结果张量交叉到下一个，在那里得到我们需要的结果。
 
-![图九](./9.png)
+![图九](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter05/chapter05_image/9.png?raw=true)
 
 &#8195;&#8195;为了使用TensorFlow，我们需要导入库;我们给它命名为tf这样我们就可以通过写入tf来访问一个模块和模块的名字:
 
@@ -341,7 +341,7 @@ with tf.Session() as session:
 
 &#8195;&#8195;图像被编码成彩色信道;图像数据以颜色信道中每个颜色在给定点上的强度表示，最常见的是RGB(表示红、蓝、绿)。图像中包含的信息是图像宽度和高度中各位置颜色的强度，如下图所示:
 
-![图十](./10.jpg)
+![图十](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter05/chapter05_image/10.jpg?raw=true)
 
 &#8195;&#8195;因此，红色信道在每个点上的宽度和高度可以用矩阵表示;蓝色和绿色的信道也是如此。所以，我们最终得到了三个矩阵，当它们结合时，它们形成了一个张量。
 
