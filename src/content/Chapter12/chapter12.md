@@ -55,8 +55,31 @@
 &emsp;&emsp;因此，让我们继续使用我们现在所称的TensorFlow中一个更抽象的模块，它将帮助我们非常快地创建深度学习解决方案。这是因为我们将用几行代码编写完整的深度学习解决方案。<br>
 ### 1、数据分析和预处理
 #### （1）导入所需模块
-```import matplotlib.pyplot as plt
+```
+import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 from scipy.spatial.distance import cdist
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense, GRU, Embedding
+from tensorflow.python.keras.optimizers import Adam
+from tensorflow.python.keras.preprocessing.text import Tokenizer
+from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 ```
+#### （2）读取数据
+```
+import imdb
+imdb.maybe_download_and_extract()     #下载并解压imdb数据集
+```
+```
+input_text_train, target_train = imdb.load_data(train=True)
+input_text_test,  target_test  = imdb.load_data(train=False)
+
+print("Size of the trainig set: ", len(input_text_train))
+print("Size of the testing set:  ", len(input_text_test))
+```
+**output**
+Size of the trainig set:  25000
+Size of the testing set:   25000
+从这个结果可以看到，这里训练数据与测试数据各有25000项。<br>
+下面我们将举一个例子来看看数据集的输入以及输出外观。<br>
