@@ -89,14 +89,14 @@ Size of the testing set:   25000
 text_data = input_text_train + input_text_test
 input_text_train[1]
 ```
-```
 **output**<br>
+```
 'Homelessness (or Houselessness as George Carlin stated) has been an issue for years but never a plan to help those on the street that were once considered human who did everything from going to school, work, or vote for the matter. Most people think of the homeless as just a lost cause while worrying about things such as racism, the war on Iraq, pressuring kids to succeed, technology, the elections, inflation, or worrying if they\'ll be next to end up on the streets.<br /><br />But what if you were given a bet to live on the streets for a month without the luxuries you once had from a home, the entertainment sets, a bathroom, pictures on the wall, a computer, and everything you once treasure to see what it\'s like to be homeless? That is Goddard Bolt\'s lesson.<br /><br />Mel Brooks (who directs) who stars as Bolt plays a rich man who has everything in the world until deciding to make a bet with a sissy rival (Jeffery Tambor) to see if he can live in the streets for thirty days without the luxuries; if Bolt succeeds, he can do what he wants with a future project of making more buildings. The bet\'s on where Bolt is thrown on the street with a bracelet on his leg to monitor his every move where he can\'t step off the sidewalk. He\'s given the nickname Pepto by a vagrant after it\'s written on his forehead where Bolt meets other characters including a woman by the name of Molly (Lesley Ann Warren) an ex-dancer who got divorce before losing her home, and her pals Sailor (Howard Morris) and Fumes (Teddy Wilson) who are already used to the streets. They\'re survivors. Bolt isn\'t. He\'s not used to reaching mutual agreements like he once did when being rich where it\'s fight or flight, kill or be killed.<br /><br />While the love connection between Molly and Bolt wasn\'t necessary to plot, I found "Life Stinks" to be one of Mel Brooks\' observant films where prior to being a comedy, it shows a tender side compared to his slapstick work such as Blazing Saddles, Young Frankenstein, or Spaceballs for the matter, to show what it\'s like having something valuable before losing it the next day or on the other hand making a stupid bet like all rich people do when they don\'t know what to do with their money. Maybe they should give it to the homeless instead of using it like Monopoly money.<br /><br />Or maybe this film will inspire you to help others.'
 ```
 ```
 target_train[1]
-output:1.0
 ```
+**output**:1.0
 这里的输出值为1，这意味着它是一个积极的情感。所以，无论是什么电影，这是一个积极的评论。<br>
 #### （3）建立字典
 &emsp;&emsp;现在，我们讨论tokenizer，这是处理原始数据的第一步，因为神经网络不能处理文本数据。Keras实现了所谓的tokenizer，用于构建词汇表并从单词映射到整数。<br>
@@ -1115,23 +1115,42 @@ tokenizer_obj.word_index  #字典数据类型，显示每一个单词单词在�
 ```
 现在，每个单词都与一个整数相关联<br>
 这里，the单词是数字1：<br>
-`tokenizer_obj.word_index['the']`
+`tokenizer_obj.word_index['the']`<br>
 **output**:1<br>
 这里，and是数字2：<br>
-`tokenizer_obj.word_index['and']`
+`tokenizer_obj.word_index['and']`<br>
 **output**:2<br>
 单词a是数字3：<br>
-`tokenizer_obj.word_index['a']`
+`tokenizer_obj.word_index['a']`<br>
 **output**:3<br>
 我们看到movie是数字17：<br>
-`tokenizer_obj.word_index['movie']`
+`tokenizer_obj.word_index['movie']`<br>
 **output**:17<br>
 Film是数字19<br>
-`tokenizer_obj.word_index['film']`
+`tokenizer_obj.word_index['film']`<br>
 **output**:19<br>
 &emsp;&emsp;这意味着the是数据集中使用最多的词，而and是数据集中使用第二多的词。因此，每当我们想要将单词映射到整数tokens时，我们就会得到这些数字。
 让我们试着以数字743为例，这是单词romantic：<br>
-`tokenizer_obj.word_index['romantic']`
+`tokenizer_obj.word_index['romantic']`<br>
 **output**:743<br>
 因此，每当我们在输入文本中看到单词romantic时，我们就将它映射到token整数743。<br>
-
+下面我们再次使用tokenizer将训练集中第一个文本中的所有单词转换为整数tokens，指令及结果如下：<br>
+`input_text_train[1]   #输入训练集中第一个文本`<br>
+```
+'Homelessness (or Houselessness as George Carlin stated) has been an issue for years but never a plan to help those on the street that were once considered human who did everything from going to school, work, or vote for the matter. Most people think of the homeless as just a lost cause while worrying about things such as racism, the war on Iraq, pressuring kids to succeed, technology, the elections, inflation, or worrying if they\'ll be next to end up on the streets.<br /><br />But what if you were given a bet to live on the streets for a month without the luxuries you once had from a home, the entertainment sets, a bathroom, pictures on the wall, a computer, and everything you once treasure to see what it\'s like to be homeless? That is Goddard Bolt\'s lesson.<br /><br />Mel Brooks (who directs) who stars as Bolt plays a rich man who has everything in the world until deciding to make a bet with a sissy rival (Jeffery Tambor) to see if he can live in the streets for thirty days without the luxuries; if Bolt succeeds, he can do what he wants with a future project of making more buildings. The bet\'s on where Bolt is thrown on the street with a bracelet on his leg to monitor his every move where he can\'t step off the sidewalk. He\'s given the nickname Pepto by a vagrant after it\'s written on his forehead where Bolt meets other characters including a woman by the name of Molly (Lesley Ann Warren) an ex-dancer who got divorce before losing her home, and her pals Sailor (Howard Morris) and Fumes (Teddy Wilson) who are already used to the streets. They\'re survivors. Bolt isn\'t. He\'s not used to reaching mutual agreements like he once did when being rich where it\'s fight or flight, kill or be killed.<br /><br />While the love connection between Molly and Bolt wasn\'t necessary to plot, I found "Life Stinks" to be one of Mel Brooks\' observant films where prior to being a comedy, it shows a tender side compared to his slapstick work such as Blazing Saddles, Young Frankenstein, or Spaceballs for the matter, to show what it\'s like having something valuable before losing it the next day or on the other hand making a stupid bet like all rich people do when they don\'t know what to do with their money. Maybe they should give it to the homeless instead of using it like Monopoly money.<br /><br />Or maybe this film will inspire you to help others.'
+```
+```
+input_train_tokens = tokenizer_obj.texts_to_sequences(input_text_train)   #将文本转换为整数tokens时，它将变成一个整数数组
+np.array(input_train_tokens)
+```
+**output**
+```
+array([list([299, 6, 3, 1059, 202, 9, 2119, 30, 1, 167, 55, 14, 47, 79, 6274, 42, 368, 114, 138, 14, 5103, 56, 4515, 153, 8, 1, 4233, 5799, 469, 68, 5, 262, 12, 2072, 6, 72, 2556, 5, 614, 71, 6, 5103, 1, 5, 1897, 1, 5540, 1469, 35, 67, 63, 203, 140, 65, 1151, 1, 4, 1, 223, 871, 29, 3195, 68, 4, 1, 5510, 10, 677, 2, 65, 1469, 50, 10, 210, 1, 398, 8, 60, 3, 1425, 3345, 762, 5, 3491, 175, 1, 368, 10, 1220, 30, 299, 3, 360, 347, 3471, 145, 133, 5, 8306, 27, 4, 125, 5103, 1425, 2563, 5, 299, 10, 525, 12, 106, 1540, 4, 56, 599, 101, 12, 299, 6, 225, 3994, 48, 3, 2244, 12, 9, 213]),
+       list([38, 14, 744, 3506, 45, 75, 32, 1771, 15, 153, 18, 110, 3, 1344, 5, 343, 143, 20, 1, 920, 12, 70, 281, 1228, 395, 35, 115, 267, 36, 166, 5, 368, 158, 38, 2058, 15, 1, 504, 88, 83, 101, 4, 1, 4339, 14, 39, 3, 432, 1148, 136, 8697, 42, 177, 138, 14, 2791, 1, 295, 20, 5276, 351, 5, 3029, 2310, 1, 38, 8697, 43, 3611, 26, 365, 5, 127, 53, 20, 1, 2032, 7, 7, 18, 48, 43, 22, 70, 358, 3, 2343, 5, 420, 20, 1, 2032, 15, 3, 3346, 208, 1, 22, 281, 66, 36, 3, 344, 1, 728, 730, 3, 3864, 1320, 20, 1, 1543, 3, 1293, 2, 267, 22, 281, 2734, 5, 63, 48, 44, 37, 5, 26, 4339, 12, 6, 2079, 7, 7, 3425, 2891, 35, 4446, 35, 405, 14, 297, 3, 986, 128, 35, 45, 267, 8, 1, 181, 366, 6951, 5, 94, 3, 2343, 16, 3, 7017, 3090, 5, 63, 43, 28, 67, 420, 8, 1, 2032, 15, 3082, 483, 208, 1, 43, 2802, 28, 67, 77, 48, 28, 487, 16, 3, 731, 1146, 4, 232, 51, 4161, 1, 20, 117, 6, 1334, 20, 1, 920, 16, 3, 20, 24, 4086, 5, 24, 170, 831, 117, 28, 185, 1562, 122, 1, 7951, 237, 358, 1, 31, 3, 100, 44, 407, 20, 24, 9597, 117, 911, 79, 102, 585, 3, 257, 31, 1, 389, 4, 5176, 2137, 4636, 32, 1222, 3303, 35, 189, 4287, 159, 2320, 40, 344, 2, 40, 8527, 6229, 1955, 4910, 2, 7720, 2618, 35, 23, 472, 328, 5, 1, 2032, 501, 4392, 213, 237, 21, 328, 5, 4805, 6768, 37, 28, 281, 115, 50, 109, 986, 117, 44, 557, 38, 2574, 505, 38, 26, 531, 7, 7, 136, 1, 112, 1906, 201, 5176, 2, 292, 1731, 5, 111, 10, 255, 114, 4541, 5, 26, 27, 4, 3425, 104, 117, 2557, 5, 109, 3, 202, 9, 276, 3, 4317, 486, 1107, 5, 24, 2347, 158, 138, 14, 8161, 186, 3889, 38, 15, 1, 504, 5, 119, 48, 44, 37, 263, 137, 4737, 159, 2320, 9, 1, 365, 254, 38, 20, 1, 79, 524, 232, 3, 364, 2343, 37, 29, 986, 83, 77, 50, 33, 89, 118, 48, 5, 77, 16, 65, 290, 273, 33, 142, 197, 9, 5, 1, 4339, 298, 4, 783, 9, 37, 290, 7, 7, 38, 273, 11, 19, 80, 5541, 22, 5, 343, 400]),
+       list([513, 121, 113, 31, 2137, 4636, 116, 967, 824, 10, 25, 123, 107, 2, 112, 134, 8, 1688, 7418, 23, 336, 5, 619, 1, 5398, 20, 391, 6, 3, 360, 14, 49, 14, 231, 8, 8161, 1, 187, 20, 9106, 6, 81, 916, 100, 109, 3478, 4, 109, 3, 3157, 41, 24, 1488, 2, 109, 1, 2792, 4, 145, 3, 2792, 28, 546, 277, 152, 675, 4423, 3, 521, 36, 1, 305, 2354, 6639, 119, 6, 799, 133, 96, 14, 3, 1121, 6056, 35, 487, 5, 4709, 1, 6769, 24, 108, 6, 51, 71, 667, 1, 1447, 129, 2, 1, 129, 117, 1, 4339, 3, 2060, 23, 29, 55, 2112, 163, 15, 1, 3127, 129, 2, 1, 105, 191, 1000, 27, 11, 17, 217, 126, 252, 55, 10, 63, 9, 60, 6, 179, 403]),
+       ...,
+       list([10, 210, 238, 316, 30, 1, 19, 1398, 2, 9, 13, 27, 643, 1415, 1415, 84, 1, 773, 13, 4346, 962, 1, 9432, 4, 314, 6094, 8, 3, 4180, 4508, 17, 13, 1141, 2, 109, 3, 326, 934, 145, 21, 4, 1473, 4, 1, 1733, 10, 13, 3132, 5, 131, 52, 2120, 5, 808, 11, 17, 41, 56, 1237, 912, 1240, 5, 1, 2112, 422, 1, 773, 45, 1050, 18, 1, 3312, 23, 1054, 1, 150, 2760, 57, 6094, 6, 1957, 47, 58, 131, 12, 44, 3, 203, 2708, 4, 1, 1123, 181, 8, 1, 176, 12, 1, 9961, 4, 1, 102, 2755, 3, 1272, 2, 29, 12, 3708, 18, 9, 39, 162, 1, 223, 17, 39, 37, 1, 129, 117, 6094, 217, 3433, 9, 612, 1514, 3061, 10, 292, 1012, 231, 396, 18, 130, 709, 73, 1343, 5, 229, 5174, 15, 40, 10, 154, 21, 15, 3, 780, 59, 13, 34, 868, 29, 1, 95, 2, 10, 339, 12, 1, 1304, 13, 1186, 69, 9, 6, 49, 864, 18, 161, 1502, 2171, 346, 10, 206, 987, 12, 1, 2701, 30, 1, 1398, 292, 34, 49, 34, 273, 10, 1055, 41, 137, 133, 18, 30, 1, 127, 4, 1, 17, 10, 413, 343, 533, 7210, 229, 37, 147, 9324, 172, 3910, 51, 612, 1, 86, 129, 8, 1, 1393, 6, 1278, 319, 2, 29, 18, 10, 66, 1, 3037, 7561, 4, 147, 3, 1150, 2, 51, 348, 318, 4, 1, 129, 8, 1, 6738, 1484, 734, 1, 283, 2368, 4109, 8, 7358, 9071, 957, 1194, 16, 1, 2850, 830, 2, 1205, 1509, 1, 1269, 207, 1, 825, 851, 54, 10, 39, 413, 76, 82, 11, 17, 96, 74]),
+       list([47, 104, 12, 22, 1185, 53, 15, 3, 6677, 477, 41, 5, 26, 248, 49, 1064, 104, 613, 4245, 4, 3805, 1049, 2, 283, 17, 12, 70, 78, 18, 259, 613, 47, 3418, 104, 2829, 400, 1, 6627, 4, 65, 9097, 6, 590, 37, 1, 1025, 6712, 7, 7, 1, 61, 1163, 148, 10, 67, 131, 42, 11, 19, 6, 12, 44, 1273, 734, 14, 637, 14, 1, 7943, 4, 2094, 79, 71, 12, 92, 3, 52, 4046, 7710, 19, 16, 1, 1890, 4, 3, 322, 2146, 31, 3, 7, 7, 44, 75, 3145, 3320, 18, 22, 62, 77, 25, 5, 3100, 42, 3, 19, 12, 5568, 4, 1, 205, 82, 92, 1098, 708, 34, 31, 1, 55, 9, 217, 5, 1, 1025, 2904, 841, 107, 9, 29, 472, 7, 7, 74, 17, 455, 80, 25, 3, 1964, 147, 1, 3079, 1726, 2448, 2649, 2, 1, 9769, 113, 4, 1, 174, 261, 1, 35, 13, 34, 74, 28, 115, 94, 68, 423, 3, 226, 2, 3495, 5, 15, 385, 8, 5, 1, 1174, 4, 177, 31, 7327, 3, 2549, 34, 74, 9, 436, 37, 10, 13, 147, 47, 1487, 53, 344, 373, 4, 3, 7333, 1231, 7, 7, 372, 372, 517, 2019, 29, 90, 517, 37, 11, 50, 2019, 1944, 3, 1075, 4, 3, 355, 18, 1114, 282, 2, 132, 104, 8, 260, 1219, 793]),
+       list([11, 6, 27, 4, 1, 7047, 104, 198, 123, 107, 9, 7576, 122, 801, 123, 543, 4, 704, 2, 1019, 5, 94, 3, 954, 4, 93, 29, 7, 7, 222, 21, 3, 689, 49, 347, 38, 108, 8, 1, 223, 954, 43, 46, 13, 3, 111, 9, 13, 32, 2, 14, 225, 14, 113, 269, 222, 161, 49, 5, 131, 34, 1811, 131, 161, 10, 1230, 2192, 386, 85, 11, 543, 4, 1832, 217, 1034, 2, 160, 613, 124, 1851, 1219, 21, 30, 47, 927, 101, 56, 545, 11, 62, 6, 3, 3609, 4, 2, 656, 9, 3, 254, 92, 590, 37, 11, 12, 45, 83, 1, 1519, 285, 37, 3, 335, 279, 19, 30, 224, 43, 22, 25, 9, 22, 755, 1002, 125, 55, 38, 290, 89, 451, 125, 55, 11, 6, 1377])],
+      dtype=object)
+```
