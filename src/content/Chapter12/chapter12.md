@@ -96,7 +96,7 @@ input_text_train[1]
 ```
 target_train[1]
 ```
-**output**:1.0
+**output**:1.0<br>
 这里的输出值为1，这意味着它是一个积极的情感。所以，无论是什么电影，这是一个积极的评论。<br>
 #### （3）建立字典
 &emsp;&emsp;现在，我们讨论tokenizer，这是处理原始数据的第一步，因为神经网络不能处理文本数据。Keras实现了所谓的tokenizer，用于构建词汇表并从单词映射到整数。<br>
@@ -107,7 +107,7 @@ tokenizer_obj = Tokenizer(num_words=num_top_words)     #使用Tokenizer建立单
 &emsp;&emsp;现在，我们从数据集中获取所有文本，并在文本上调用函数fit，按照每一个单词在影评中出现的次数进行排序，前10000名的单词会列入字典中。<br>
 ```
 tokenizer_obj.fit_on_texts(text_data)
-tokenizer_obj.word_index  #字典数据类型，显示每一个单词单词在所有文章中出现的次数的排名。
+tokenizer_obj.word_index  #字典数据类型，显示每一个单词在所有文章中出现的次数的排名。
 ```
 **output**
 ```
@@ -1154,3 +1154,170 @@ array([list([299, 6, 3, 1059, 202, 9, 2119, 30, 1, 167, 55, 14, 47, 79, 6274, 42
        list([11, 6, 27, 4, 1, 7047, 104, 198, 123, 107, 9, 7576, 122, 801, 123, 543, 4, 704, 2, 1019, 5, 94, 3, 954, 4, 93, 29, 7, 7, 222, 21, 3, 689, 49, 347, 38, 108, 8, 1, 223, 954, 43, 46, 13, 3, 111, 9, 13, 32, 2, 14, 225, 14, 113, 269, 222, 161, 49, 5, 131, 34, 1811, 131, 161, 10, 1230, 2192, 386, 85, 11, 543, 4, 1832, 217, 1034, 2, 160, 613, 124, 1851, 1219, 21, 30, 47, 927, 101, 56, 545, 11, 62, 6, 3, 3609, 4, 2, 656, 9, 3, 254, 92, 590, 37, 11, 12, 45, 83, 1, 1519, 285, 37, 3, 335, 279, 19, 30, 224, 43, 22, 25, 9, 22, 755, 1002, 125, 55, 38, 290, 89, 451, 125, 55, 11, 6, 1377])],
       dtype=object)
 ```
+这里，单词homelessness变成了数字299，单词or变成了数字6，依此类推。<br>
+同样，我们还需要转换文本的其余部分，代码如下:<br>
+`input_test_tokens = tokenizer_obj.texts_to_sequences(input_text_test)  #将文本转换为数字列表`<br>
+#### （4）数字列表截长补短
+&emsp;&emsp;现在有另一个问题，因为tokens序列的长度取决于原始文本的长度，即使循环单元可以处理任意长度的序列。但是TensorFlow的工作方式是，批处理中的所有数据都需要具有相同的长度。<br>
+&emsp;&emsp;因此，我们需要确保整个数据集中的所有序列都具有相同的长度，或者编写一个自定义数据生成器，以确保单个批处理中的序列具有相同的长度。现在，要确保数据集中的所有序列都具有相同的长度也比较简单，但问题是存在一些异常值。假定我们认为超过2200个单词的句子太长，如果我们有超过2200个单词的句字，那么我们的记忆就会受到很大的伤害。因此，我们必须要做出妥协。<br>
+&emsp;&emsp;首先，我们需要计算每个输入序列中的所有单词或tokens。从下列结果我们可以看到，一个序列中的平均单词数大约是221个：<br>
+```
+total_num_tokens = [len(tokens) for tokens in input_train_tokens + input_test_tokens]
+total_num_tokens = np.array(total_num_tokens)
+np.mean(total_num_tokens)     #计算所有数字序列的平均单词数
+```
+**output**:221.27716<br>
+从下列结果，我们可以看到这些序列中最大的单词数超过2200<br>
+`np.max(total_num_tokens)`<br>
+**output**:2209<br>
+&emsp;&emsp;平均值221和最大值2209之间有巨大的差别，如果我们只是在数据集中填充所有的句子，以便它们会有2209个tokens，那么我们就会浪费大量的内存。如果说我们有一个包含数百万个文本序列的数据集，这将会是一个很大的问题。<br>
+&emsp;&emsp;所以我们要做出一个妥协。我们将填充所有序列，并截断那些太长的序列，这样它们就有544个单词了。我们的计算方法是：取数据集中所有序列的平均单词数，并添加两个标准差，代码如下：<br>
+```
+max_num_tokens = np.mean(total_num_tokens) + 2 * np.std(total_num_tokens)   #均值加两个标准差
+max_num_tokens = int(max_num_tokens)
+max_num_tokens
+```
+**output**:544<br>
+添加标准差后，我们每一个序列的单词数将保留为544个。<br>
+`np.sum(total_num_tokens < max_num_tokens)/len(total_num_tokens)  #小于544个单词的序列个数占所有序列个数的比例`<br>
+**output**:0.9453
+从这里我们可以看到，大约有95%的文本长度均为544，只有5%的文本比544个单词长。<br>
+&emsp;&emsp;现在我们知道，在Keras中称这些为函数。它们要么填充太短的序列(所以它们只添加零)，要么截断太长的序列(如果文本太长，基本上只需要切断一些单词)。 然而，需要注意的是：我们到底是在序列前还是在序列后模式下进行填充和截断呢？<br>
+&emsp;&emsp;因此，假设我们有一个整数tokens序列，因为它太短了，我们想要填充它。我们可以：要么在开头放置这些零，以便在结尾处有实际的整数tokens。或者用相反的方式来做，这样我们所有的数据都在开始，所有的零在结尾。但是，如果我们回到前面的RNN流程图，我们知道它是一步步地处理序列，所以如果我们开始处理零，它可能没有任何意义，内部状态可能只是保持为零。因此，每当它看到一个特定单词的整数token时，它就会知道，好的，现在我们开始处理数据。然而，如果所有的零都在末尾，我们就会开始处理所有的数据；那么我们就会在循环单元中有一些内部状态。现在，我们看到了大量的零，这可能会破坏我们刚刚计算出来的内部状态。这就是为什么在开始时填充零可能是个好主意。<br>
+&emsp;&emsp;另一个问题是关于截断文本。如果文本很长，我们将截断它，以使它适合于文字，或任何数字。现在，想象一下，我们在中间的某个地方抓住了一个句子，它写的是this very good movie，或者this is not。当然，我们只在很长的序列中这样做，但是我们有可能失去正确分类这篇文章所必需的信息。因此，这是我们在截断输入文本时需要做出妥协。一个比较好的方法是创建一个批处理并在批处理中填充文本。因此，当我们看到一个很长的序列时，我们会把其他序列放置在相同的长度上。但我们不需要将所有这些数据存储在内存中，因为大部分数据都是浪费的。<br>
+&emsp;&emsp;接下来让我们返回并转换整个数据集，使其被截断和填充；它是一个大的数据矩阵：<br>
+```
+seq_pad = 'pre'        #pre表示从起始填充或截断
+
+input_train_pad = pad_sequences(input_train_tokens, maxlen=max_num_tokens,
+                            padding=seq_pad, truncating=seq_pad)           #padding表示填充，truncating表示截断
+
+input_test_pad = pad_sequences(input_test_tokens, maxlen=max_num_tokens,
+                           padding=seq_pad, truncating=seq_pad)
+```
+我们检查这个矩阵的形状：<br>
+`input_train_pad.shape`<br>
+**output**:(25000,544)<br>
+`input_test_pad.shape`<br>
+**output**:(25000,544)<br>
+下面，让我们看看填充前后的特定示例tokens：<br>
+填充前的数字矩阵如下：<br>
+`np.array(input_train_tokens[1])`<br>
+**output**<br>
+```array([  38,   14,  744, 3506,   45,   75,   32, 1771,   15,  153,   18,
+        110,    3, 1344,    5,  343,  143,   20,    1,  920,   12,   70,
+        281, 1228,  395,   35,  115,  267,   36,  166,    5,  368,  158,
+         38, 2058,   15,    1,  504,   88,   83,  101,    4,    1, 4339,
+         14,   39,    3,  432, 1148,  136, 8697,   42,  177,  138,   14,
+       2791,    1,  295,   20, 5276,  351,    5, 3029, 2310,    1,   38,
+       8697,   43, 3611,   26,  365,    5,  127,   53,   20,    1, 2032,
+          7,    7,   18,   48,   43,   22,   70,  358,    3, 2343,    5,
+        420,   20,    1, 2032,   15,    3, 3346,  208,    1,   22,  281,
+         66,   36,    3,  344,    1,  728,  730,    3, 3864, 1320,   20,
+          1, 1543,    3, 1293,    2,  267,   22,  281, 2734,    5,   63,
+         48,   44,   37,    5,   26, 4339,   12,    6, 2079,    7,    7,
+       3425, 2891,   35, 4446,   35,  405,   14,  297,    3,  986,  128,
+         35,   45,  267,    8,    1,  181,  366, 6951,    5,   94,    3,
+       2343,   16,    3, 7017, 3090,    5,   63,   43,   28,   67,  420,
+          8,    1, 2032,   15, 3082,  483,  208,    1,   43, 2802,   28,
+         67,   77,   48,   28,  487,   16,    3,  731, 1146,    4,  232,
+         51, 4161,    1,   20,  117,    6, 1334,   20,    1,  920,   16,
+          3,   20,   24, 4086,    5,   24,  170,  831,  117,   28,  185,
+       1562,  122,    1, 7951,  237,  358,    1,   31,    3,  100,   44,
+        407,   20,   24, 9597,  117,  911,   79,  102,  585,    3,  257,
+         31,    1,  389,    4, 5176, 2137, 4636,   32, 1222, 3303,   35,
+        189, 4287,  159, 2320,   40,  344,    2,   40, 8527, 6229, 1955,
+       4910,    2, 7720, 2618,   35,   23,  472,  328,    5,    1, 2032,
+        501, 4392,  213,  237,   21,  328,    5, 4805, 6768,   37,   28,
+        281,  115,   50,  109,  986,  117,   44,  557,   38, 2574,  505,
+         38,   26,  531,    7,    7,  136,    1,  112, 1906,  201, 5176,
+          2,  292, 1731,    5,  111,   10,  255,  114, 4541,    5,   26,
+         27,    4, 3425,  104,  117, 2557,    5,  109,    3,  202,    9,
+        276,    3, 4317,  486, 1107,    5,   24, 2347,  158,  138,   14,
+       8161,  186, 3889,   38,   15,    1,  504,    5,  119,   48,   44,
+         37,  263,  137, 4737,  159, 2320,    9,    1,  365,  254,   38,
+         20,    1,   79,  524,  232,    3,  364, 2343,   37,   29,  986,
+         83,   77,   50,   33,   89,  118,   48,    5,   77,   16,   65,
+        290,  273,   33,  142,  197,    9,    5,    1, 4339,  298,    4,
+        783,    9,   37,  290,    7,    7,   38,  273,   11,   19,   80,
+       5541,   22,    5,  343,  400])
+```
+填充之后，这个示例如下所示：<br>
+`input_train_pad[1]`<br>
+**output**
+```
+array([   0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+          0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+         38,   14,  744, 3506,   45,   75,   32, 1771,   15,  153,   18,
+        110,    3, 1344,    5,  343,  143,   20,    1,  920,   12,   70,
+        281, 1228,  395,   35,  115,  267,   36,  166,    5,  368,  158,
+         38, 2058,   15,    1,  504,   88,   83,  101,    4,    1, 4339,
+         14,   39,    3,  432, 1148,  136, 8697,   42,  177,  138,   14,
+       2791,    1,  295,   20, 5276,  351,    5, 3029, 2310,    1,   38,
+       8697,   43, 3611,   26,  365,    5,  127,   53,   20,    1, 2032,
+          7,    7,   18,   48,   43,   22,   70,  358,    3, 2343,    5,
+        420,   20,    1, 2032,   15,    3, 3346,  208,    1,   22,  281,
+         66,   36,    3,  344,    1,  728,  730,    3, 3864, 1320,   20,
+          1, 1543,    3, 1293,    2,  267,   22,  281, 2734,    5,   63,
+         48,   44,   37,    5,   26, 4339,   12,    6, 2079,    7,    7,
+       3425, 2891,   35, 4446,   35,  405,   14,  297,    3,  986,  128,
+         35,   45,  267,    8,    1,  181,  366, 6951,    5,   94,    3,
+       2343,   16,    3, 7017, 3090,    5,   63,   43,   28,   67,  420,
+          8,    1, 2032,   15, 3082,  483,  208,    1,   43, 2802,   28,
+         67,   77,   48,   28,  487,   16,    3,  731, 1146,    4,  232,
+         51, 4161,    1,   20,  117,    6, 1334,   20,    1,  920,   16,
+          3,   20,   24, 4086,    5,   24,  170,  831,  117,   28,  185,
+       1562,  122,    1, 7951,  237,  358,    1,   31,    3,  100,   44,
+        407,   20,   24, 9597,  117,  911,   79,  102,  585,    3,  257,
+         31,    1,  389,    4, 5176, 2137, 4636,   32, 1222, 3303,   35,
+        189, 4287,  159, 2320,   40,  344,    2,   40, 8527, 6229, 1955,
+       4910,    2, 7720, 2618,   35,   23,  472,  328,    5,    1, 2032,
+        501, 4392,  213,  237,   21,  328,    5, 4805, 6768,   37,   28,
+        281,  115,   50,  109,  986,  117,   44,  557,   38, 2574,  505,
+         38,   26,  531,    7,    7,  136,    1,  112, 1906,  201, 5176,
+          2,  292, 1731,    5,  111,   10,  255,  114, 4541,    5,   26,
+         27,    4, 3425,  104,  117, 2557,    5,  109,    3,  202,    9,
+        276,    3, 4317,  486, 1107,    5,   24, 2347,  158,  138,   14,
+       8161,  186, 3889,   38,   15,    1,  504,    5,  119,   48,   44,
+         37,  263,  137, 4737,  159, 2320,    9,    1,  365,  254,   38,
+         20,    1,   79,  524,  232,    3,  364, 2343,   37,   29,  986,
+         83,   77,   50,   33,   89,  118,   48,    5,   77,   16,   65,
+        290,  273,   33,  142,  197,    9,    5,    1, 4339,  298,    4,
+        783,    9,   37,  290,    7,    7,   38,  273,   11,   19,   80,
+       5541,   22,    5,  343,  400])
+```
+&emsp;&emsp;了解了文本转换为数字列表之后，接下来，我们来看一个向后映射的功能，即从整数tokens映射回文本单词。我们只需要用一个非常简单的助手函数即可，代码如下:<br>
+```
+index = tokenizer_obj.word_index      #数字列表
+index_inverse_map = dict(zip(index.values(), index.keys()))    #zip函数将键和值反过来
+
+def convert_tokens_to_string(input_tokens):          
+    input_words = [index_inverse_map[token] for token in input_tokens if token != 0]   #将token整数转换为单词
+    combined_text = " ".join(input_words)  #加入所有的单词
+
+    return combined_text
+ ```
+例如，数据集中的原始文本如下：<br>
+`input_text_train[1]`<br>
+**output**<br>
+```
+'Homelessness (or Houselessness as George Carlin stated) has been an issue for years but never a plan to help those on the street that were once considered human who did everything from going to school, work, or vote for the matter. Most people think of the homeless as just a lost cause while worrying about things such as racism, the war on Iraq, pressuring kids to succeed, technology, the elections, inflation, or worrying if they\'ll be next to end up on the streets.<br /><br />But what if you were given a bet to live on the streets for a month without the luxuries you once had from a home, the entertainment sets, a bathroom, pictures on the wall, a computer, and everything you once treasure to see what it\'s like to be homeless? That is Goddard Bolt\'s lesson.<br /><br />Mel Brooks (who directs) who stars as Bolt plays a rich man who has everything in the world until deciding to make a bet with a sissy rival (Jeffery Tambor) to see if he can live in the streets for thirty days without the luxuries; if Bolt succeeds, he can do what he wants with a future project of making more buildings. The bet\'s on where Bolt is thrown on the street with a bracelet on his leg to monitor his every move where he can\'t step off the sidewalk. He\'s given the nickname Pepto by a vagrant after it\'s written on his forehead where Bolt meets other characters including a woman by the name of Molly (Lesley Ann Warren) an ex-dancer who got divorce before losing her home, and her pals Sailor (Howard Morris) and Fumes (Teddy Wilson) who are already used to the streets. They\'re survivors. Bolt isn\'t. He\'s not used to reaching mutual agreements like he once did when being rich where it\'s fight or flight, kill or be killed.<br /><br />While the love connection between Molly and Bolt wasn\'t necessary to plot, I found "Life Stinks" to be one of Mel Brooks\' observant films where prior to being a comedy, it shows a tender side compared to his slapstick work such as Blazing Saddles, Young Frankenstein, or Spaceballs for the matter, to show what it\'s like having something valuable before losing it the next day or on the other hand making a stupid bet like all rich people do when they don\'t know what to do with their money. Maybe they should give it to the homeless instead of using it like Monopoly money.<br /><br />Or maybe this film will inspire you to help others.'
+```
+如果我们使用一个帮助函数将tokens转换回文本单词，我们将得到以下文本：<br>
+`convert_tokens_to_string(input_train_tokens[1])     #将数字列表转化为字符串`
+**output**<br>
+```
+"or as george stated has been an issue for years but never a plan to help those on the street that were once considered human who did everything from going to school work or vote for the matter most people think of the homeless as just a lost cause while worrying about things such as racism the war on iraq kids to succeed technology the or worrying if they'll be next to end up on the streets br br but what if you were given a bet to live on the streets for a month without the you once had from a home the entertainment sets a bathroom pictures on the wall a computer and everything you once treasure to see what it's like to be homeless that is lesson br br mel brooks who directs who stars as plays a rich man who has everything in the world until deciding to make a bet with a sissy rival to see if he can live in the streets for thirty days without the if succeeds he can do what he wants with a future project of making more buildings the on where is thrown on the street with a on his leg to his every move where he can't step off the sidewalk he's given the by a after it's written on his forehead where meets other characters including a woman by the name of molly ann warren an ex dancer who got divorce before losing her home and her pals sailor howard morris and teddy wilson who are already used to the streets they're survivors isn't he's not used to reaching mutual like he once did when being rich where it's fight or flight kill or be killed br br while the love connection between molly and wasn't necessary to plot i found life stinks to be one of mel films where prior to being a comedy it shows a tender side compared to his slapstick work such as blazing young frankenstein or for the matter to show what it's like having something valuable before losing it the next day or on the other hand making a stupid bet like all rich people do when they don't know what to do with their money maybe they should give it to the homeless instead of using it like money br br or maybe this film will inspire you to help others"
+```
+可以看到，除了标点符号和其他符号，其他基本一样。<br>
