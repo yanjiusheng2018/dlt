@@ -78,8 +78,10 @@ input_text_test,  target_test  = imdb.load_data(train=False)
 print("Size of the trainig set: ", len(input_text_train))
 print("Size of the testing set:  ", len(input_text_test))
 ```
-**output**
+**output**<br>
+```
 Size of the trainig set:  25000
 Size of the testing set:   25000
+```
 从这个结果可以看到，这里训练数据与测试数据各有25000项。<br>
 下面我们将举一个例子来看看数据集的输入以及输出外观。<br>
