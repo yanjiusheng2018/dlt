@@ -485,6 +485,9 @@ _________________________________________________________________
 ```
 rnn_type_model.fit(input_train_pad, target_train,
           validation_split=0.05, epochs=3, batch_size=64)
+ #validation_split=0.05表示在训练数据中分出5%作为验证数据，其余95%作为训练数据
+ #epochs=3表示执行3个训练周期
+ #batch_size=64表示每一批次64项数据
 ```
 **output**
 ```
