@@ -479,7 +479,7 @@ Epoch number: 5/5...  Step: 989...  loss: 1.7260...  0.049 sec/batch
 Epoch number: 5/5...  Step: 990...  loss: 1.7144...  0.051 sec/batch
 ```
 ## 检查点
-&emsp;&emsp;现在，加载checkpoints。为了更好的了解存储和加载checkpoints，可以查看Tensorflow文档(http://www.tensorflow.org/programmers_guide/variables):<br>  
+&emsp;&emsp;现在，加载checkpoints。为了更好的了解存储和加载checkpoints，可以查看Tensorflow文档(http://www.tensorflow.org/programmers_guide/variables):<br>
 &emsp;&emsp;tf.train.get_checkpoint_state('checkpoints')<br>
 ## 生成文本
 &emsp;&emsp;我们的训练模型是基于输入的数据集的。下一步是使用这个训练模型生成文本并了解这个模型是如何学习输入文本的风格和结构。为此，我们可以从一些初始字符开始，然后将新的预测字符作为下一步的输入。我们会重复这个步骤直到得到具有特定长度的文本。<br>
@@ -521,9 +521,9 @@ def sample_from_LSTM_output(checkpoint, n_samples, lstm_size, vocab_size, prime=
             samples.append(integer_to_vocab[c])
     return ''.join(samples)
 ```
-&emsp;&emsp;我们使用最新的存储的checkpoint开始取样过程：<br>  
-&emsp;&emsp;tf.train.latest_checkpoint('checkpoints')<br> 
-&emsp;&emsp;现在，是时候使用最新的checkpoints进行采样：<br>  
+&emsp;&emsp;我们使用最新的存储的checkpoint开始取样过程：<br>
+&emsp;&emsp;tf.train.latest_checkpoint('checkpoints')<br>
+&emsp;&emsp;现在，是时候使用最新的checkpoints进行采样：<br>
 &emsp;&emsp;checkpoint = tf.train.latest_checkpoint('checkpoints') print('Sampling text frm the trained model....') sampled_text = sample_from_LSTM_output(checkpoint, 2000, lstm_size, len(language_vocab), prime="Far") print(sampled_text)<br> 
 &emsp;&emsp;你可以看到，我们会产生一些有意义的词和一些毫无意义的词。为了获得更多的结果，你可以多次运行模型，并尝试使用超参数。<br>
 ## 总结
