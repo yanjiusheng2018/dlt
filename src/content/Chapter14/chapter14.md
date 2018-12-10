@@ -100,7 +100,7 @@ Leaky ReLU激活函数没有在TensorFlow中实现, 因此我们需要自己来�
 
 ## 生成器
 
-mnist图像在0和1之间进行归一化, 其中tjhnpje激活函数可以表现得最好。但在实践中发现，与其他函数相比，uboi激活函数能提供更好的性能。因此, 为了使用uboi激活函数, 我们需要将这些图像的像素值的范围重新缩放到-1 和1之间:
+mnist图像在0和1之间进行归一化, 其中sigmoid激活函数可以表现得最好。但在实践中发现，与其他函数相比，tanh激活函数能提供更好的性能。因此, 为了使用tanh激活函数, 我们需要将这些图像的像素值的范围重新缩放到-1 和1之间:
 
 ```def generator(gen_z,gen_out_dim,num_hiddern_units=128,reuse_vars=False,leaky_relu_alpha=0.01);```
 
@@ -118,7 +118,7 @@ return tanh_output,logits_layer
 
 ## 判别器
  
- 接下来, 我们将构建生成对抗网络中的第二个主要组件,这就是判别器。判别器与生层器大同小异, 但不是使用uboi激活函数, 我们将使用tjhnpj激活
+ 接下来, 我们将构建生成对抗网络中的第二个主要组件,这就是判别器。判别器与生层器大同小异, 但不是使用tanh激活函数, 我们将使用sigmoid激活
  功能;它将产生一个二进制输出, 将代表判断输入图像上的判别器:
  
  ```def discriminator(disc_input,num_hiddern_units=128,reuse_vars=False,leaky_relu_alpha=0.01)```
@@ -367,7 +367,7 @@ for gen_sample, ax_row in zip(gen_samples[::int(len(gen_sample)/rows)], axes):
 
 ## 从生成器中获取样本
 
-在上一节中，我们介绍了在此GAN架构的训练过程中生成的一些示例。 我们还可以通过加载我们保存的检查点，并为生成器提供可用于生成新图像的新潜在空间，从生成器中生成全新的图像：
+在上一节中，我们介绍了在此GAN架构的训练过程中生成的一些示例。 我们还可以通过加载生成器变量，并为生成器提供可用于生成新图像的新潜在空间，从生成器中生成全新的图像：
 ```
 # Sampling from the generator
 saver = tf.train.Saver(var_list=g_vars)
