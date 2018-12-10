@@ -15,19 +15,22 @@
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE1.jpg">
 </div>
 
-<div align="center">
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE1.jpg )<br>   
-</div>
-
 &emsp;&emsp;图1：在输入或输出形状方面RNNs的灵活性<br>
 &emsp;&emsp;这类体系结构的本质是模仿人类处理信息的方式。在任何谈话过程中，你对对方话语的理解完全取决于他之前所讲的话，你甚至可以根据对方刚才讲的话预测他接下来会将什么。<br>
 &emsp;&emsp;RNN在运用过程中也应该遵循完全相同的过程。例如，假设你想要翻译某一个句子中的一个特定的单词。你不会使用传统的前馈神经网络，因为传统的神经网络没有将之前接收到的单词的翻译的输出作为我们想要翻译的当前单词的输入的能力，并且也会因为缺少单词的上下文的信息而导致翻译错误。<br>
 &emsp;&emsp;RNNs保留过去的信息，并具有某种循环方式，允许在任何给定的点上使用之前学习到的信息进行当前预测：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE2.jpg)<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE2.jpg">
+</div>
+
 &emsp;&emsp;图2：RNNs体系结构具有保留过去步骤的信息的循环<br>
 &emsp;&emsp;在图2中，A是接收X(t)作为输入的一些神经网络，并产生和输出h(t)。此外，在这个循环的辅助下接收前一个步骤的信息。<br>
 &emsp;&emsp;这个循环看上去不是那么清晰，但是如果我们把循环展开，如图2所示，你会发现循环非常简单和直观，RNN只不过是同一个网络（可能是普通FNN）的重复，如图3所示：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE3.jpg)图3：RNN体系结构展开图<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE3.jpg">
+</div>
+
+&emsp;&emsp;图3：RNN体系结构展开图<br>
 &emsp;&emsp;RNNs这种直观的结构及其在输入输出形状方面的灵活性使其非常适用于基于序列的学习任务，例如机器翻译、语言建模、情绪分析、图像字幕等。<br>
 ## RNNs的案例
 &emsp;&emsp;现在，我们对RNNs的工作原理以及它在不同的基于序列的示例中的有用性有了直观的了解。让我们进一步了解其中一些有趣的例子。<br>
@@ -40,7 +43,11 @@
 &emsp;&emsp;3.根据给定的hel的上下文计算字符l的概率，<br>
 &emsp;&emsp;4.最后根据给定的hell的上下文计算字符0的概率。<br>
 &emsp;&emsp;正如我们前几章学到的，机器学习技术通常是深度学习的一部分，只接受实值数字作为输入。所以，我们需要以某种方式转换或编码或输入字符为数字形式。为此，我们使用独热（one-hot）向量编码，这是一种通过具有零向量的方法对文本进行编码, 向量中除了词汇中字符的索引是1，其余位置均是0（本例词汇helo）。在对训练样本进行编码后，我们将一次性把编码后的训练样本输入到RNN类型的模型中。对每个给定的字符，RNN类型的模型的输出结果都是一个四维的向量（向量的维度对应于词汇数量），它表示词汇中每个字符作为给定输入字符之后的下一个字符的概率。图4表明了该过程：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE4.jpg)图4：以独热编码字符作为RNN类型的网络的输入以及输出是基于当前输入之后最有可能出现的字符的概率分布示例<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE4.jpg">
+</div>
+
+&emsp;&emsp;图4：以独热编码字符作为RNN类型的网络的输入以及输出是基于当前输入之后最有可能出现的字符的概率分布示例<br>
 &emsp;&emsp;正如图4所示，你会发现我们将输入序列中的第一个字符h输入模型，输出的四维向量表示下一个字符的置信度。因此，在输入h之后，出现的下一个字符是h的置信度是1，出现下一个字符是e的置信度是2.2，出现下一个字符是l的置信度是-3.0，出现下一个字符是o的置信度4.1。在这个特殊示例中，基于我们得训练样本的序列是hello，我们知道正确的下一个字符是e。因此，我们在训练这个RNN型网络的同时，主要目标是增加e作为下一个字符的可信度，降低其他字符的可信度。为了达到优化目的，我们将使用梯度下降和反向传播算法进行权重的更新并影响网络，以便对下个出现的准确的字符e生成更高的可信度，以此类推，对其他三个训练样本也进行权重更新以降低损失。<br>
 &emsp;&emsp;正如你所看到的，RNN型网络的输出会对词汇中的所有字符作为下一个字符出现生成置信分布。我们可以将这种置信分布转化为概率分布，这样某一个字符作为下一个字符出现的概率增加会导致其他字符出现的概率，因为概率和恒为1。对于这种特殊优化，我们可以对每个输出向量进行标准softmax函数的转换。<br>
 &emsp;&emsp;为了从这类网络中生成文本，我们可以对这个模型输入一个初始字符并得到接下来有可能出现的字符的概率分布，然后可以从这些字符中进行采样，并将其作为输入字符返回输入到模型中。通过一遍又一遍的重复这个过程我们可以得到一系列字符，也就是我们想要生成的固定长度的文本。<br>
@@ -55,25 +62,40 @@
 ## 梯度消失问题
 &emsp;&emsp;在训练这类RNN型结构体系时，我们使用梯度下降和基于时间的反向传播算法，这为许多基于序列的学习工作带来了一些成功。但是因为梯度的性质和使用快速训练策略的原因，可以证明梯度价值会变小甚至会消失。这个过程说明了许多学习者陷入的梯度消失的问题。<br>
 &emsp;&emsp;在本章的后面部分，我们将讨论研究者是如何处理这类问题并产生一般RNN（vanilla RNNs）算法的变体来克服这些问题：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE5.jpg)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE5.jpg">
+</div>
+
 &emsp;&emsp;图5：梯度消失问题 <br>
 ## 长时依赖问题
 &emsp;&emsp;研究者们面对的另一个具有挑战性的问题是人们可以在文本中找到的长时依赖问题。例如，假设某一句子，“I used to live in France and I learned how to speak...”，很显然该句子的后一个单词是French。<br>
 &emsp;&emsp;在这种情况下，具有短期依赖性的一般RNN模型便可以处理，如图6显示：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE6.jpg)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE6.jpg">
+</div>
+
 &emsp;&emsp;图6：展示文本中的短期依赖<br>
 &emsp;&emsp;进一步举例，如果一个人一开始就说“I used to live in France..”，然后他/她开始描述在法国的美好生活，最后以“I learned to speak French”结尾。因此，要想用模型预测他/她在句子结束时说的所学到的语言，模型就需要用到前面说的关于live 和French的信息。如果模型无法追踪文本中的长时依赖关系，那么该模型则无法处理此类情况：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE7.jpg)<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE7.jpg">
+</div>
+
 &emsp;&emsp;图7：文本中长时依赖问题的挑战<br>
 &emsp;&emsp;为了处理文本中的梯度消失和长时依赖问题，研究者引入了一般RNN模型的变体，即长短期记忆网络（LSTM）。<br>
 ## LSTM网络
 &emsp;&emsp;LSTM，RNN模型的变体，用于帮助学习文本中的长时依赖关系。早在1997年，Hochreiter & Schmidhuber就介绍了LSTM网络（http://www.bioinf.jku.at/publications/older/2604.pdf） ，很多研究者也对此进行了研究并在很多领域取得了有趣的成果。<br>
 &emsp;&emsp;因为LSTM网络的内部结构，因此这类型的体系结构能够处理文本中的长时依赖关系的问题。<br>
 &emsp;&emsp;LSTM网络与常规的RNN模型类似，因为随着时间的推移，它有一个重复的模块，但这个重复部件的内部结构不同于常规的RNN。它包括很多用于遗忘和更新信息的图层：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE8.jpg)<br>
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE8.jpg">
+</div>
+
 &emsp;&emsp;图8：标准RNN的重复模块包含一个层<br>
 &emsp;&emsp;正如上文提到的，常规RNN只有一个非常简单的结构，例如一个tanh层，但是LSTMs神经网络有四个不同的层并以某种特殊的方式进行相互作用。这种特殊的相互作用的方式使得LSTM在很多领域能很好地工作，我们将在建立语言模型的示例中看到这一点：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE9.jpg)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE9.jpg">
+</div>
+
 &emsp;&emsp;图9：LSTM的重复模块包含四个相互作用的层<br>
 &emsp;&emsp;有关数学细节以及四个层之间实际相互作用方式的更多详细信息，可以查阅以下网址：http://colah.github.io/posts/2015-08-Understanding-LSTMs/<br>
 ##  LSTM工作原理
@@ -83,7 +105,10 @@
 &emsp;&emsp;最后，需要决定LSTM的神经元需要输出的内容。这些输出的内容将基于我们的细胞状态，但将是一个筛选过的版本。<br>
 ## 语言模型的实现
 &emsp;&emsp;在这一部分中，我们将建立对字符进行操作的语言模型。为了演示模型的实现，我们将使用安娜•卡列尼娜的一本小说，并了解神经网络是如何学习文本的结构和风格并实现生成类似的文本：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE10.jpg)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE10.jpg">
+</div>
+
 &emsp;&emsp;图10：字符级RNN的一般结构<br>
 &emsp;&emsp;*这个神经网络是根据Andrej Karpathy的关于RNNs的帖子( http://karpathy.github.io/2015/05/21/rnn-effectiveness/ )和Troch (http://github.com/karpathy/char-rnn) 的实现为基础的。*<br>
 &emsp;&emsp;*同样，在r2rt(http://r2rt.com/recurrent-neural-networks-in-tensorflow-ii.html) 以及在github上Sherjil Ozairp(http://github.com/sherjilozair/char-rnn-tensorflow) 写的关于神经网络的信息。下面是字符级RNN的一般体系结构。*<br>
@@ -140,7 +165,10 @@ Output:
 &emsp;&emsp;由于我们将使用随机梯度下降来训练我们的模型，我们需要将我们的整个数据转换成训练批次。<br>
 ## 生成小批次训练                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 &emsp;&emsp;在本节中，我们将把我们的数据分成小的批次用于训练。因此，批由所需序列步骤数的许多序列组成。图11是一个可视化示例：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE11.jpg)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE11.jpg">
+</div>
+
 &emsp;&emsp;图11：批次和序列的外观示例<br>
 &emsp;&emsp;因此，我们现在需要定义一个函数，该函数将遍历编码的文本并生成各个批。在这个函数中，我们将使用python机制，yield(http://jeffknupp.com/blog/2013/04/07/improve-your-python-yield-and-generators-explained )。<br>
 &emsp;&emsp;典型的批由N×M个字符组成，N是序列数，M是序列阶数。为了得到数据集中可能的批数（the number of batches），我们只需要将数据长度除以希望的批规模（batch size），在得到可能的批的数量后，我们可以得到每个批中应该有多少字符。<br>
@@ -210,12 +238,18 @@ target
 &emsp;&emsp;*“因为他们的隐藏状态是之前所有隐藏状态的函数，RNN在本质上是在时间深处进行模型运作。从这篇论文得到启发的一个问题是是否RNN也可以从空间的深度中受益；这就是堆叠多个循环隐藏层，就像在传统的深层网络中堆叠前馈层一样”《深度RNNs中的语音识别》(https://arxiv.org/abs/1303.5778 )，2013。*<br>
 &emsp;&emsp;很多研究者尝试用栈式LSTMs解决序列预测问题。栈式LSTM的结构被定义为有多个LSTM层构成的LSTM模型。之前介绍的LSTM层提供序列的输出，而不是单值输出到下一个LSTM层，如下所示。<br>
 &emsp;&emsp;具体而言，它是每一个时间节点上的单一输出，而不是所有输入时间步长上的输出。<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE12.jpg)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE12.jpg">
+</div>
+
 &emsp;&emsp;图12：栈式LSTMs <br>
 &emsp;&emsp;因此在本例中，我们将使用这种多层LSTM结构，以获得更好的效果。<br>
 ### 模型结构
 &emsp;&emsp;我们将在此建立模型，我们会把它分成几个部分，这样就更容易对每个点进行推理。然后，我们可以将它们连接到整个神经网络：<br>
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE13.jpg)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE13.jpg">
+</div>
+
 &emsp;&emsp;图13：字符级模型体系结构 <br>
 ## 输入
 &emsp;&emsp;我们从对模型的初始输入定义一个占位符开始建模。模型的输入将是训练数据和目标。在dropout层使用keep_probability的参数，避免模型数据的过度拟合：<br>
