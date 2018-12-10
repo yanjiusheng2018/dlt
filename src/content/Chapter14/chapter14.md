@@ -276,8 +276,8 @@ gen_train_optimizer = tf.train.AdamOptimizer().minimize(gen_loss, var_list=gen_v
 现在让我们开始训练过程, 看看如何管理生成类似于 mnist 的图像:
 
 ```python
-train_batch_size = 100
-num_epochs = 100
+train_batch_size = 64
+num_epochs = 300
 generated_samples = []
 model_losses = []
 
@@ -328,7 +328,7 @@ with open('train_generator_samples.pkl', 'wb') as f:
     pkl.dump(generated_samples, f)
 ```
 
-在运行了100次epoch的模型后, 我们有了一个训练模型, 将能够生成与我们提供给判别器的原始输入图像类似的图像:
+在运行了300次epoch的模型后, 我们有了一个训练模型, 将能够生成与我们提供给判别器的原始输入图像类似的图像:
 
 ```python
 fig, ax = plt.subplots()
