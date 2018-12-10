@@ -303,14 +303,14 @@ def build_model_inputs(batch_size, num_steps):
 ```
 ## 建立LSTM细胞单元
 &emsp;&emsp;在本部分中，我们将编写一个用于创建LSTM细胞单元的函数并作用于模型的隐藏层。这个细胞单元是模型的组成部分。以此，我们将用Tensorflow构建记忆单元。让我们了解我们是如何用Tensorflow构建基本的LSTM细胞单元。<br>
-&emsp;&emsp;我们调用下面的代码创建LSTM细胞单元，参数num_units代表隐藏层的细胞单元数：<br>  
-&emsp;&emsp;lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units)<br>  
-&emsp;&emsp;为了防止过度拟合，我们可以使用dropout层，它可以通过降低模型的复杂性防止数据过度拟合：<br>  
-&emsp;&emsp;tf.contrib.rnn.DropoutWrapper(lstm, output_keep_prob=keep_probability)<br>  
-&emsp;&emsp;正如我们前面所提及的，我们将使用栈式LSTM结构；它将帮助我们从不同角度理解数据，实践证明，它也比单层LSTM表现的更好。为了在Tensorflow中定义多层LSTM，可以使用tf.contrib.rnn.MultiRNNCell函数(http://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/rnn/MultiRNNCell):<br>  
+&emsp;&emsp;我们调用下面的代码创建LSTM细胞单元，参数num_units代表隐藏层的细胞单元数：<br>
+&emsp;&emsp;lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units)<br>
+&emsp;&emsp;为了防止过度拟合，我们可以使用dropout层，它可以通过降低模型的复杂性防止数据过度拟合：<br>
+&emsp;&emsp;tf.contrib.rnn.DropoutWrapper(lstm, output_keep_prob=keep_probability)<br>
+&emsp;&emsp;正如我们前面所提及的，我们将使用栈式LSTM结构；它将帮助我们从不同角度理解数据，实践证明，它也比单层LSTM表现的更好。为了在Tensorflow中定义多层LSTM，可以使用tf.contrib.rnn.MultiRNNCell函数(http://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/rnn/MultiRNNCell):<br>
 &emsp;&emsp;tf.contrib.rnn.MultiRNNCell([cell] * num_layers)<br>
-&emsp;&emsp;对于第一个细胞单元的初始状态，没有先前的信息，所以需要将第一个细胞单元初始为零。可以用以下函数来执行此操作：<br>  
-&emsp;&emsp;initial_state = cell.zero_state(batch_size, tf.float32)<br>  
+&emsp;&emsp;对于第一个细胞单元的初始状态，没有先前的信息，所以需要将第一个细胞单元初始为零。可以用以下函数来执行此操作：<br>
+&emsp;&emsp;initial_state = cell.zero_state(batch_size, tf.float32)<br>
 &emsp;&emsp;最后，把所有的模块都放在一起构建LSTM记忆单元：<br>
 ```
 def build_lstm_cell(size, num_layers, batch_size, keep_probability):
@@ -372,7 +372,7 @@ def build_model_optimizer(model_loss, learning_rate, grad_clip):
     return model_optimizer
 ```
 ## 构建网络
-&emsp;&emsp;现在我们将所有的部分放在一起构建神经网络。通过LSTM细胞单元单元实际运行数据时我们使用tf.nn.drnamic_rnn (http://www.tensorflow.org/version/r1.0/api_docs/python/tf/nn/dynamic_rnn )。这个函数会为我们适当的传递LSTM细胞中的隐藏状态和细胞状态。它对批（mini-batch）中的每个序列进行操作，并在每一个步骤中返回每个LSTM细胞单元的输出并提供最终的LSTM状态。我们把这个状态存为final_state，因此在下一个批运行时，可以将最终状态传给第一个LSTM细胞单元。我们将从build_lstm得到的初始状态以及输入的序列传递到细胞单元，并通过tf.nn.dynamic_rnn运行。同样，将数据输入到RNN模型中时也需要进行独热编码：<br>
+&emsp;&emsp;现在我们将所有的部分放在一起构建神经网络。通过LSTM细胞单元单元实际运行数据时我们使用tf.nn.drnamic_rnn   (http://www.tensorflow.org/version/r1.0/api_docs/python/tf/nn/dynamic_rnn )。这个函数会为我们适当的传递LSTM细胞中的隐藏状态和细胞状态。它对批（mini-batch）中的每个序列进行操作，并在每一个步骤中返回每个LSTM细胞单元的输出并提供最终的LSTM状态。我们把这个状态存为final_state，因此在下一个批运行时，可以将最终状态传给第一个LSTM细胞单元。我们将从build_lstm得到的初始状态以及输入的序列传递到细胞单元，并通过tf.nn.dynamic_rnn运行。同样，将数据输入到RNN模型中时也需要进行独热编码：<br>
 ```
 class CharLSTM:
     def __init__(self, num_classes, batch_size=64, num_steps=50,
