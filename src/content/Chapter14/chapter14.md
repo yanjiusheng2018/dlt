@@ -106,7 +106,6 @@ def generator(gen_z, gen_out_dim, num_hiddern_units=128, reuse_vars=False, leaky
         Building the generator part of the network
 
         Function arguments
-        ---------
         gen_z : the generator input tensor
         gen_out_dim : the output shape of the generator
         num_hiddern_units : Number of neurons/units in the hidden layer
@@ -114,7 +113,6 @@ def generator(gen_z, gen_out_dim, num_hiddern_units=128, reuse_vars=False, leaky
         leaky_relu_alpha : leaky ReLU parameter
 
         Function Returns
-        -------
         tanh_output, logits_layer:
     with tf.variable_scope('generator', reuse=reuse_vars):
         # Defining the generator hidden layer
@@ -141,14 +139,12 @@ def generator(gen_z, gen_out_dim, num_hiddern_units=128, reuse_vars=False, leaky
         Building the discriminator part of the network
 
         Function Arguments
-        ---------
         disc_input : discrminator input tensor
         num_hiddern_units : Number of neurons/units in the hidden layer
         reuse_vars : Reuse variables with tf.variable_scope
         leaky_relu_alpha : leaky ReLU parameter
 
         Function Returns
-        -------
         sigmoid_out, logits_layer:
     with tf.variable_scope('discriminator', reuse=reuse_vars):
         # Defining the generator hidden layer
