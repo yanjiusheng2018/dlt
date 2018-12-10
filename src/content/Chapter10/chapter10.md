@@ -304,13 +304,13 @@ def build_model_inputs(batch_size, num_steps):
 ## 建立LSTM细胞单元
 &emsp;&emsp;在本部分中，我们将编写一个用于创建LSTM细胞单元的函数并作用于模型的隐藏层。这个细胞单元是模型的组成部分。以此，我们将用Tensorflow构建记忆单元。让我们了解我们是如何用Tensorflow构建基本的LSTM细胞单元。<br>
 &emsp;&emsp;我们调用下面的代码创建LSTM细胞单元，参数num_units代表隐藏层的细胞单元数：<br>  
-lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units)<br>  
+&emsp;&emsp;lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units)<br>  
 &emsp;&emsp;为了防止过度拟合，我们可以使用dropout层，它可以通过降低模型的复杂性防止数据过度拟合：<br>  
-tf.contrib.rnn.DropoutWrapper(lstm, output_keep_prob=keep_probability)<br>  
+&emsp;&emsp;tf.contrib.rnn.DropoutWrapper(lstm, output_keep_prob=keep_probability)<br>  
 &emsp;&emsp;正如我们前面所提及的，我们将使用栈式LSTM结构；它将帮助我们从不同角度理解数据，实践证明，它也比单层LSTM表现的更好。为了在Tensorflow中定义多层LSTM，可以使用tf.contrib.rnn.MultiRNNCell函数(http://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/rnn/MultiRNNCell):<br>  
-tf.contrib.rnn.MultiRNNCell([cell] * num_layers)<br>
+&emsp;&emsp;tf.contrib.rnn.MultiRNNCell([cell] * num_layers)<br>
 &emsp;&emsp;对于第一个细胞单元的初始状态，没有先前的信息，所以需要将第一个细胞单元初始为零。可以用以下函数来执行此操作：<br>  
-initial_state = cell.zero_state(batch_size, tf.float32)<br>  
+&emsp;&emsp;initial_state = cell.zero_state(batch_size, tf.float32)<br>  
 &emsp;&emsp;最后，把所有的模块都放在一起构建LSTM记忆单元：<br>
 ```
 def build_lstm_cell(size, num_layers, batch_size, keep_probability):
@@ -480,7 +480,7 @@ Epoch number: 5/5...  Step: 990...  loss: 1.7144...  0.051 sec/batch
 ```
 ## 检查点
 &emsp;&emsp;现在，加载checkpoints。为了更好的了解存储和加载checkpoints，可以查看Tensorflow文档(http://www.tensorflow.org/programmers_guide/variables):<br>  
-tf.train.get_checkpoint_state('checkpoints')<br>
+&emsp;&emsp;tf.train.get_checkpoint_state('checkpoints')<br>
 ## 生成文本
 &emsp;&emsp;我们的训练模型是基于输入的数据集的。下一步是使用这个训练模型生成文本并了解这个模型是如何学习输入文本的风格和结构。为此，我们可以从一些初始字符开始，然后将新的预测字符作为下一步的输入。我们会重复这个步骤直到得到具有特定长度的文本。<br>
 &emsp;&emsp;通过以下代码，我们还可以对函数添加额外的语句，以便使用一些初始文本为网络提供支持，并从初始文本开始运行。<br>
@@ -522,9 +522,9 @@ def sample_from_LSTM_output(checkpoint, n_samples, lstm_size, vocab_size, prime=
     return ''.join(samples)
 ```
 &emsp;&emsp;我们使用最新的存储的checkpoint开始取样过程：<br>  
-tf.train.latest_checkpoint('checkpoints')<br> 
+&emsp;&emsp;tf.train.latest_checkpoint('checkpoints')<br> 
 &emsp;&emsp;现在，是时候使用最新的checkpoints进行采样：<br>  
-checkpoint = tf.train.latest_checkpoint('checkpoints') print('Sampling text frm the trained model....') sampled_text = sample_from_LSTM_output(checkpoint, 2000, lstm_size, len(language_vocab), prime="Far") print(sampled_text)<br> 
+&emsp;&emsp;checkpoint = tf.train.latest_checkpoint('checkpoints') print('Sampling text frm the trained model....') sampled_text = sample_from_LSTM_output(checkpoint, 2000, lstm_size, len(language_vocab), prime="Far") print(sampled_text)<br> 
 &emsp;&emsp;你可以看到，我们会产生一些有意义的词和一些毫无意义的词。为了获得更多的结果，你可以多次运行模型，并尝试使用超参数。<br>
 ## 总结
 &emsp;&emsp;我们已经学习了RNNs，它的工作原理，以及RNNs的广泛运用。我们用一部有趣的小说作为数据集，训练了基于字符水平的RNN模型，以及RNN的应用走向。我们足够期待RNN领域的巨大创新，我相信它将成为智能系统的一个普遍却关键的组成部分。<br>
