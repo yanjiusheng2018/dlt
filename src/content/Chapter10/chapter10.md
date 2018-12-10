@@ -13,7 +13,7 @@
 &emsp;&emsp;基于我们之前使用的深度学习体系结构的背景，你会发现RNNs的特别之处。我们之前学习的结构体系在输入或训练方面并不灵活。这些结构体系接收固定大小的序列、向量、图像作为输入并产生另一个固定大小的序列、向量、图像作为输出。RNN体系结构在某种程度上是不同的，因为它可以输入一个序列但输出另一个序列，或者如图一所示，输入序列但是单输出，或单输入但是输出为序列。这种灵活性对于如语言建模和情绪分析的多种应用程序非常有用:<br>
 <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE1.jpg">
-</div>
+</div><br> 
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE1.jpg )<br>          
 &emsp;&emsp;图1：在输入或输出形状方面RNNs的灵活性<br>
 &emsp;&emsp;这类体系结构的本质是模仿人类处理信息的方式。在任何谈话过程中，你对对方话语的理解完全取决于他之前所讲的话，你甚至可以根据对方刚才讲的话预测他接下来会将什么。<br>
