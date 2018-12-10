@@ -524,7 +524,9 @@ def sample_from_LSTM_output(checkpoint, n_samples, lstm_size, vocab_size, prime=
 &emsp;&emsp;我们使用最新的存储的checkpoint开始取样过程：<br>
 &emsp;&emsp;tf.train.latest_checkpoint('checkpoints')<br>
 &emsp;&emsp;现在，是时候使用最新的checkpoints进行采样：<br>
-&emsp;&emsp;checkpoint = tf.train.latest_checkpoint('checkpoints') print('Sampling text frm the trained model....') sampled_text = sample_from_LSTM_output(checkpoint, 2000, lstm_size, len(language_vocab), prime="Far") print(sampled_text)<br> 
+&emsp;&emsp;checkpoint = tf.train.latest_checkpoint('checkpoints')<br>
+&emsp;&emsp;print('Sampling text frm the trained model....')<br>
+&emsp;&emsp;sampled_text = sample_from_LSTM_output(checkpoint, 2000, lstm_size, len(language_vocab), prime="Far")<br> &emsp;&emsp;print(sampled_text)<br> 
 &emsp;&emsp;你可以看到，我们会产生一些有意义的词和一些毫无意义的词。为了获得更多的结果，你可以多次运行模型，并尝试使用超参数。<br>
 ## 总结
 &emsp;&emsp;我们已经学习了RNNs，它的工作原理，以及RNNs的广泛运用。我们用一部有趣的小说作为数据集，训练了基于字符水平的RNN模型，以及RNN的应用走向。我们足够期待RNN领域的巨大创新，我相信它将成为智能系统的一个普遍却关键的组成部分。<br>
