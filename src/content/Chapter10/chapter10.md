@@ -26,14 +26,20 @@
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE2.jpg">
 </div>
 
-&emsp;&emsp;图2：RNNs体系结构具有保留过去步骤的信息的循环<br>
+<div align=center>
+图2：RNNs体系结构具有保留过去步骤的信息的循环<br>
+</div>
+
 &emsp;&emsp;在图2中，A是接收X(t)作为输入的一些神经网络，并产生和输出h(t)。此外，在这个循环的辅助下接收前一个步骤的信息。<br>
 &emsp;&emsp;这个循环看上去不是那么清晰，但是如果我们把循环展开，如图2所示，你会发现循环非常简单和直观，RNN只不过是同一个网络（可能是普通FNN）的重复，如图3所示：<br>
 <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE3.jpg">
 </div>
 
-&emsp;&emsp;图3：RNN体系结构展开图<br>
+<div align="center">
+图3：RNN体系结构展开图<br>
+</div>
+
 &emsp;&emsp;RNNs这种直观的结构及其在输入输出形状方面的灵活性使其非常适用于基于序列的学习任务，例如机器翻译、语言建模、情绪分析、图像字幕等。<br>
 ## RNNs的案例
 &emsp;&emsp;现在，我们对RNNs的工作原理以及它在不同的基于序列的示例中的有用性有了直观的了解。让我们进一步了解其中一些有趣的例子。<br>
@@ -50,7 +56,10 @@
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE4.jpg">
 </div>
 
-&emsp;&emsp;图4：以独热编码字符作为RNN类型的网络的输入以及输出是基于当前输入之后最有可能出现的字符的概率分布示例<br>
+<div align="center">
+图4：以独热编码字符作为RNN类型的网络的输入以及输出是基于当前输入之后最有可能出现的字符的概率分布示例<br>
+</div>
+
 &emsp;&emsp;正如图4所示，你会发现我们将输入序列中的第一个字符h输入模型，输出的四维向量表示下一个字符的置信度。因此，在输入h之后，出现的下一个字符是h的置信度是1，出现下一个字符是e的置信度是2.2，出现下一个字符是l的置信度是-3.0，出现下一个字符是o的置信度4.1。在这个特殊示例中，基于我们得训练样本的序列是hello，我们知道正确的下一个字符是e。因此，我们在训练这个RNN型网络的同时，主要目标是增加e作为下一个字符的可信度，降低其他字符的可信度。为了达到优化目的，我们将使用梯度下降和反向传播算法进行权重的更新并影响网络，以便对下个出现的准确的字符e生成更高的可信度，以此类推，对其他三个训练样本也进行权重更新以降低损失。<br>
 &emsp;&emsp;正如你所看到的，RNN型网络的输出会对词汇中的所有字符作为下一个字符出现生成置信分布。我们可以将这种置信分布转化为概率分布，这样某一个字符作为下一个字符出现的概率增加会导致其他字符出现的概率，因为概率和恒为1。对于这种特殊优化，我们可以对每个输出向量进行标准softmax函数的转换。<br>
 &emsp;&emsp;为了从这类网络中生成文本，我们可以对这个模型输入一个初始字符并得到接下来有可能出现的字符的概率分布，然后可以从这些字符中进行采样，并将其作为输入字符返回输入到模型中。通过一遍又一遍的重复这个过程我们可以得到一系列字符，也就是我们想要生成的固定长度的文本。<br>
@@ -69,7 +78,10 @@
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE5.jpg">
 </div>
 
-&emsp;&emsp;图5：梯度消失问题 <br>
+<div align="center">
+图5：梯度消失问题 <br>
+</div>
+
 ## 长时依赖问题
 &emsp;&emsp;研究者们面对的另一个具有挑战性的问题是人们可以在文本中找到的长时依赖问题。例如，假设某一句子，“I used to live in France and I learned how to speak...”，很显然该句子的后一个单词是French。<br>
 &emsp;&emsp;在这种情况下，具有短期依赖性的一般RNN模型便可以处理，如图6显示：<br>
@@ -77,13 +89,19 @@
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE6.jpg">
 </div>
 
-&emsp;&emsp;图6：展示文本中的短期依赖<br>
+<div align="center">
+图6：展示文本中的短期依赖<br>
+</div>
+
 &emsp;&emsp;进一步举例，如果一个人一开始就说“I used to live in France..”，然后他/她开始描述在法国的美好生活，最后以“I learned to speak French”结尾。因此，要想用模型预测他/她在句子结束时说的所学到的语言，模型就需要用到前面说的关于live 和French的信息。如果模型无法追踪文本中的长时依赖关系，那么该模型则无法处理此类情况：<br>
 <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE7.jpg">
 </div>
 
-&emsp;&emsp;图7：文本中长时依赖问题的挑战<br>
+<div align="center">
+图7：文本中长时依赖问题的挑战<br>
+</div>
+
 &emsp;&emsp;为了处理文本中的梯度消失和长时依赖问题，研究者引入了一般RNN模型的变体，即长短期记忆网络（LSTM）。<br>
 ## LSTM网络
 &emsp;&emsp;LSTM，RNN模型的变体，用于帮助学习文本中的长时依赖关系。早在1997年，Hochreiter & Schmidhuber就介绍了LSTM网络（http://www.bioinf.jku.at/publications/older/2604.pdf） ，很多研究者也对此进行了研究并在很多领域取得了有趣的成果。<br>
@@ -93,13 +111,19 @@
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE8.jpg">
 </div>
 
-&emsp;&emsp;图8：标准RNN的重复模块包含一个层<br>
+<div align="center">
+图8：标准RNN的重复模块包含一个层<br>
+</div>
+
 &emsp;&emsp;正如上文提到的，常规RNN只有一个非常简单的结构，例如一个tanh层，但是LSTMs神经网络有四个不同的层并以某种特殊的方式进行相互作用。这种特殊的相互作用的方式使得LSTM在很多领域能很好地工作，我们将在建立语言模型的示例中看到这一点：<br>
 <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE9.jpg">
 </div>
 
-&emsp;&emsp;图9：LSTM的重复模块包含四个相互作用的层<br>
+<div align="center">
+图9：LSTM的重复模块包含四个相互作用的层<br>
+</div>
+
 &emsp;&emsp;有关数学细节以及四个层之间实际相互作用方式的更多详细信息，可以查阅以下网址：http://colah.github.io/posts/2015-08-Understanding-LSTMs/<br>
 ##  LSTM工作原理
 &emsp;&emsp;常规的LSTM体系结构的第一步是决定哪些信息是不必要的，它将通过扔掉不必要的信息来为更重要的信息留下更多的空间来发挥作用。为此，模型中有一个层叫做遗忘门(forget gate layer)，它会根据上一时刻的输出h(t-1)和当前时刻的输入x(t)来产生一个0-1的值，来决定哪些信息是要丢弃的。<br>
@@ -112,7 +136,10 @@
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE10.jpg">
 </div>
 
-&emsp;&emsp;图10：字符级RNN的一般结构<br>
+<div align="center">
+图10：字符级RNN的一般结构<br>
+</div>
+
 &emsp;&emsp;*这个神经网络是根据Andrej Karpathy的关于RNNs的帖子( http://karpathy.github.io/2015/05/21/rnn-effectiveness/ )和Troch (http://github.com/karpathy/char-rnn) 的实现为基础的。*<br>
 &emsp;&emsp;*同样，在r2rt(http://r2rt.com/recurrent-neural-networks-in-tensorflow-ii.html) 以及在github上Sherjil Ozairp(http://github.com/sherjilozair/char-rnn-tensorflow) 写的关于神经网络的信息。下面是字符级RNN的一般体系结构。*<br>
 &emsp;&emsp;我们将建立一个字符级的RNN模型用来训练安娜•卡列尼娜的小说(链接：https://en.wikipedia.org/wiki/Anna_Karenina) 。它将根据书中的文本生成一个新的文本。链接上包含txt文本和实现的代码。<br>
@@ -172,7 +199,10 @@ Output:
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE11.jpg">
 </div>
 
-&emsp;&emsp;图11：批次和序列的外观示例<br>
+<div align="center">
+图11：批次和序列的外观示例<br>
+</div>
+
 &emsp;&emsp;因此，我们现在需要定义一个函数，该函数将遍历编码的文本并生成各个批。在这个函数中，我们将使用python机制，yield(http://jeffknupp.com/blog/2013/04/07/improve-your-python-yield-and-generators-explained )。<br>
 &emsp;&emsp;典型的批由N×M个字符组成，N是序列数，M是序列阶数。为了得到数据集中可能的批数（the number of batches），我们只需要将数据长度除以希望的批规模（batch size），在得到可能的批的数量后，我们可以得到每个批中应该有多少字符。<br>
 &emsp;&emsp;之后，我们需要将数据集拆分成所需数量（N）的序列。我们可以使用arr.reshape(size)。我们知道我们需要N个序列(代码中可以使用num_seqs)，将其作为第一维度的大小。对于第二维度，可以使用-1作为规模占位符，系统会为数组填充适当的数据。之后，会得到一个N×（M×K）的数组，其中K是批次数。<br>
@@ -245,7 +275,10 @@ target
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE12.jpg">
 </div>
 
-&emsp;&emsp;图12：栈式LSTMs <br>
+<div align="center">
+图12：栈式LSTMs <br>
+</div>
+
 &emsp;&emsp;因此在本例中，我们将使用这种多层LSTM结构，以获得更好的效果。<br>
 ### 模型结构
 &emsp;&emsp;我们将在此建立模型，我们会把它分成几个部分，这样就更容易对每个点进行推理。然后，我们可以将它们连接到整个神经网络：<br>
@@ -253,7 +286,10 @@ target
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter10/chapter10_image/%E5%9B%BE13.jpg">
 </div>
 
-&emsp;&emsp;图13：字符级模型体系结构 <br>
+<div align="center">
+图13：字符级模型体系结构 <br>
+</div>
+
 ## 输入
 &emsp;&emsp;我们从对模型的初始输入定义一个占位符开始建模。模型的输入将是训练数据和目标。在dropout层使用keep_probability的参数，避免模型数据的过度拟合：<br>
 ```
