@@ -118,11 +118,13 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 &#8195;&#8195;正如我们之前提到的，数据集中的每个图像都有相应的标签范围从0到9。
 
 &#8195;&#8195;出于实现的目的，我们将标签编码为单热向量（one—hot）。one—hot向量是除了该向量的数字的索引之外的全零的向量代表。例如，3将是[0,0,0,1,0,0,0,0,0,0]。因此，mnist.train.labels是（55000,10）的浮点数组。
+
 <div align="center">
-(https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/6.png)
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/6.png">
 
 图6：MNIST数据分析图
 </div> 
+
 
 ## 数字分类 - 模型构建和培训
 
@@ -135,14 +137,16 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 &#8195;&#8195;为了计算给定图像在特定类中的证据，我们对像素强度进行加权求和。如果这个像素具有很强的证据说明这张图片不属于该类，那么相应的权值为负数，相反如果这个像素拥有有利的证据支持这张图片属于这个类，那么权值是正数。
 
 &#8195;&#8195;图7显示了一个模型学习到的图片上每个像素对于特定数字类的权值。红色代表负数权值，蓝色代表正数权值。
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/7.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/7.png)
-
-<center>图7：为每个MNIST类学习的一个模型的权重</center> 
+图7：为每个MNIST类学习的一个模型的权重
+</div> 
 
 &#8195;&#8195;我们也需要加入一个额外的偏置量（bias），因为输入往往会带有一些无关的干扰量。因此对于给定的输入图片 x 它代表的是数字 i 的证据可以表示为:
-
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/8.png)
+<div align="center">
+<img src="(https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/8.png">
+</div> 
 
 其中:
 +    **W**i代表权重
@@ -150,9 +154,9 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 +    **j**&#8194;&#8194;代表给定图片 x 的像素索引用于像素求和.
 
 &#8195;&#8195;softmax函数可以把这些证据转换成我们预测的概率 y：
-
+<div align="center">
 **<center> **<font size=5>y = softmax(evidence)</font>**</center>**
-
+</div> 
 &#8195;&#8195;这里的softmax可以看成是一个激励（activation）函数或者链接（link）函数，把我们定义的线性函数的输出转换成我们想要的格式，也就是关于10个数字类的概率分布。因此，给定一张图片，它对于每一个数字的吻合度可以被softmax函数转换成为一个概率值。softmax函数可以定义为：
 
 **<center> **<font size=5>softmax(evidence) = normalize(exp(evidence))</font>**</center>**
