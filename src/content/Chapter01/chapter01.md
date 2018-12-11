@@ -356,8 +356,8 @@ def create_cnn_model_arch():
                   loss='categorical_crossentropy')  # using the cross-entropy loss function
     return cnn_model
 ```
-&emsp;&emsp;在开始训练模型之前，我们需要使用模型评估和验证方法来帮助我们评估我们的模型，并了解它的泛化能力。为此，我们将使用一种称为k-折交叉确认. 同样，我们不需要理解这个方法或它是如何工作的，因为我们稍后将详细解释这个方法。<br>  
-&emsp;&emsp;因此，让我们开始并创建一个功能，帮助我们评估和验证模型：<br>
+在开始训练模型之前，我们需要使用模型评估和验证方法来帮助我们评估我们的模型，并了解它的泛化能力。为此，我们将使用一种称为k-折交叉确认. 同样，我们不需要理解这个方法或它是如何工作的，因为我们稍后将详细解释这个方法。<br>  
+因此，让我们开始并创建一个功能，帮助我们评估和验证模型：<br>
 ```
 def create_model_with_kfold_cross_validation(nfolds=10):
     batch_size = 16 # in each iteration, we consider 32 training examples at once
