@@ -119,7 +119,7 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 &#8195;&#8195;出于实现的目的，我们将标签编码为单热向量（one—hot）。one—hot向量是除了该向量的数字的索引之外的全零的向量代表。例如，3将是[0,0,0,1,0,0,0,0,0,0]。因此，mnist.train.labels是（55000,10）的浮点数组。
 <div align="center">
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/6.png)
+(https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/6.png)
 
 图6：MNIST数据分析图
 </div> 
