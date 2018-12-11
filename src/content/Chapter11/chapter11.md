@@ -19,21 +19,25 @@
 <div align="center">
 表示学习-实现词嵌入 		
 </div>
-&emsp;&emsp;有许多技术可以用于这项任务。这种技术被称为嵌入，将文本嵌入到另一个实值向量空间中。
-&emsp;&emsp;稍后我们会看到，这个向量空间实际上非常有趣，因为你会发现你可以把一个单词的向量从其他与它相似的单词中提取出来，或者在这个空间中做一些地理上的处理。
+
+&emsp;&emsp;有许多技术可以用于这项任务。这种技术被称为嵌入，将文本嵌入到另一个实值向量空间中。稍后我们会看到，这个向量空间实际上非常有趣，因为你会发现你可以把一个单词的向量从其他与它相似的单词中提取出来，或者在这个空间中做一些地理上的处理。
 
 ## Word2Vec
 &emsp;&emsp;Word2Vec是NLP领域应用最广泛的嵌入式技术之一。该模型通过查看上下文信息，从输入文本中创建实值向量输入字出现。因此，你会发现相似的词会在非常相似的语境中被提及，因此模型会知道这两个词应该一起放在特定的嵌入空间中彼此接近。
 &emsp;&emsp;从下图的叙述中，模型将学习到爱慕和爱这两个词在非常相似的语境中，应该放在非常接近的位置生成的向量空间。“喜欢”这个词的语境可能和“爱”这个词有点相似，但不会像单词爱慕那样接近“爱”:
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204125217577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204125217577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70">
+</div>
 
 &emsp;&emsp;Word2Vec模型也依赖于输入句子的语义特征;例如，单词adore和love主要用于积极的语境，通常放在名词短语或名词之前。同样，模型会知道这两个词有某些含义。
 &emsp;&emsp;它更有可能把这两个向量的向量表示放在相似的上下文中。所以，句子的结构会告诉单词2vec模型很多类似的单词。
 
 &emsp;&emsp;在实践中，人们向Word2Vec模型输入大量的文本。该模型将学习如何为相似的词生成相似的向量，并且它将为在输入文本中的每个唯一的词。所有这些词的向量将被组合，最终的输出将是一个嵌入矩阵，其中每行表示特定唯一单词的实值向量表示。
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204125413627.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204125413627.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70">
+</div>
 
 &emsp;&emsp;因此，模型的最终输出将是训练语料库中所有唯一单词的嵌入矩阵。通常，好的嵌入矩阵可能包含数百万个实数值向量。
 &emsp;&emsp;Word2Vec建模使用窗口扫描句子，然后我们可以根据上下文信息预测窗口中间词的向量的Word2Vec模型每次扫描一个句子。与任何机器学习技术类似，我们需要为Word2Vec模型定义一个成本函数及其相应的优化标准，这将使模型能够为每个唯一的图像生成实值向量，并根据其上下文信息将向量相互关联。
@@ -44,35 +48,46 @@
 
 &emsp;&emsp;在模型的训练过程中，我们将使用极大似然法，在已知模型之前看到的称之为h的单词的输入句子中，来最大化下一个单词w的概率。
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2018120412583857.png)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/2018120412583857.png">
+</div>
 
 &emsp;&emsp;在这里，相对于上下文h的兼容性，score函数计算一个值来表示目标单词w。这个模型讲用来训练以最大化训练输入数据的可能性(log likelihood用于数学简化和使用log进行推导):
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204125928491.png)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204125928491.png">
+</div>
 
 &emsp;&emsp;所以，ML法会试图最大化上面的方程，得到a概率语言模型。但是这个的计算是非常昂贵的，因为我们需要使用分数函数来计算每个概率词汇w’，在该模型的相应当前上下文h中。这将发生在每一个训练步骤。
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204130041455.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204130041455.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70">
+</div>
 
 &emsp;&emsp;由于构建概率语言模型的计算成本很高，人们倾向于使用不同的计算成本较低的技术，例如连续字袋(CBOW)和跳格模型。
 &emsp;&emsp;通过训练这些模型，建立了一种逻辑回归的二元分类方法，将实际目标词wt和h噪声或想象词分离开来上下文。下面的图表使用CBOW技术简化了这个想法:这种最大似然方法将用softmax函数表示:
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204130206630.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204130206630.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70">
+</div>
 
 &emsp;&emsp;下一个图显示了构建Word2Vec模型时可以使用的两种架构:
 
-
-
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204130232489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204130232489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70">
+</div>
 
 &emsp;&emsp;说的更正式些，这些技术的目标函数最大化了以下几点:
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204131031190.png)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204131031190.png">
+</div>
 
 &emsp;&emsp;在这里:
 
-
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204131109268.png)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204131109268.png">
+</div>
 
 二元逻辑回归的概率是基于是在数据集D中看到上下文h中的单词w的模型，数据集D是根据向量计算的。这个向量表示已学习的嵌入，是我们可以从一个有噪声的概率分布(如训练输入示例的单位图)中生成的虚构或有噪声的词。
 
@@ -91,11 +106,15 @@ the quick brown fox jumped over the lazy dog
 
 &emsp;&emsp;现在，我们可以继续计算实对和噪声对之间的损失为:
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204132141214.png)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204132141214.png">
+</div>
 
 &emsp;&emsp;在这种情况下，目标是更新参数以改进前面的目标函数。通常，我们可以使用梯度。因此，我们将尝试计算相对于目标函数参数损失的梯度，它将被表示为
 
- ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204132232378.png)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204132232378.png">
+</div>
  
  &emsp;&emsp;经过训练后，我们可以根据实值向量表示的降维结果对其进行形象化处理。你会发现这个向量空间非常有趣是因为你可以用它做很多有趣的事情。例如，你可以在这个空间里通过说国王是皇后就像男人是女人。我们甚至可以通过从皇后向量中减去国王向量并加上男人来得到女人向量;这样做的结果将非常接近女性的实际学习向量。你也可以在这个空间里学习地理。
 &emsp;&emsp;前面的例子给出了这些向量背后的很好的直觉，以及它们如何对大多数NLP应用程序(如机器翻译或词性)有用(POS)标记。
@@ -105,18 +124,24 @@ the quick brown fox jumped over the lazy dog
 &emsp;&emsp;文本是许多自然语言处理应用程序(如机器翻译、情感分析和文本到语音系统)的主要输入。所以，学习一个实值文本表示将帮助我们使用不同的深度学习技术来完成这些任务。
 在这本书的前几章中，我们介绍了一种叫做one-hot编码的东西，它产生了一个0的向量，除了这个向量表示的单词的索引。所以,您可能想知道我们为什么不在这里使用它。这种方法效率很低，因为通常你会有一大堆不同的单词，可能大概有50000个单词，使用一热编码就会产生一个49,999个向量集合为0，只有一个条目设置为1。这样一个非常稀疏的输入将会导致巨大的计算浪费，因为我们会在神经网络的隐层中做矩阵乘法。
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204132647226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204132647226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70">
+</div>
 
 &emsp;&emsp;正如我们前面提到的，使用one-hot编码的结果将是非常稀疏的向量，尤其是当你有大量不同的单词需要编码的时候。
 &emsp;&emsp;下图显示，当我们将除一项以外的所有0的稀疏向量乘以一个权重矩阵时，输出将仅是该矩阵的一行对应于稀疏向量的一个值:
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204132710607.png)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204132710607.png">
+</div>
 
 &emsp;&emsp;为了避免这种巨大的计算浪费，我们将使用嵌入，这只是一个完全连接层与一些嵌入权重。在这一层，我们跳过了这个低效的乘法，从一个叫做权值矩阵的东西中查找嵌入层的嵌入权值。
 &emsp;&emsp;因此，我们将使用这个权重查找这个权重矩阵来查找嵌入的权重，而不是计算产生的浪费。首先，需要构建此查找获取。为此，我们将把所有输入单词编码为整数，如下图所示，然后为了得到这个单词的相应值，我们将使用它的整数表示作为这个权重矩阵中的行数的过程。
 &emsp;&emsp;查找特定单词的对应嵌入值称为嵌入查找。如前所述，嵌入层将只是一个完全连接的层，其中单位数表示嵌入维数。
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204132736834.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204132736834.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70">
+</div>
 
 &emsp;&emsp;你可以看到这个过程是非常直观和直接的;我们只需要遵循以下步骤:
 1、将查找表定义为权重矩阵。
