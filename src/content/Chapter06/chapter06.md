@@ -375,7 +375,7 @@ softmax_layer = tf.nn.softmax(tf.matmul(input_values,weights) + biases)
 #我们用tf.matmul(X，W)表示矩阵x乘以W，对应之前等式里面的X*W ,然后再加上b，把和输入到tf.nn.softmax函数里面。
 ```
 
-&#8195;&#8195;首先，让我们忽略softmax并查看softmax函数内部的内容。matmul是用于乘法矩阵的TensorFlow函数。如果你知道矩阵乘法（*https://en.wikipedia.org/wiki/Matrix_multiplication*），你会明白这样计算的恰到好处。
+&#8195;&#8195;首先，让我们忽略softmax并查看softmax函数内部的内容。matmul是用于乘法矩阵的TensorFlow函数。如果你知道矩阵乘法（* https://en.wikipedia.org/wiki/Matrix_multiplication），你会明白这样计算的恰到好处。
 <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/11.png">
 </div>
@@ -475,7 +475,7 @@ model_cross_entropy = tf.reduce_mean(-tf.reduce_sum(output_values * tf.log(softm
 #将生成的预测y与实际样本标签y'进行交叉熵运算，然后取平均值
 ```
 
-&#8195;&#8195;此函数从softmax层（其值范围从0到1）中获取所有预测的对数，并通过示例的真值将它们与元素相乘(*https://en.wikipedia.org/wiki/Hadamard_product_%287matrices%29*)。如果每个值的log函数接近于零，则它将使此值为一个大的负数（-np.log(0.01)=4.6），如果它接近于1，则它将使值为小一个的负数（-np.log(0.09)=0.1）：
+&#8195;&#8195;此函数从softmax层（其值范围从0到1）中获取所有预测的对数，并通过示例的真值将它们与元素相乘(* https://en.wikipedia.org/wiki/Hadamard_product_%287matrices%29)。如果每个值的log函数接近于零，则它将使此值为一个大的负数（-np.log(0.01)=4.6），如果它接近于1，则它将使值为小一个的负数（-np.log(0.09)=0.1）：
 <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/19.png">
 
