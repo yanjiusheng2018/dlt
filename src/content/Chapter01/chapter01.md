@@ -102,6 +102,7 @@ overwise label(fish)=opah
 <div align="center">
 图1.11  模型学习过程
 </div> 
+
 ### 数据预处理
 &emsp;&emsp;学习周期的这个组成部分代表了我们算法的知识基础。因此，为了帮助学习算法对不可见的数据进行准确的决策，我们需要以最好的形式提供这种数据库。因此，我们的数据可能需要大量的清洗和预处理（转换）。<br>
 #### 数据清洗
@@ -111,9 +112,9 @@ overwise label(fish)=opah
 * 降低了普遍性，这是模型在不可见数据上表现良好的能力。
 #### 数据预处理
 &emsp;&emsp;在这个步骤中，我们对我们的数据进行转换，使其一致和具体。在预处理数据时，可以考虑很多不同的转换：<br>
-* 重新定义、命名（更换标签）：这意味着将分类值转换为数字，如 如果使用一些学习方法，分类值是危险的，而且数字也会在值之间强加一个顺序。
-* 重新缩放(归一化）：将连续值转换为一定的范围，通常〔1, 1〕或〔0, 1〕
-* 新特征：从现有功能中构建新特征。 例如，肥胖因子=体重/身高
+* 重新定义、命名（更换标签）：这意味着将分类值转换为数字，如 如果使用一些学习方法，分类值是危险的，而且数字也会在值之间强加一个顺序。<br>
+* 重新缩放(归一化）：将连续值转换为一定的范围，通常〔1, 1〕或〔0, 1〕<br>
+* 新特征：从现有功能中构建新特征。 例如，肥胖因子=体重/身高<br>
 ### 特征提取
 &emsp;&emsp;样本的解释特征（输入变量）的数量可以是巨大的。$$X<sub>i</sub>=(X<sub>i</sub>^1,X<sub>i</sub>^2,X<sub>i</sub>^3,\cdots,X<sub>i</sub>^d)$$作为训练样本（观察值/例子）d非常大。这方面的一个例子可以是文档分类任务3，其中您得到10000个不同的单词，单词和输入变量将是不同单词的出现次数。<br>  
 &emsp;&emsp;大量的输入变量可能会有问题，有时甚至是一个错误，因为我们有很多输入变量和很少的训练样本来帮助我们在学习过程中。为了避免输入变量数量庞大的灾难（维数灾难），数据科学家使用维数减少技术来从输入变量中选择一个子集。例如，在文本分类任务中，他们可以做到以下几点：<br>
@@ -214,6 +215,7 @@ from keras.utils import np_utils
 from sklearn.metrics import log_loss
 from keras import __version__ as keras_version
 ```
+
 &emsp;&emsp;为了使用数据集中提供的图像，我们需要使它们具有相同的大小。OpenCV是一个很好的选择，这样做，从OpenCV网站得知：<br>
 OpenCV（开源计算机视觉库）是在BSD许可证下发布的，因此可以免费用于学术和商业用途。它具有C++、C、Python和Java接口，支持Windows、Linux、Mac OS、IOS和Android。OpenCV是为计算效率而设计的，并对实时应用有很强的关注。在优化的C/C++中，OpenCV可以利用多核处理。启用OpenCL，它可以利用底层异构计算平台的硬件加速。<br>  
 &emsp;&emsp;可以通过使用Python包管理器来安装OpenCV
@@ -229,6 +231,7 @@ def rezize_image(img_path):
    img_resized = cv2.resize(img, (32, 32), cv2.INTER_LINEAR)
    return img_resized
 ```
+
 &emsp;&emsp;现在我们需要加载我们的数据集的所有训练样本，并根据先前的函数调整每个图像的大小。因此，我们将实现一个函数，该函数将从每种鱼类型的不同文件夹加载训练样本：
 ```
 def load_training_samples():
@@ -254,6 +257,7 @@ def load_training_samples():
            train_label.append(folder_index)
     return train_input_variables, train_input_variables_id, train_label
 ```
+
 &emsp;&emsp;正如我们所讨论的，我们有一个测试集，将作为未知的数据，以测试我们的模型的泛化能力。因此，我们需要对测试图像进行同样的操作，加载图像并进行大小调整处理：
 ```
 def load_testing_samples():
@@ -272,6 +276,7 @@ def load_testing_samples():
        testing_samples_id.append(file_base)
     return testing_samples, testing_samples_id
 ```
+
 &emsp;&emsp;现在我们需要调用前一个函数到另一个函数中。函数用来加载和调整训练样本的大小。 此外，它将添加几行代码来将训练数据转换为NumPy格式，重新整形该数据以适合我们的分类器，并最终将其转换：
 ```
 def load_normalize_training_samples():
@@ -288,6 +293,7 @@ def load_normalize_training_samples():
     training_label = np_utils.to_categorical(training_label, 8)
     return training_samples, training_label, training_samples_id
 ```
+
 &emsp;&emsp;我们还需要做同样的测试：
 ```
 def load_normalize_testing_samples():
