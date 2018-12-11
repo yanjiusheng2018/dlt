@@ -18,7 +18,6 @@
 
 <div align="center">
 <img src="https://github.com/luoteng123/Chapter06/blob/master/Chapter06_image/1.png?raw=true">
-
 图1：具有一个隐藏层的简单FNN
 </div>
 
