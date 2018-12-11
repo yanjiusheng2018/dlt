@@ -316,6 +316,7 @@ def load_normalize_testing_samples():
 图1.10 CNN体系结构 
 </div> 
 因此，让我们继续创建一个功能，将负责创建CNN架构，将在我们的鱼类识别任务中使用：<br>
+
 ```
 def create_cnn_model_arch():
     pool_size = 2 # we will use 2x2 pooling throughout
@@ -356,6 +357,7 @@ def create_cnn_model_arch():
                   loss='categorical_crossentropy')  # using the cross-entropy loss function
     return cnn_model
 ```
+
 在开始训练模型之前，我们需要使用模型评估和验证方法来帮助我们评估我们的模型，并了解它的泛化能力。为此，我们将使用一种称为k-折交叉确认. 同样，我们不需要理解这个方法或它是如何工作的，因为我们稍后将详细解释这个方法。<br>  
 因此，让我们开始并创建一个功能，帮助我们评估和验证模型：<br>
 
