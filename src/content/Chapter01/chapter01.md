@@ -1,6 +1,6 @@
-<div align="center">
+
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter04/chapter04_images/%E8%AE%A1%E7%AE%97%E5%9B%BE-%E5%8F%98%E9%87%8F.png">
-</div>
+
 
 # 第01章 鸟瞰 数据科学
 &emsp;&emsp;据科学或机器学习是让机器能够从数据集中学习而不被告知或编程的过程。
