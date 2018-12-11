@@ -156,19 +156,19 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 &#8195;&#8195;softmax函数可以把这些证据转换成我们预测的概率 y：
 <div align="center">
 
-**<font size=8>y = softmax(evidence)</font>**
+**<font size=10>y = softmax(evidence)</font>**
 
 </div> 
 &#8195;&#8195;这里的softmax可以看成是一个激励（activation）函数或者链接（link）函数，把我们定义的线性函数的输出转换成我们想要的格式，也就是关于10个数字类的概率分布。因此，给定一张图片，它对于每一个数字的吻合度可以被softmax函数转换成为一个概率值。softmax函数可以定义为：
 <div align="center">
 
-**<font size=8>softmax(evidence) = normalize(exp(evidence))</font>**
+**<font size=10>softmax(evidence) = normalize(exp(evidence))</font>**
 
 </div>
 
 &#8195;&#8195;展开等式右边的子式，可以得到：
 <div align="center">
-<img src="(https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/9.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/9.png?raw=true">
 </div> 
 &#8195;&#8195;但是更多的时候把softmax模型函数定义为前一种形式：把输入值当成幂指数求值，再正则化这些结果值。这个幂运算表示，更大的证据对应更大的假设模型（hypothesis）里面的乘数权重值。反之，拥有更少的证据意味着在假设模型里面拥有更小的乘数系数。假设模型里的权值不可以是0值或者负值。Softmax然后会正则化这些权重值，使它们的总和等于1，以此构造一个有效的概率分布。
 
