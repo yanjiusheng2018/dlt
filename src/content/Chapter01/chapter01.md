@@ -315,7 +315,7 @@ def load_normalize_testing_samples():
 <div align="center">
 图1.10 CNN体系结构 
 </div> 
-&emsp;&emsp;因此，让我们继续创建一个功能，将负责创建CNN架构，将在我们的鱼类识别任务中使用：<br>
+因此，让我们继续创建一个功能，将负责创建CNN架构，将在我们的鱼类识别任务中使用：<br>
 ```
 def create_cnn_model_arch():
     pool_size = 2 # we will use 2x2 pooling throughout
