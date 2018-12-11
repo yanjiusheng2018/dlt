@@ -173,27 +173,32 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 &#8195;&#8195;但是更多的时候把softmax模型函数定义为前一种形式：把输入值当成幂指数求值，再正则化这些结果值。这个幂运算表示，更大的证据对应更大的假设模型（hypothesis）里面的乘数权重值。反之，拥有更少的证据意味着在假设模型里面拥有更小的乘数系数。假设模型里的权值不可以是0值或者负值。Softmax然后会正则化这些权重值，使它们的总和等于1，以此构造一个有效的概率分布。
 
 &#8195;&#8195;对于softmax回归模型可以用下面的图解释，对于输入的xs加权求和，再分别加上一个偏置量，最后再输入到softmax函数中：
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/10.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/10.png)
-
-<center>图8：softmax回归的可视化</center> 
+图8：softmax回归的可视化
+</div>
 
 &#8195;&#8195;如果把它写成一个等式，我们可以得到：
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/12.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/12.png)
-
-<center>图9：softmax回归的方程表示</center> 
+图9：softmax回归的方程表示
+</div>
 
 &#8195;&#8195;我们也可以用向量表示这个计算过程：用矩阵乘法和向量相加。这有助于提高计算效率和可读性：
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/13.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/13.png)
-
-<center>图10：softmax回归方程的向量化表示</center> 
+图10：softmax回归方程的向量化表示
+</div> 
 
 &#8195;&#8195;更进一步，可以写成更加紧凑的方式：
+<div align="center">
 
-**<center> **<font size=5>y = softmax(Wx + b)</font>**</center>**
+**<font size=5>y = softmax(Wx + b)</font>**
 
+</div> 
 &#8195;&#8195;现在，让我们把它转变成TensorFlow可以使用的东西。
 
 ## 数据分析
@@ -278,10 +283,11 @@ input_values_train, target_values_train = train_size(55000)
 &#8195;&#8195;所以现在，我们有一个55,000个手写数字样本的训练集，每个样本是28×28像素图像，被扁平化为784维向量。 我们还有一个one-hot热门编码格式的相应标签。
 
 &#8195;&#8195;target_values_train目标训练集数据是所有的input_values_train输入训练集数据标签的样本。 在以下示例中，数组代表7的one-hot编码格式：
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/14.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/14.png)
-
-<center>图11：数字7的one—hot编码</center> 
+图11：数字7的one—hot编码
+</div> 
 
 &#8195;&#8195;因此，让我们可视化数据集中的随机图像并查看其外观，我们将使用前面的辅助函数来显示数据集中的随机数字：
 
@@ -292,13 +298,11 @@ visualize_digit(ran.randint(0, input_values_train.shape[0]))
 
     [0. 0. 0. 0. 0. 0. 1. 0. 0. 0.]
     
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/23.png">
 
-
-![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/23.png)
-
-
-<center>图12：可视化模型的输出数字</center> 
-
+图12：可视化模型的输出数字
+</div> 
 
 #从数据集中可视化一个随机数字和它的图像
 
@@ -308,12 +312,12 @@ visualize_digit(ran.randint(0, input_values_train.shape[0]))
 ```python
 visualize_mult_imgs_flat(0,400)
 ```
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/24.png">
 
+图13：前400个训练样本
+</div> 
 
-![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/24.png)
-
-
-<center>图13：前400个训练样本</center> 
 
 #前400个训练样本的像素点强度值
 #横轴表示784个像素点
@@ -372,14 +376,15 @@ softmax_layer = tf.nn.softmax(tf.matmul(input_values,weights) + biases)
 ```
 
 &#8195;&#8195;首先，让我们忽略softmax并查看softmax函数内部的内容。matmul是用于乘法矩阵的TensorFlow函数。如果你知道矩阵乘法（**https://en.wikipedia.org/wiki/Matrix_multiplication**），你会明白这样计算的恰到好处。
-
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/11.png)
-
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/11.png">
+</div>
 &#8195;&#8195;将导致一些训练样例（m）*类别数（n）的矩阵：
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/17.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/17.png)
-
-<center>图14：简单矩阵乘法</center> 
+图14：简单矩阵乘法
+</div>
 
 &#8195;&#8195;可以通过评估sofmax层来确认它：
 
@@ -448,8 +453,9 @@ sess.run(tf.nn.softmax(tf.constant([0.1, 0.005, 2])))
 &#8195;&#8195;目标是减少实际值和预测值之间的任何错误分类。
 
 &#8195;&#8195;交叉熵定义为：
-
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/18.png)
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/18.png">
+</div>
 
 其中：
 +    y 是我们预测的概率分布
@@ -470,10 +476,11 @@ model_cross_entropy = tf.reduce_mean(-tf.reduce_sum(output_values * tf.log(softm
 ```
 
 &#8195;&#8195;此函数从softmax层（其值范围从0到1）中获取所有预测的对数，并通过示例的真值将它们与元素相乘(*https://en.wikipedia.org/wiki/Hadamard_product_%287matrices%29*)。如果每个值的log函数接近于零，则它将使此值为一个大的负数（-np.log(0.01)=4.6），如果它接近于1，则它将使值为小一个的负数（-np.log(0.09)=0.1）：
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/19.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/19.png)
-
-<center>图15：y=log(x)的可视化</center>
+图15：y=log(x)的可视化
+</div>
 
 &#8195;&#8195;如果预测的话，我们基本上会对分类器进行非常大的惩罚；如果预测是确信的，负数值非常小，那么预测不确信心，则负数非常大。
 
@@ -651,12 +658,11 @@ for i in range(10):
     frame.axes.get_yaxis().set_visible(False)
 ```
 
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/25.png">
 
-![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/25.png)
-
-
-<center>图16：可视化数字0-9的权重</center> 
-
+图16：可视化数字0-9的权重
+</div>
 
 ```python
 #热力图可视化权重
@@ -681,11 +687,11 @@ visualize_digit(0)
     [0. 0. 0. 0. 0. 0. 0. 1. 0. 0.]
     
 
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/26.png">
 
-![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/26.png)
-
-
-<center>图17：第0个样本的标签和它的可视化</center> 
+图17：第0个样本的标签和它的可视化
+</div>
 
 &#8195;&#8195;让我们看看我们的softmax预测器：
 
@@ -701,9 +707,6 @@ print(answer)
     
 
 &#8195;&#8195;前面的代码将为我们提供一个10列的向量，每列包含一个概率：
-
-[[2.1248012e-05 1.1646927e-05 8.9631692e-02 1.9201526e-02 8.2086492e-04
-  1.2516821e-05 3.8538201e-05 8.5374612e-01 6.9188857e-03 2.9596921e-02]] 
 
 &#8195;&#8195;我们可以使用argmax函数找出最可能的数字,看到我们输入图像的分类正确的：
 
@@ -748,11 +751,11 @@ def display_result(ind):
 display_result(ran.randint(0, 55000))
 ```
 
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/27.png">
 
-![png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/27.png)
-
-
-<center>图18：随机样本的预测值、标签和它的可视化</center> 
+图18：随机样本的预测值、标签和它的可视化
+</div>
 
 &#8195;&#8195;我们再次获得了正确的分类！
 
