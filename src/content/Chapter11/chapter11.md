@@ -13,6 +13,10 @@
 
 &emsp;&emsp;我们需要将输入文本中的每个单词或令牌转换为实值向量。这些如果向量不携带原始输入的模式、信息、含义和语义，那么它们将是无用的。例如，在真实的文本中，爱和爱慕这两个词是非常重要的彼此相似，意思相同。我们需要表示它们的实值向量的结果它们彼此接近并且在同一个向量空间中。所以,这两个词的向量表示以及另一个与它们不相似的词将会是这样的图:
 
+<div align="center">
+<img src="https://img-blog.csdnimg.cn/20181204124918413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70">
+</div>
+
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204124918413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
 
 表示学习-实现词嵌入 					
