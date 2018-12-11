@@ -358,6 +358,7 @@ def create_cnn_model_arch():
 ```
 在开始训练模型之前，我们需要使用模型评估和验证方法来帮助我们评估我们的模型，并了解它的泛化能力。为此，我们将使用一种称为k-折交叉确认. 同样，我们不需要理解这个方法或它是如何工作的，因为我们稍后将详细解释这个方法。<br>  
 因此，让我们开始并创建一个功能，帮助我们评估和验证模型：<br>
+
 ```
 def create_model_with_kfold_cross_validation(nfolds=10):
     batch_size = 16 # in each iteration, we consider 32 training examples at once
@@ -411,6 +412,7 @@ def create_model_with_kfold_cross_validation(nfolds=10):
     overall_settings_output_string = 'loss_' + str(overall_score) + '_folds_' + str(nfolds) + '_ep_' + str(num_epochs)
     return overall_settings_output_string, trained_models
 ```
+
 &emsp;&emsp;现在，在建立模型和使用k-fold交叉验证方法来评估和验证模型之后，我们需要在测试集上报告训练模型的结果。为了做到这一点，我们还将使用k倍的交叉验证，但是这次通过测试来看看我们训练的模型有多好。<br>  
 &emsp;&emsp;因此，让我们定义一个函数，它将把经过训练的美国有线电视新闻网模型作为输入，然后使用我们拥有的测试集来测试它们：<br>
 ```
