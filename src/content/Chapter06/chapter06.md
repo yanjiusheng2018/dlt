@@ -54,7 +54,7 @@
 
 ## The MNIST data
 
-&#8195;&#8195;MNIST数据集的官网是Yann LeCun's website( http://yann.lecun.com/exdb/mnist/ <br>)。幸运的是，TensorFlow提供了一些辅助函数来下载MNIST数据集，以至于可以通过使用以下两行代码来下载数据集：
+&#8195;&#8195;MNIST数据集的官网是Yann LeCun's website(* http://yann.lecun.com/exdb/mnist/ )。幸运的是，TensorFlow提供了一些辅助函数来下载MNIST数据集，以至于可以通过使用以下两行代码来下载数据集：
 
 
 ```python
@@ -118,10 +118,11 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 &#8195;&#8195;正如我们之前提到的，数据集中的每个图像都有相应的标签范围从0到9。
 
 &#8195;&#8195;出于实现的目的，我们将标签编码为单热向量（one—hot）。one—hot向量是除了该向量的数字的索引之外的全零的向量代表。例如，3将是[0,0,0,1,0,0,0,0,0,0]。因此，mnist.train.labels是（55000,10）的浮点数组。
-
+<div align="center">
 ![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/6.png)
 
-<center>图6：MNIST数据分析</center> 
+图6：MNIST数据分析图
+</div> 
 
 ## 数字分类 - 模型构建和培训
 
