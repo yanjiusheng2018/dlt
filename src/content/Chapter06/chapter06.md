@@ -155,7 +155,7 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 &#8195;&#8195;softmax函数可以把这些证据转换成我们预测的概率 y：
 <div align="center">
-**<center> **<font size=5>y = softmax(evidence)</font>**</center>**
+**<font size=5>y = softmax(evidence)</font>**
 </div> 
 &#8195;&#8195;这里的softmax可以看成是一个激励（activation）函数或者链接（link）函数，把我们定义的线性函数的输出转换成我们想要的格式，也就是关于10个数字类的概率分布。因此，给定一张图片，它对于每一个数字的吻合度可以被softmax函数转换成为一个概率值。softmax函数可以定义为：
 
