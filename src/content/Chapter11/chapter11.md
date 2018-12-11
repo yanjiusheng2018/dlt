@@ -16,10 +16,9 @@
 <div align="center">
 <img src="https://img-blog.csdnimg.cn/20181204124918413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70">
 </div>
-
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20181204124918413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI3MDkzODMx,size_16,color_FFFFFF,t_70)
-
-表示学习-实现词嵌入 					
+<div align="center">
+表示学习-实现词嵌入 		
+</div>
 &emsp;&emsp;有许多技术可以用于这项任务。这种技术被称为嵌入，将文本嵌入到另一个实值向量空间中。
 &emsp;&emsp;稍后我们会看到，这个向量空间实际上非常有趣，因为你会发现你可以把一个单词的向量从其他与它相似的单词中提取出来，或者在这个空间中做一些地理上的处理。
 
