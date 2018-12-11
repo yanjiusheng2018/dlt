@@ -28,9 +28,6 @@
 
 图2：具有更多隐藏层的人工神经网络
 </div>
-![image.png](https://github.com/luoteng123/Chapter06/blob/master/Chapter06_image/2.png?raw=true)
-
-<center>图2：具有更多隐藏层的人工神经网络</center> 
 
 &#8195;&#8195;组织输入，隐藏和输出层的体系结构非常简单。例如，让我们通过一个实际例子来查看特定的手写图像是否包含数字9。
 
@@ -43,10 +40,11 @@
 &#8195;&#8195;在本节中，我们将通过为手写图像实现分类器来解决问题。这种实现可以被视为*Hello Word！* 神经网络
 
 &#8195;&#8195;MNIST是一种广泛使用的数据集，用于对机器学习技术进行基准测试。数据集包含一组手写数字，如下所示：
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/3.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/3.png)
-
-<center>图3：MNIST数据集中的样本数字</center> 
+图3：MNIST数据集中的样本数字
+</div>
 
 &#8195;&#8195;因此，数据集还包括手写图像及其相应的标签。
 
@@ -56,7 +54,7 @@
 
 ## The MNIST data
 
-&#8195;&#8195;MNIST数据集的官网是Yann LeCun's website(* http://yann.lecun.com/exdb/mnist/ )。幸运的是，TensorFlow提供了一些辅助函数来下载MNIST数据集，以至于可以通过使用以下两行代码来下载数据集：
+&#8195;&#8195;MNIST数据集的官网是Yann LeCun's website(http://yann.lecun.com/exdb/mnist/)。幸运的是，TensorFlow提供了一些辅助函数来下载MNIST数据集，以至于可以通过使用以下两行代码来下载数据集：
 
 
 ```python
@@ -99,21 +97,23 @@ print(mnist.validation.images.shape,mnist.validation.labels.shape)
 
 &#8195;&#8195;MNIST数据集分为三部分：55,000个训练数据（mnist. train），10,000个测试数据（mnist.test）和5,000个验证数据（mnist. validation）。这种划分非常重要; 在机器学习中必不可少的是，我们要有单独的数据，我们没有从中学习，以便我们可以确保我们学到的东西实际上是一般化的！
 
-&#8195;&#8195;如前所述，每个MNIST样本都有两部分：手写数字的图像及其相应的标签。训练集和测试集都包含图像及其相应的标签。例如，训练图像是mnist.train.images并且培训标签是mnist.train.labels。􀁎
+&#8195;&#8195;如前所述，每个MNIST样本都有两部分：手写数字的图像及其相应的标签。训练集和测试集都包含图像及其相应的标签。例如，训练图像是mnist.train.images并且培训标签是mnist.train.labels。
 
 &#8195;&#8195;每个图像是28像素乘28像素。 我们可以将其解释为一大堆数字：
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/4.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/4.png)
-
-<center>图4：矩阵表示中的MNIST数字（强度值）</center> 
+图4：矩阵表示中的MNIST数字（强度值）
+</div>
 
 &#8195;&#8195;为了将这个像素值矩阵馈送到神经网络的输入层，我们需要将该矩阵展平为784个值的向量。 因此，数据集的最终形状将是一堆784维向量空间。
 
 &#8195;&#8195;结果是mnist.train.images(训练图像)是一个形状为（55000,784)的张量。第一个维度是图像列表的索引，第二个维度是索引每个图像中的每个像素强度值。对于特定图像中的特定像素，张量中的每个条目是0到1之间的像素强度：
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/5.png">
 
-![image.png](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter06/Chapter06_image/5.png)
-
-<center>图5：MNIST数据分析</center> 
+图5：MNIST数据分析
+</div>
 
 &#8195;&#8195;正如我们之前提到的，数据集中的每个图像都有相应的标签范围从0到9。
 
