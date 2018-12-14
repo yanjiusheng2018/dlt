@@ -1044,7 +1044,7 @@ fig.tight_layout(pad=0.1)
 &emsp;&emsp;此外，在本章中，我们还了解了自动编码器体系结构的灵活性，以及如何对其进行不同的更改。我们甚至对它进行了测试，以解决从输入图像中去除噪声的难题。这种灵活性为更多自动编码器将非常适合的应用程序打开了大门。<br>
 ## 图像彩色化
 &emsp;&emsp;自动编码器，特别是卷积版本，可以用于更困难的任务，如图像着色。在下面的例子中，我们给模型输入了一个没有任何颜色的输入图像，这个图像的重构版本将被自动编码器模型着色:<br>
-![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181214113559.png)
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181214113559.png)<br>
 ![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181214113340.png)
 &emsp;&emsp;现在我们的自动编码器已经过训练，我们可以使用它来给我们从未见过的图片着色!<br>
 &emsp;&emsp;这种应用程序可以用来给相机早期拍摄的老照片上色。<br>
