@@ -582,10 +582,6 @@ Output:
 .
 .
 .
-Epoch: 20/20... Training loss: 0.097
-Epoch: 20/20... Training loss: 0.097
-Epoch: 20/20... Training loss: 0.097
-Epoch: 20/20... Training loss: 0.098
 Epoch: 20/20... Training loss: 0.098
 Epoch: 20/20... Training loss: 0.101
 Epoch: 20/20... Training loss: 0.100
@@ -805,4 +801,264 @@ for imgs, row in zip([input_images, reconstructed_images], axes):
 fig.tight_layout(pad=0.1)
 ```
 Output:
-![image.png]()
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181214112300.png)
+## 去噪自动编码器
+&emsp;&emsp;我们可以通过强迫autoencoder体系结构学习更重要的内容来进一步了解它关于输入数据的特性。通过在输入图像中加入噪声并以原始图像为目标，模型将尝试去除噪声并学习重要特征从而在输出中产生有意义的重构图像。这种CAE结构可用于去除输入图像的噪声。这个特定的自动编码器的变化称为去噪自动编码器:<br>
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%9B%BE%E4%BA%94.jpg)
+&emsp;&emsp;让我们从实现下图中的体系结构开始。我们在这个去噪的自动编码器架构中添加的唯一额外的东西，给原始输入图像添加一些噪声:<br>
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181214112911.png)
+## 建立模型
+&emsp;&emsp;在这个实现中，我们将在编码器和解码器部分使用更多的层，这是因为我们在输入中添加了新的复杂性，下一个模型虽然与前一个CAE完全相同，但是增加了额外的图层，这将帮助我们从一个有噪声的图像中重建一个无噪声的图像。<br>
+&emsp;&emsp;让我们继续构建这个架构吧:
+```
+learning_rate = 0.001
+#定义输入和目标值的占位符变量sfof
+inputs_values = tf.placeholder(tf.float32, (None,28,28,1),name='inputs_values')
+targets_values = tf.placeholder(tf.float32, (None,28,28,1),name='targets_values')
+```
+```
+#定义网络的编码器部分
+#在编码器parrt中定义第一个卷积层
+#tensor将呈28x28x32的形状 这里滤镜大小为32，
+conv_layer_1 = tf.layers.conv2d(inputs=inputs_values, filters=32, kernel_size=(3,3), 
+                                padding='same',activation=tf.nn.relu)
+```
+```
+#输出tenosor的形状是14x14x32
+maxpool_layer_1 = tf.layers.max_pooling2d(conv_layer_1, pool_size=(2,2),
+                    strides=(2,2), padding='same')
+```
+```
+#输出tenosor的形状是14x14x32
+conv_layer_2 = tf.layers.conv2d(inputs = maxpool_layer_1, filters=32, kernel_size=(3,3),
+                                padding='same',activation=tf.nn.relu)
+```
+```
+#输出张量的形状是7x7x32
+maxpool_layer_2 = tf.layers.max_pooling2d(conv_layer_2, pool_size=(2,2),
+                                         strides=(2,2), padding='same')
+```
+```
+#输出张量的形状是7x7x16
+conv_layer_3 = tf.layers.conv2d(inputs=maxpool_layer_2, filters=16,
+                               kernel_size=(3,3), padding='same', activation=tf.nn.relu)
+```
+```
+#输出张量的形状是4x4x16
+encoding_layer = tf.layers.max_pooling2d(conv_layer_3, pool_size=(2,2),
+                                        strides=(2,2), padding='same')
+```
+```
+#定义网络的编码器部分
+#在编码器parrt中定义第一个卷积层
+#输出张量将呈7x7x16的形状
+upsample_layer_1 = tf.image.resize_images(encoding_layer,size=(7,7),
+                                         method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+```
+```
+#输出张量将呈是7x7x16的形状
+conv_layer_4 = tf.layers.conv2d(inputs=upsample_layer_1, filters=16, kernel_size=(3,3),
+                              padding='same', activation=tf.nn.relu)
+```
+```
+#输出张量将呈是14x14x16的形状
+upsample_layer_2 = tf.image.resize_images(conv_layer_4, size=(14,14),
+                                         method = tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+```
+```
+#输出张量将呈是14x14x32的形状
+conv_layer_5 = tf.layers.conv2d(inputs=upsample_layer_2, filters=32,
+                               kernel_size=(3,3), padding='same',activation=tf.nn.relu)
+```
+```
+#输出张量将呈是28x28x32的形状
+upsample_layer_3 = tf.image.resize_images(conv_layer_5, size=(28,28),
+                                         method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+```
+```
+#输出张量将呈是28x28x32的形状
+conv_layer_6 = tf.layers.conv2d(inputs=upsample_layer_3, filters=32,kernel_size=(3,3),
+                                padding='same', activation=tf.nn.relu)
+```
+```
+#输出张量将呈是28x28x1的形状
+logits_layer = tf.layers.conv2d(inputs=conv_layer_6, filters=1, kernel_size=(3,3),
+                               padding='same',activation=None)
+```
+```
+#将logits值赋给sigmoid激活函数，得到重建的图像
+decoding_layer = tf.nn.sigmoid(logits_layer)
+```
+```
+#在计算交叉熵时，将逻辑输入到sigmoid激活函数
+model_loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=targets_values,logits=logits_layer)
+```
+```
+#获取模型成本并定义优化器以使其最小化
+model_cost = tf.reduce_mean(model_loss)
+model_optimizer = tf.train.AdamOptimizer(learning_rate).minimize(model_cost)
+```
+## 模型训练
+&emsp;&emsp;现在是开始训练这个更深层次的网络时候了，反过来，通过重构噪声输入的无噪声头像，需要更多的时间来收敛。 让我们创建会话变量开始：<br>
+```
+sess = tf.Session()
+```
+&emsp;&emsp;下一步，我们将开始巡视的过程但是花费更多的周期<br>
+```
+num_epochs = 100  #100个周期
+train_batch_size = 200 #每一批次为200个数据
+```
+```
+#定义要添加到mnist数据集的噪声系数
+mnist_noise_factor = 0.5 #决定噪声的难度
+sess.run(tf.global_variables_initializer()) #初始化tensorflow全局变量
+```
+```
+for e in range(num_epochs):
+    for ii in range(mnist_dataset.train.num_examples//train_batch_size):
+        input_batch = mnist_dataset.train.next_batch(train_batch_size)
+        #从相应的批处理中获取和重塑图像
+        batch_images = input_batch[0].reshape((-1,28,28,1))
+        #为输入图像添加随机噪声
+        noisy_images = batch_images + mnist_noise_factor * np.random.randn(*batch_images.shape)
+        #剪切所有大于0或大于1的值
+        noisy_images = np.clip(noisy_images, 0., 1.)
+        #设置输入图像为噪声图像，原始图像为目标图像
+        input_batch_cost, _ = sess.run([model_cost, model_optimizer],
+                                     feed_dict={inputs_values: noisy_images,
+                                                targets_values:batch_images})      
+        print("Epoch: {}/{}...".format(e+1, num_epochs),
+               "Training loss: {:.3f}".format(input_batch_cost))
+```
+```
+.
+.
+.
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.097
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.097
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.097
+Epoch: 100/100... Training loss: 0.101
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.103
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.097
+Epoch: 100/100... Training loss: 0.097
+Epoch: 100/100... Training loss: 0.103
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.096
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.096
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.096
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.101
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.101
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.101
+Epoch: 100/100... Training loss: 0.096
+Epoch: 100/100... Training loss: 0.103
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.102
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.100
+Epoch: 100/100... Training loss: 0.101
+Epoch: 100/100... Training loss: 0.103
+Epoch: 100/100... Training loss: 0.101
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.101
+Epoch: 100/100... Training loss: 0.098
+Epoch: 100/100... Training loss: 0.099
+Epoch: 100/100... Training loss: 0.101
+Epoch: 100/100... Training loss: 0.097
+Epoch: 100/100... Training loss: 0.094
+Epoch: 100/100... Training loss: 0.101
+Epoch: 100/100... Training loss: 0.098
+```
+&emsp;&emsp;现在我们已经训练了模型，使其能够产生无噪声的图像，这意味着自动编码器适用于许多领域。<br>
+&emsp;&emsp;在下一个代码片段中，我们不会将MNIST测试集的行图像提供给模型，因为我们需要首先向这些图像添加噪声，以查看经过训练的模型如何能够生成无噪声图像。<br>
+&emsp;&emsp;这里我给训练图像贴加了噪声，并把他们传给自动编码器，它确实在去除噪声上做的出奇的好，尽管有时有点难分辨最初的数字是什么。<br>
+```
+#定义某些图片
+fig, axes = plt.subplots(nrows=2, ncols=10, sharex=True, sharey=True,figsize=(20,4))
+
+#可视化一些图片
+input_images = mnist_dataset.test.images[:10]
+noisy_imges = input_images + mnist_noise_factor * np.random.randn(*input_images.shape)
+
+#剪切和重塑噪声图像
+noisy_images = np.clip(noisy_imges, 0.,1.).reshape((10,28,28,1))
+
+#得到重构的图像
+reconstructed_images = sess.run(decoding_layer, feed_dict={inputs_values:noisy_images})
+
+#可视化输入图像和有噪声的图像
+for imgs, row in zip([noisy_images, reconstructed_images], axes):
+    for img, ax in zip(imgs, row):
+        ax.imshow(img.reshape((28,28)), cmap='Greys_r')
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
+        
+fig.tight_layout(pad=0.1) 
+```
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181214111929.png)
+## 自动编码器的应用
+&emsp;&emsp;在上一个从较低的表示构造图像的例子中，我们看到它与原始输入非常相似，而且我们还看到了CAE在去除数据集噪声时的优点。我们在上面实现的这种例子对于图像构造应用和数据集去噪是非常有用的。因此，您可以将上述实现推广到您感兴趣的任何其他示例。<br>
+&emsp;&emsp;此外，在本章中，我们还了解了自动编码器体系结构的灵活性，以及如何对其进行不同的更改。我们甚至对它进行了测试，以解决从输入图像中去除噪声的难题。这种灵活性为更多自动编码器将非常适合的应用程序打开了大门。<br>
+## 图像彩色化
+&emsp;&emsp;自动编码器，特别是卷积版本，可以用于更困难的任务，如图像着色。在下面的例子中，我们给模型输入了一个没有任何颜色的输入图像，这个图像的重构版本将被自动编码器模型着色:<br>
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181214113559.png)
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181214113340.png)
+&emsp;&emsp;现在我们的自动编码器已经过训练，我们可以使用它来给我们从未见过的图片着色!<br>
+&emsp;&emsp;这种应用程序可以用来给相机早期拍摄的老照片上色。<br>
+## 更多应用
+&emsp;&emsp;另一个有趣的应用程序是生成分辨率更高的图像，或神经图像增强，如下图所示。<br>
+&emsp;&emsp;这些数字显示了Richard Zhang的图像着色更加逼真的版本:<br>
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%9B%BE%E4%B9%9D.jpg)
+&emsp;&emsp;这张图显示了另一个自动编码器的应用，使图像增强:<br>
+![image.png](https://raw.githubusercontent.com/yanjiusheng2018/dlt/master/src/content/Chapter13/chapter13_image/%E5%9B%BE%E5%8D%81.jpg)
+## 总结
+&emsp;&emsp;在本章中，我们介绍了一种全新的体系结构，可以用于许多有趣的应用程序。自动编码器非常灵活，所以您可以在图像增强、着色或构造方面自由地提出您自己的问题。此外，还有更多的自编码器变体，称为变分自编码器。它们还用于非常有趣的应用程序，例如图像生成。
+学号|姓名|专业
+|:-----------:|:-----------:|:-----------:|
+201802210496|李云|应用统计
+201802210508|张磊|应用统计
+201802210501|江炜烨|应用统计
+<br>
