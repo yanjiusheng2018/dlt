@@ -111,7 +111,7 @@
   Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
 ```
 <div align="center">
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png)
+<img src=https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png>
 </div>
 <div align="center">
 图1 广告数据特征和各特征变量的散点图
