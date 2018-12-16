@@ -46,10 +46,10 @@
 &emsp;&emsp;接下来，我们可以使用pandas.read_csv方法将数据加载到一个易于使用的pandas数据结构中，称为DataFrame。有关pandas.read_csv及其参数的更多信息，请参阅此方法的pandas文档[](http://pandas.pydata.org/pandas-docs/stable/qenerated/pandas.read_csv.html):
 
 ```
-  #read advertising data samples into a DataFrame
+#read advertising data samples into a DataFrame
 
-  Advertising_data = <br>
-  pd.read_csv(‘http://www-bcf.use.edu/~qareth/ISL/Advertising.csv’,index_col=0)
+Advertising_data = <br>
+pd.read_csv(‘http://www-bcf.use.edu/~qareth/ISL/Advertising.csv’,index_col=0)
 ```
 &emsp;&emsp;传递给pandas.read_csv方法的第一个参数是一个表示文件路径的字符串值。字符串可以是包含IUUQ、GUQ、T和GJMF的URL。传递的第二个参数是列的索引，它将用作数据行的标签/名称。
 
@@ -58,12 +58,11 @@
 &emsp;&emsp;现在，让我们看一下广告数据的前五行:
 
 ```
-   #DataFrame.head methond above the first n row of the data where the
-   #default value of n is 5,DataFrame.head(n=5)
-   Advertising_data.head()
+#DataFrame.head methond above the first n row of the data where the
+#default value of n is 5,DataFrame.head(n=5)
+Advertising_data.head()
 ```
-
- Output
+Output
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/1.png)
 
 ### 广告数据基本信息
@@ -80,10 +79,10 @@
 &emsp;&emsp;我们还可以使用DataFrame来知道我们数据中的样本/观察数:
 
 ```
-  #print the shape of the DataFrame
-  &emsp;&emsp;Advertising_data.shape
-  &emsp;&emsp;Output:
-  &emsp;&emsp;(200,4)
+#print the shape of the DataFrame
+&emsp;&emsp;Advertising_data.shape
+&emsp;&emsp;Output:
+&emsp;&emsp;(200,4)
 ```
 &emsp;&emsp;所以，广告数据中有200个观察结果。
 
@@ -95,20 +94,20 @@
 &emsp;&emsp;让我们导入可视化库Matplotlib:
 
 ```
-  Import matplotlib.pyplot as plt
-  #The next line will allow us make inlines plots that could appear
-  directly in the notebook
-  #without poping up in a different window
-  Matplotlib inline
+Import matplotlib.pyplot as plt
+#The next line will allow us make inlines plots that could appear
+directly in the notebook
+#without poping up in a different window
+Matplotlib inline
 ```
 &emsp;&emsp;现在，我们使用散点图来可视化广告数据特性和响应变量之间的关系:
 
 ```
-  fig, axs=plt.subplots{1,3,sharey=True}
-  #Adding the scatterplots to the grid
-  Advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’,ax=axs[0],figsize=(16,8))
-  Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])
-  Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
+fig, axs=plt.subplots{1,3,sharey=True}
+#Adding the scatterplots to the grid
+Advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’,ax=axs[0],figsize=(16,8))
+Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])
+Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
 ```
 <div align="center">
 <img src=https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png>
@@ -116,39 +115,65 @@
 <div align="center">
 图1 广告数据特征和各特征变量的散点图
 </div>
-&emsp;&emsp;现在，我们需要看看广告将如何帮助增加销量。所以，我们需要问自己几个问题。有价值的问题像是广告和销量之间的关系，哪种广告对销量的贡献更大，以及每种广告对销量的大致影响。我们将尝试用一个简单的线性模型来回答这些问题。<br>
-### 简单的回归模型
-&emsp;&emsp;线性回归模型是一种学习算法，它使用解释特征(或输入或预测因子)的组合来预测定量(也称为数值)响应。<br>
-&emsp;&emsp;只有一个特征的简单线性回归模型的形式如下:<br>
-&emsp;&emsp;&emsp;&emsp;y = beta0 + beta1x<br>
+
+&emsp;&emsp;现在，我们需要看看广告将如何帮助增加销量。所以，我们需要问自己几个问题。有价值的问题像是广告和销量之间的关系，哪种广告对销量的贡献更大，以及每种广告对销量的大致影响。我们将尝试用一个简单的线性模型来回答这些问题。
+
+### 简单回归模型
+&emsp;&emsp;线性回归模型是一种学习算法，它使用解释特征(或输入或预测因子)的组合来预测定量(也称为数值)响应。
+
+&emsp;&emsp;只有一个特征的简单线性回归模型的形式如下:
+
+&emsp;&emsp;&emsp;&emsp;y = beta0 + beta1x
+
 &emsp;&emsp;这里：<br>
-&emsp;&emsp;y为预测数值(response) c销量<br>
-&emsp;&emsp;x是输入变量<br>
-&emsp;&emsp;beta0叫做截距<br>
-&emsp;&emsp;beta1是输入变量x-----电视广告的系数<br>
-&emsp;&emsp;beta0和beta1都被认为是模型的系数。为了创建一个模型, 在广告的例子中该模型可以预测销量的价值,我们需要学习这些系数是因为beta1的度量了x 对y的影响。例如,如果beta1 = 0.04,这意味着额外的100美元花在电视广告上将使得销量增加4个单位。所以，我们需要继续看看我们应该如何学习这些系数。<br>
+&emsp;&emsp;●y为预测数值(response) c销量<br>
+&emsp;&emsp;●x是输入变量<br>
+&emsp;&emsp;●beta0叫做截距<br>
+&emsp;&emsp;●beta1是输入变量x的电视广告的系数
+
+&emsp;&emsp;beta0和beta1都被认为是模型的系数。为了创建一个模型, 在广告的例子中该模型可以预测销量的价值,我们需要学习这些系数是因为beta1的度量了x 对y的影响。例如,如果beta1 = 0.04,这意味着额外的100美元花在电视广告上将使得销量增加4个单位。所以，我们需要继续看看我们应该如何学习这些系数。
+
 ### 学习模型的系数
-&emsp;&emsp;为了估计模型的系数，我们需要用回归线对数据进行拟合，回归线给出的答案与实际销量情况类似。为了得到最适合数据的回归线，我们将使用一种称为最小二乘的准则。因此，我们需要找到一条使预测值和实际值之间的差最小的直线。换句话说，我们需要找到一个回归线，使残差平方和最小。图2说明了这一点:<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE3.png)<br>
-&emsp;&emsp;下面是图2中存在的元素:<br>
-&emsp;&emsp;黑点表示x(电视广告)和y(销售额)的实际或观察值<br>
-&emsp;&emsp;蓝线表示最小二乘直线(回归线)<br>
-&emsp;&emsp;红线表示残差，残差是预测值和观察值(实际值)之间的差值<br>
-&emsp;&emsp;这就是我们的系数与最小二乘直线(回归线)的关系:<br>
-&emsp;&emsp;beta0是截距，也就是x =0时y的值<br>
-&emsp;&emsp;beta1是斜率，它表示y的变化量除以x的变化量<br>
-&emsp;&emsp;图3给出了对此的图形解释:<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png)<br>
-&emsp;&emsp;现在，让我们开始使用Statsmodels来学习这些系数:<br>
-&emsp;&emsp;#To use the formula notation below,we need to import the module like the following<br>
-&emsp;&emsp;Import statsmodels.formula.api as smf<br>
-&emsp;&emsp;#create a fitted model in one line of code(which will represent the least squares line)<br>
-&emsp;&emsp;Lm=smf.ols(formula=’sales~TV’,data=advertising_data).fit()<br>
-&emsp;&emsp;#show the trained model cofficients<br>
-&emsp;&emsp;Lm.paramsOutput:<br>
-&emsp;&emsp;Intercept        7.032594<br>
-&emsp;&emsp;TV             0.047537<br>
-&emsp;&emsp;dtype: float64<br>
+&emsp;&emsp;为了估计模型的系数，我们需要用回归线对数据进行拟合，回归线给出的答案与实际销量情况类似。为了得到最适合数据的回归线，我们将使用一种称为最小二乘的准则。因此，我们需要找到一条使预测值和实际值之间的差最小的直线。换句话说，我们需要找到一个回归线，使残差平方和最小。图2说明了这一点:
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE3.png">
+</div>
+<div align="center">
+图2 使残差平方和达到最小的直线回归拟合
+</div>
+
+&emsp;&emsp;下面是图2中存在的元素:
+
+&emsp;&emsp;●黑点表示x(电视广告)和y(销售额)的实际或观察值<br>
+&emsp;&emsp;●蓝线表示最小二乘直线(回归线)<br>
+&emsp;&emsp;●红线表示残差，残差是预测值和观察值(实际值)之间的差值
+
+&emsp;&emsp;这就是我们的系数与最小二乘直线(回归线)的关系:
+
+&emsp;&emsp;●beta0是截距，也就是x =0时y的值<br>
+&emsp;&emsp;●beta1是斜率，它表示y的变化量除以x的变化量
+
+&emsp;&emsp;图3给出了对此的图形解释:
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图3 最小二乘直线和回归系数的关系
+</div>
+
+&emsp;&emsp;现在，让我们开始使用Statsmodels来学习这些系数:
+
+```
+#To use the formula notation below,we need to import the module like the following
+Import statsmodels.formula.api as smf
+#create a fitted model in one line of code(which will represent the least squares line)
+Lm=smf.ols(formula=’sales~TV’,data=advertising_data).fit()
+#show the trained model cofficients
+Lm.params
+```
+Output
 &emsp;&emsp;正如我们所提到的，线性回归模型的优点之一是很容易解释，所以让我们继续解释这个模型。<br>
 ### 解释模型系数
 &emsp;&emsp;我们来看看如何解释模型的系数，例如TV ad系数(beta1):<br>
