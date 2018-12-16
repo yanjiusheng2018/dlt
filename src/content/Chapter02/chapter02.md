@@ -66,8 +66,8 @@
 &emsp;&emsp;#Adding the scatterplots to the grid<br>
 &emsp;&emsp;Advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’,ax=axs[0],figsize=(16,8))<br>
 &emsp;&emsp;Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])<br>
-&emsp;&emsp;Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png)
+&emsp;&emsp;Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png)
 &emsp;&emsp;现在，我们需要看看广告将如何帮助增加销量。所以，我们需要问自己几个问题。有价值的问题像是广告和销量之间的关系，哪种广告对销量的贡献更大，以及每种广告对销量的大致影响。我们将尝试用一个简单的线性模型来回答这些问题。<br>
 ### 简单的回归模型
 &emsp;&emsp;线性回归模型是一种学习算法，它使用解释特征(或输入或预测因子)的组合来预测定量(也称为数值)响应。<br>
@@ -90,7 +90,7 @@
 &emsp;&emsp;beta0是截距，也就是x =0时y的值<br>
 &emsp;&emsp;beta1是斜率，它表示y的变化量除以x的变化量<br>
 &emsp;&emsp;图3给出了对此的图形解释:<br>
-
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png)
 &emsp;&emsp;<br>
 
 
