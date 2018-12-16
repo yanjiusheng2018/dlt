@@ -348,7 +348,7 @@ Output:
 
 &emsp;&emsp;为了了解泰坦尼克号的例子，你需要做以下事情：
 
-&emsp;&emsp;1. 单击<http://github.com/ ahmed-menshawy/ML_Titannic/archive/master.zip>,在ZIP文件中下载此存储库。或从终端执行:<br>
+&emsp;&emsp;1. 单击<http://github.com/ahmed-menshawy/ML_Titannic/archive/master.zip>, 在ZIP文件中下载此存储库。或从终端执行:<br>
 &emsp;&emsp;2. Git克隆: <(https://github.com/ahmed-menshawy/ML_Titanic.git><br>
 &emsp;&emsp;3. 安装(virtualenv)<http://virtualenv.readthedocs.org/en/latest/installation.html><br>
 &emsp;&emsp;4. 导航到解压克隆repo的目录，并用virtualenv ml_titania创建虚拟环境<br>
