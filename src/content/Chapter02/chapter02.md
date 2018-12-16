@@ -168,8 +168,9 @@
 &emsp;&emsp;注意，对于每个训练样本，以上方程的两项之和中只有一项是非零的（取决于标签 的值是0还是1）。当 =1时，最小化模型成本函数意味着我们需要使 变大，当y=0时 使1- 变大。<br>
 &emsp;&emsp;现在，我们有一个成本函数来计算给定的 与我们的训练样本的匹配程度。我们可以学习使用优化技术对训练样本进行分类，使 最小化，并找到参数 的最佳值.一旦完成这一任务，我们就可以使用这些参数将一个新的测试样本分为1或0类，检查这两个类中哪类是最可能的。如果P(y=1)<p(y=0)，则输出0，否则输出1，这与类之间定义0.5的阈值并检查h(x)>0.5相同的。<br>
 &emsp;&emsp;为了使成本函数 最小化，我们可以使用一种优化技术来找到使成本函数最小化的最佳参数值 。我们可以使用一个叫做梯度的微积分工具，它用来找到成本函数的最大增长率。然后，我们可以用相反的方向来求这个函数的最小值；例如J(0)的梯度用VJ(0)来表示，即对模型参数的成本函数取梯度。因此，我们需要提供一个函数来计算J(0)和VJ(9)的值，以供对任意的参数 进行选择。如果我们对J(0)上的代价函数求关于0的梯度或导数，我们会得到如下结果<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/image/tupian2.jpg)
-&emsp;&emsp;<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png)
+&emsp;&emsp;用向量形式表示为:<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png)
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
