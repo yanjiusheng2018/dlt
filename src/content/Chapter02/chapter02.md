@@ -38,7 +38,7 @@
 &emsp;&emsp;#DataFrame.head methond above the first n row of the data where the<br>
 &emsp;&emsp;#default value of n is 5,DataFrame.head(n=5)<br>
 &emsp;&emsp;Advertising_data.head()<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/image/tupian2.jpg)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/1.png)
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
