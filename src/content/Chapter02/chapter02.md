@@ -64,7 +64,7 @@ Advertising_data.head()
 ```
 Output
 
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/1.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E8%A1%A81.png)
 
 ### 广告数据基本信息
 &emsp;&emsp;这个问题属于监督学习类型，其中我们有解释特征(输入变量)和响应(输出变量)。输入/输入变量分别是什么?
