@@ -57,33 +57,34 @@
 
 &emsp;&emsp;现在，让我们看一下广告数据的前五行:
 
-`
-   #DataFrame.head methond above the first n row of the data where the<br>
-   #default value of n is 5,DataFrame.head(n=5)<br>
+```
+   #DataFrame.head methond above the first n row of the data where the
+   #default value of n is 5,DataFrame.head(n=5)
    Advertising_data.head()
-`
+```
+
  Output
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/1.png)
 
 ### 广告数据基本信息
 &emsp;&emsp;这个问题属于监督学习类型，其中我们有解释特征(输入变量)和响应(输出变量)。输入/输入变量分别是什么?
 
-&emsp;&emsp;1. **电视**: 在一个特定的市场上为一个产品在电视上做广告的花费(以几千美元计)<br>
-&emsp;&emsp;2. **收音机**: 花在收音机上的广告费用<br>
-&emsp;&emsp;3. **报纸**: 花在报纸上的广告费用
+&emsp;&emsp;●**电视**: 在一个特定的市场上为一个产品在电视上做广告的花费(以几千美元计)<br>
+&emsp;&emsp;●**收音机**: 花在收音机上的广告费用<br>
+&emsp;&emsp;●**报纸**: 花在报纸上的广告费用
 
 &emsp;&emsp;响应/结果/输出变量是什么?
 
-&emsp;&emsp;**销售**: 在特定市场上的单个产品的销量(以数以千计的小部件为单位)
+&emsp;&emsp;●**销售**: 在特定市场上的单个产品的销量(以数以千计的小部件为单位)
 
 &emsp;&emsp;我们还可以使用DataFrame来知道我们数据中的样本/观察数:
 
-`
+```
   #print the shape of the DataFrame
   &emsp;&emsp;Advertising_data.shape
   &emsp;&emsp;Output:
   &emsp;&emsp;(200,4)
-`
+```
 &emsp;&emsp;所以，广告数据中有200个观察结果。
 
 ### 数据分析与可视化
@@ -93,22 +94,22 @@
 
 &emsp;&emsp;让我们导入可视化库Matplotlib:
 
-`
+```
   Import matplotlib.pyplot as plt
   #The next line will allow us make inlines plots that could appear
   directly in the notebook
   #without poping up in a different window
   Matplotlib inline
-`
+```
 &emsp;&emsp;现在，我们使用散点图来可视化广告数据特性和响应变量之间的关系:
 
-`
+```
   fig, axs=plt.subplots{1,3,sharey=True}
   #Adding the scatterplots to the grid
   Advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’,ax=axs[0],figsize=(16,8))
   Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])
   Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
-`
+```
 <div align="center">
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png)
 </div>
