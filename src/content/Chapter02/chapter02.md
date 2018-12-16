@@ -158,7 +158,7 @@ Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
 &emsp;&emsp;图3给出了对此的图形解释:
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE3.png">
 </div>
 <div align="center">
 图3 最小二乘直线和回归系数的关系
@@ -174,16 +174,21 @@ Lm=smf.ols(formula=’sales~TV’,data=advertising_data).fit()
 #show the trained model cofficients
 Lm.params
 ```
-Output
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE5.png)
+Output:
+
+```
+Intercept     7.032594
+TV            0.047537
+dtype         float64
+```
 &emsp;&emsp;正如我们所提到的，线性回归模型的优点之一是很容易解释，所以让我们继续解释这个模型。
 
 ### 解释模型系数
-&emsp;&emsp;我们来看看如何解释模型的系数，例如TV ad系数(beta1):
+&emsp;&emsp;我们来看看如何解释模型的系数，例如TV广告系数(beta1):
 
-&emsp;&emsp;投入/功能(电视广告)支出增加1单位会使销量(响应)增加0.047537个单位。换句话说，在电视广告上多花100美元，就会增加4.7537个单位的销量。
+&emsp;&emsp;投入/功能(电视广告)支出增加1单位会使销量(响应)增加0.047537个单位。换句话说，在电视广告上多花100美元，就会增加4.7537个单位的销量。<br>
 
-&emsp;&emsp;从电视广告数据中建立一个学习模型的目的是预测未知数据的销售情况。那么，让我们看看如何使用学习过的模型来基于电视广告的给定价值来预测销售额(我们不知道)。
+&emsp;&emsp;从电视广告数据中建立一个学习模型的目的是预测未知数据的销售情况。那么，让我们看看如何使用学习过的模型来基于电视广告的给定价值来预测销售额(我们不知道)。<br>
 
 ### 使用模型进行预测
 &emsp;&emsp;假设我们有未知的电视广告支出数据，我们想知道它们对公司销售情况的影响。所以，我们需要用学习过的模型来完成。假设我们想知道5万美元的电视广告会增加多少销售额。
@@ -193,12 +198,14 @@ Output
 &emsp;&emsp;&emsp;&emsp;&emsp;y = 7.032594 + 0.047537*x
 
 `
-#manually calculating the increase in the sales based on $50k<br>
+#manually calculating the increase in the sales based on $50k
 7.032594+0.047537*50000<br>
 `
-Output:<br>
-9,409.444
 
+Output:
+`
+9,409.444
+`
 &emsp;&emsp;我们也可以用Statsmodels来做预测。首先，我们需要提供pandas DataFrame的电视广告花费情况，因为Statsmodels的预测要求:
 
 ```
