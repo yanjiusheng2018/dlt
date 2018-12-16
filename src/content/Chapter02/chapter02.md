@@ -241,7 +241,7 @@ Array([ 9.40942557 ])
 X_min_max=pd.DataFrame({‘TV’:[advertising_data.TV.min(),advertising_data.TV.max()]})
 X_min_max.head()
 ```
-Output:改
+Output:
 
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E8%A1%A82.png)<br>
 &emsp;&emsp;让我们得到这两个值对应的预测值：
@@ -303,11 +303,10 @@ Output:
 
 &emsp;&emsp;Logistic回归是我们可以用于分类任务的众多学习算法之一，我们使用不同的假设类，同时试图预测特定样本属于一类的概率和它属于零类的概率。因此，Logistic回归中，我们将尝试学习以下函数：
 
-函数
 <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE9.png)<br>
+
 &emsp;&emsp;
 
 方程![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png)通常被称为	sigmoid或logistic函数，它将 的值压缩到一个固定的范围[0,1]，如下图所示。因为z的输出值被压缩在[0,1]之间，我们可以将 理解为一个概率。
