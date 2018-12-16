@@ -144,7 +144,29 @@
 &emsp;&emsp;advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’)<br>
 &emsp;&emsp;#plotting the least squares line<br>
 &emsp;&emsp;Plt.plot(new_TVAdSpending,preds,c=’red’,linewidth=2)<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE7.png)
+&emsp;&emsp;本示例的扩展和进一步的解释将在下一章进行解释。<br>
+## 2.2 线性分类模型
+&emsp;&emsp;在本节中，我们将讨论logistic回归，这是被广泛使用的分类算法之一。<br>
+&emsp;&emsp;logistic回归是什么？logistic 回归的简单的定义：它是一种线性判别的分类算法。<br>
+&emsp;&emsp;我们用以下两点来说明这个定义：<br>
+&emsp;&emsp;1. 与线性回归不同，logistic回归在给定一组特征或输入变量的情况下，不会尝试去估计或预测这些被给定的数值变量的值。相反，logistic回归算法的输出是给定样本或观察值属于特定类的概率。简单地说，假设我们有一个二元分类的问题。在这种类型的问题中，我们输出变量中只有两个类，例如，患病或不患病。某特定样本属于患病类的概率为P_0且该样本属于非患病类的概率为P_1=1-P_0。因此，logistic回归算法的输出总是在0-1之间。<br>
+&emsp;&emsp;2.你也许知道有很多用于回归或分类的学习算法，并且每种学习算法对数据样本都有自己的假设。对所选定的数据选择合适的学习算法的能力将会随着对这个主题的实践和良好理解而逐渐产生。因此，logistic回归算法的中心假设是，我们的输入空间或特征空间可以被一个线性曲面分割成两个区域（每个类一个），如果我们只有两个特征，它可以是一条线，如果我们有三个特征，它可以是一个平面，以此类推。这个分类边界的位置和方向将由选定的数据决定。如果选定的数据满足这个约束条件，即能够将选定样本分隔成与每个类对应的具有线性曲面的区域，那么说明你选定的数据是线性可分的。<br>
+&emsp;&emsp;下图5说明了这个假设。在图5中，用三维空间展示：输入或特征以及两个可能的类：患病的（红色）和非患病的（蓝色）。分界面将这个区域区分成两个区域，因为它是线性的并且帮助模型区分属于不同类别的样本，因此称这是一个线性判别。<br>
 ![]()
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
