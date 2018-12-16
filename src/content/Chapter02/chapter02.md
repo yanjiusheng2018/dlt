@@ -118,15 +118,33 @@
 &emsp;&emsp;#creating a Pandas Dataframe to match Statsmodels interface expectations<br>
 &emsp;&emsp;new_TVAdSpending=pd.DataFrame({‘TV’:[50000]})<br>
 &emsp;&emsp;new_TVAdSpending.head()<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE5.png)
+&emsp;&emsp;现在，我们可以继续使用predict函数来预测销售价值:<br>
+&emsp;&emsp;#use the model to make predictions on new value<br>
+&emsp;&emsp;Preds = lm.predict{new_TVAdSpending}<br>
+&emsp;&emsp;Output<br>
+&emsp;&emsp;Array([9.40942557])<br>
+&emsp;&emsp;让我们看看学习过的最小二乘直线是怎样的。为了画出这条线，我们需要两个点，每个点都用这对来表示:( x,predict_value_of_x)。<br>
+&emsp;&emsp;那么，让我们取电视广告的最小值和最大值:<br>
+&emsp;&emsp;# create a DataFrame with the minimum and maximum values of TV<br>
+&emsp;&emsp;X_min_max=pd.DataFrame({‘TV’:[advertising_data.TV.min(),advertising_data.TV.max()]})<br>
+&emsp;&emsp;X_min_max.head()<br>
+&emsp;&emsp;Output<br>
+&emsp;&emsp;TV<br>
+&emsp;&emsp;0      0.7<br>
+&emsp;&emsp;1      296.4<br>
+&emsp;&emsp;让我们得到这两个值对应的预测值：<br>
+&emsp;&emsp;# predictions for X min and max values<br>
+&emsp;&emsp;predictions=lm.predict(X_min_max)<br>
+&emsp;&emsp;predictions<br>
+&emsp;&emsp;Output:<br>
+&emsp;&emsp;Array([7.0658692,21.12245377])<br>
+&emsp;&emsp;现在，让我们画出实际数据然后用最小二乘线来拟合:<br>
+&emsp;&emsp;#plotting the actual observeddata<br>
+&emsp;&emsp;advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’)<br>
+&emsp;&emsp;#plotting the least squares line<br>
+&emsp;&emsp;Plt.plot(new_TVAdSpending,preds,c=’red’,linewidth=2)<br>
 ![]()
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
