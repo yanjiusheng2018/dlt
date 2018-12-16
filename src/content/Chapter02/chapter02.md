@@ -162,8 +162,9 @@
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE9.png)
 &emsp;&emsp;方程![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png) 通常被称为	sigmoid或logistic函数，它将 的值压缩到一个固定的范围[0，1]，如下图所示。因为z的输出值被压缩在[0，1]之间，我们可以将 理解为一个概率。<br>
 &emsp;&emsp;我们的目标是寻找参数 的值，使得当输入样本x属于一类 的概率大于该样本属于零类的概率：<br>
-![]()
-&emsp;&emsp;<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE11.png)
+&emsp;&emsp;假设我们有一组训练样本，他们有相应的二进制标签。我们需要最小化以下成本函数，该函数能够衡量给定ho的性能。<br>
+
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
