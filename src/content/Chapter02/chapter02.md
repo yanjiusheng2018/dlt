@@ -160,8 +160,9 @@
 &emsp;&emsp;在线性回归中，我们试图用线性函数模型 来预测数据集中第 样本 的输出变量 的值。对于诸如二进制标签(ye（0，1）)之类的分类任务，以上的线性函数模型不是一个很好的解决方案。<br>
 &emsp;&emsp;Logistic回归是我们可以用于分类任务的众多学习算法之一，我们使用不同的假设类，同时试图预测特定样本属于一类的概率和它属于零类的概率。因此，Logistic回归中，我们将尝试学习以下函数：<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE9.png)
-&emsp;&emsp;方程![]()<br>
-&emsp;&emsp;<br>
+&emsp;&emsp;方程![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png) 通常被称为	sigmoid或logistic函数，它将 的值压缩到一个固定的范围[0，1]，如下图所示。因为z的输出值被压缩在[0，1]之间，我们可以将 理解为一个概率。<br>
+&emsp;&emsp;我们的目标是寻找参数 的值，使得当输入样本x属于一类 的概率大于该样本属于零类的概率：<br>
+![]()
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
