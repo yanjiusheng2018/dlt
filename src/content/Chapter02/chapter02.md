@@ -39,7 +39,7 @@
 &emsp;&emsp;#default value of n is 5,DataFrame.head(n=5)<br>
 &emsp;&emsp;Advertising_data.head()<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/1.png)
-###了解广告数据
+### 了解广告数据
 &emsp;&emsp;这个问题属于监督学习类型，其中我们有解释特征(输入变量)和响应(输出变量)。输入/输入变量分别是什么?<br>
 &emsp;&emsp;1.电视:在一个特定的市场上为一个产品在电视上做广告的花费(以几千美元计)<br>
 &emsp;&emsp;2.收音机:花在收音机上的广告费用<br>
@@ -52,7 +52,7 @@
 &emsp;&emsp;Output:<br>
 &emsp;&emsp;(200,4)<br>
 &emsp;&emsp;所以，广告数据中有200个观察结果。<br>
-###数据分析与可视化
+### 数据分析与可视化
 &emsp;&emsp;为了理解数据的基本形式、输入变量和输出变量之间的关系以及更多内在联系，我们可以使用不同类型的可视化。为了理解广告数据输入变量和输出变量之间的关系，我们将使用散点图。<br>
 &emsp;&emsp;为了对数据进行不同类型的可视化，可以使用Matplotlib(http://matplotlib.org/)，这是一个用于可视化的Python 2D库。要获得Matplotlib，你可以按照他们的安装说明:http://matplotlib.org/users/installing.html.<br>
 &emsp;&emsp;让我们导入可视化库Matplotlib:<br>
