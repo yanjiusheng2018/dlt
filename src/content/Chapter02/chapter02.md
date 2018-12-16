@@ -138,7 +138,7 @@ Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
 &emsp;&emsp;为了估计模型的系数，我们需要用回归线对数据进行拟合，回归线给出的答案与实际销量情况类似。为了得到最适合数据的回归线，我们将使用一种称为最小二乘的准则。因此，我们需要找到一条使预测值和实际值之间的差最小的直线。换句话说，我们需要找到一个回归线，使残差平方和最小。图2说明了这一点:
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE3.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png">
 </div>
 <div align="center">
 图2 使残差平方和达到最小的直线回归拟合
