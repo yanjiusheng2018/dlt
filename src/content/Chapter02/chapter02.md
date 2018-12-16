@@ -63,6 +63,7 @@ pd.read_csv(‘http://www-bcf.use.edu/~qareth/ISL/Advertising.csv’,index_col=0
 Advertising_data.head()
 ```
 Output
+
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/1.png)
 
 ### 广告数据基本信息
@@ -211,110 +212,222 @@ Output:
 
 &emsp;&emsp;现在，我们可以继续使用predict函数来预测销售价值:
 
-`
+```
 #use the model to make predictions on new value
 Preds = lm.predict{new_TVAdSpending}
-`
-
+```
 Output:
+
 Array([ 9.40942557 ])
 
 &emsp;&emsp;让我们看看学习过的最小二乘直线是怎样的。为了画出这条线，我们需要两个点，每个点都用这对来表示:( x,predict_value_of_x)。
 
 &emsp;&emsp;那么，让我们取电视广告的最小值和最大值:
 
-`
+```
 # create a DataFrame with the minimum and maximum values of TV
 X_min_max=pd.DataFrame({‘TV’:[advertising_data.TV.min(),advertising_data.TV.max()]})
 X_min_max.head()
-`
+```
+Output:改
+
+```
+TV<br>
+&emsp;&emsp;0      0.7
+&emsp;&emsp;1      296.4
+```
+&emsp;&emsp;让我们得到这两个值对应的预测值：
+
+```
+# predictions for X min and max values
+predictions=lm.predict(X_min_max)
+predictions
+```
 Output:
-&emsp;&emsp;TV<br>
-&emsp;&emsp;0      0.7<br>
-&emsp;&emsp;1      296.4<br>
 
+`
+Array([7.0658692,21.12245377])
+`
+&emsp;&emsp;现在，让我们画出实际数据然后用最小二乘线来拟合:
 
+```
+#plotting the actual observeddata
+advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’)
+#plotting the least squares line
+Plt.plot (new_TVAdSpending,  preds, c=’red’, linewidth=2)
+```
 
-&emsp;&emsp;让我们得到这两个值对应的预测值：<br>
-&emsp;&emsp;# predictions for X min and max values<br>
-&emsp;&emsp;predictions=lm.predict(X_min_max)<br>
-&emsp;&emsp;predictions<br>
-&emsp;&emsp;Output:<br>
-&emsp;&emsp;Array([7.0658692,21.12245377])<br>
-&emsp;&emsp;现在，让我们画出实际数据然后用最小二乘线来拟合:<br>
-&emsp;&emsp;#plotting the actual observeddata<br>
-&emsp;&emsp;advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’)<br>
-&emsp;&emsp;#plotting the least squares line<br>
-&emsp;&emsp;Plt.plot(new_TVAdSpending,preds,c=’red’,linewidth=2)<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE7.png)<br>
-&emsp;&emsp;本示例的扩展和进一步的解释将在下一章进行解释。<br>
+Output: 改
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图4 真实值与最小二乘回归直线
+</div>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE7.png)
+
+&emsp;&emsp;本示例的扩展和进一步的解释将在下一章进行解释。
+
 ## 2.2 线性分类模型
-&emsp;&emsp;在本节中，我们将讨论logistic回归，这是被广泛使用的分类算法之一。<br>
-&emsp;&emsp;logistic回归是什么？logistic 回归的简单的定义：它是一种线性判别的分类算法。<br>
-&emsp;&emsp;我们用以下两点来说明这个定义：<br>
+&emsp;&emsp;在本节中，我们将讨论logistic回归，这是被广泛使用的分类算法之一。
+
+&emsp;&emsp;logistic回归是什么？logistic 回归的简单的定义：它是一种线性判别的分类算法。
+
+&emsp;&emsp;我们用以下两点来说明这个定义：
+
 &emsp;&emsp;1. 与线性回归不同，logistic回归在给定一组特征或输入变量的情况下，不会尝试去估计或预测这些被给定的数值变量的值。相反，logistic回归算法的输出是给定样本或观察值属于特定类的概率。简单地说，假设我们有一个二元分类的问题。在这种类型的问题中，我们输出变量中只有两个类，例如，患病或不患病。某特定样本属于患病类的概率为P_0且该样本属于非患病类的概率为P_1=1-P_0。因此，logistic回归算法的输出总是在0-1之间。<br>
-&emsp;&emsp;2.你也许知道有很多用于回归或分类的学习算法，并且每种学习算法对数据样本都有自己的假设。对所选定的数据选择合适的学习算法的能力将会随着对这个主题的实践和良好理解而逐渐产生。因此，logistic回归算法的中心假设是，我们的输入空间或特征空间可以被一个线性曲面分割成两个区域（每个类一个），如果我们只有两个特征，它可以是一条线，如果我们有三个特征，它可以是一个平面，以此类推。这个分类边界的位置和方向将由选定的数据决定。如果选定的数据满足这个约束条件，即能够将选定样本分隔成与每个类对应的具有线性曲面的区域，那么说明你选定的数据是线性可分的。<br>
-&emsp;&emsp;下图5说明了这个假设。在图5中，用三维空间展示：输入或特征以及两个可能的类：患病的（红色）和非患病的（蓝色）。分界面将这个区域区分成两个区域，因为它是线性的并且帮助模型区分属于不同类别的样本，因此称这是一个线性判别。<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE8.png)<br>
+&emsp;&emsp;2.你也许知道有很多用于回归或分类的学习算法，并且每种学习算法对数据样本都有自己的假设。对所选定的数据选择合适的学习算法的能力将会随着对这个主题的实践和良好理解而逐渐产生。因此，logistic回归算法的中心假设是，我们的输入空间或特征空间可以被一个线性曲面分割成两个区域（每个类一个），如果我们只有两个特征，它可以是一条线，如果我们有三个特征，它可以是一个平面，以此类推。这个分类边界的位置和方向将由选定的数据决定。如果选定的数据满足这个约束条件，即能够将选定样本分隔成与每个类对应的具有线性曲面的区域，那么说明你选定的数据是线性可分的。下图5说明了这个假设。在图5中，用三维空间展示：输入或特征以及两个可能的类：患病的（红色）和非患病的（蓝色）。分界面将这个区域区分成两个区域，因为它是线性的并且帮助模型区分属于不同类别的样本，因此称这是一个线性判别。
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图5 分为两类的线性曲面分割图
+</div>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE8.png)
+
 &emsp;&emsp;如果你的样本数据不是线性可分离的，你可以将你的数据转换到更高纬度的空间，通过添加更多的特性来实现。<br>
 ### 2.2.1 分类与逻辑回归
-&emsp;&emsp;在前一节中，我们学习了如何预测连续型的数量（例如，电视广告对公司销售的影响）作为输入值的线性函数（例如，电视、广播和报纸广告）。但对某些情况而言，输出将不再是连续型的量。例如，预测某人是否患病是一个分类问题，我们需要一个不同的学习算法来解决这一问题。在本节中，我们将深入研究Logistic回归的数学分析，这是一种用于分类任务的学习算法。<br>
-&emsp;&emsp;在线性回归中，我们试图用线性函数模型 来预测数据集中第 样本 的输出变量 的值。对于诸如二进制标签(ye（0，1）)之类的分类任务，以上的线性函数模型不是一个很好的解决方案。<br>
-&emsp;&emsp;Logistic回归是我们可以用于分类任务的众多学习算法之一，我们使用不同的假设类，同时试图预测特定样本属于一类的概率和它属于零类的概率。因此，Logistic回归中，我们将尝试学习以下函数：<br>
+&emsp;&emsp;在前一节中，我们学习了如何预测连续型的数量（例如，电视广告对公司销售的影响）作为输入值的线性函数（例如，电视、广播和报纸广告）。但对某些情况而言，输出将不再是连续型的量。例如，预测某人是否患病是一个分类问题，我们需要一个不同的学习算法来解决这一问题。在本节中，我们将深入研究Logistic回归的数学分析，这是一种用于分类任务的学习算法。
+
+&emsp;&emsp;在线性回归中，我们试图用线性函数模型 来预测数据集中第 样本 的输出变量 的值。对于诸如二进制标签(ye（0，1）)之类的分类任务，以上的线性函数模型不是一个很好的解决方案。
+
+&emsp;&emsp;Logistic回归是我们可以用于分类任务的众多学习算法之一，我们使用不同的假设类，同时试图预测特定样本属于一类的概率和它属于零类的概率。因此，Logistic回归中，我们将尝试学习以下函数：
+
+学些的函数
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE9.png)<br>
-&emsp;&emsp;方程![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png) 通常被称为	sigmoid或logistic函数，它将 的值压缩到一个固定的范围[0，1]，如下图所示。因为z的输出值被压缩在[0，1]之间，我们可以将 理解为一个概率。<br>
-&emsp;&emsp;我们的目标是寻找参数 的值，使得当输入样本x属于一类 的概率大于该样本属于零类的概率：<br>
+&emsp;&emsp;
+
+方程![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png)通常被称为	sigmoid或logistic函数，它将 的值压缩到一个固定的范围[0,1]，如下图所示。因为z的输出值被压缩在[0,1]之间，我们可以将 理解为一个概率。
+
+&emsp;&emsp;我们的目标是寻找参数 的值，使得当输入样本x属于一类 的概率大于该样本属于零类的概率：
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图6 sigmoid函数形态
+</div>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE11.png)<br>
-&emsp;&emsp;假设我们有一组训练样本，他们有相应的二进制标签。我们需要最小化以下成本函数，该函数能够衡量给定ho的性能。<br>
+
+&emsp;&emsp;因此，假设我们有一组训练样本，他们有相应的二进制标签。我们需要最小化以下成本函数，该函数能够衡量给定ho的性能。
+
+函数
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE12.png)<br>
-&emsp;&emsp;注意，对于每个训练样本，以上方程的两项之和中只有一项是非零的（取决于标签 的值是0还是1）。当 =1时，最小化模型成本函数意味着我们需要使 变大，当y=0时 使1- 变大。<br>
-&emsp;&emsp;现在，我们有一个成本函数来计算给定的 与我们的训练样本的匹配程度。我们可以学习使用优化技术对训练样本进行分类，使 最小化，并找到参数 的最佳值.一旦完成这一任务，我们就可以使用这些参数将一个新的测试样本分为1或0类，检查这两个类中哪类是最可能的。如果P(y=1)<p(y=0)，则输出0，否则输出1，这与类之间定义0.5的阈值并检查h(x)>0.5相同的。<br>
-&emsp;&emsp;为了使成本函数 最小化，我们可以使用一种优化技术来找到使成本函数最小化的最佳参数值 。我们可以使用一个叫做梯度的微积分工具，它用来找到成本函数的最大增长率。然后，我们可以用相反的方向来求这个函数的最小值；例如J(0)的梯度用VJ(0)来表示，即对模型参数的成本函数取梯度。因此，我们需要提供一个函数来计算J(0)和VJ(9)的值，以供对任意的参数 进行选择。如果我们对J(0)上的代价函数求关于0的梯度或导数，我们会得到如下结果<br>
+
+&emsp;&emsp;注意，对于每个训练样本，以上方程的两项之和中只有一项是非零的（取决于标签 的值是0还是1）。当 =1时，最小化模型成本函数意味着我们需要使 变大，当y=0时 使1- 变大。
+
+&emsp;&emsp;现在，我们有一个成本函数来计算给定的 与我们的训练样本的匹配程度。我们可以学习使用优化技术对训练样本进行分类，使 最小化，并找到参数 的最佳值.一旦完成这一任务，我们就可以使用这些参数将一个新的测试样本分为1或0类，检查这两个类中哪类是最可能的。如果P(y=1)<p(y=0)，则输出0，否则输出1，这与类之间定义0.5的阈值并检查h(x)>0.5相同的。
+
+&emsp;&emsp;为了使成本函数 最小化，我们可以使用一种优化技术来找到使成本函数最小化的最佳参数值 。我们可以使用一个叫做梯度的微积分工具，它用来找到成本函数的最大增长率。然后，我们可以用相反的方向来求这个函数的最小值；例如J(0)的梯度用VJ(0)来表示，即对模型参数的成本函数取梯度。因此，我们需要提供一个函数来计算J(0)和VJ(9)的值，以供对任意的参数 进行选择。如果我们对J(0)上的代价函数求关于0的梯度或导数，我们会得到如下结果
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+方程
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png)<br>
+
 &emsp;&emsp;用向量形式表示为:<br>
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+方程
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE14.png)<br>
-&emsp;&emsp;现在，我们对逻辑回归有了数学上的理解，让我们继续使用这种新的学习方法来解决一个分类任务<br>
+
+&emsp;&emsp;现在，我们对逻辑回归有了数学上的理解，让我们继续使用这种新的学习方法来解决一个分类任务
+ 
 ## 2.3 泰坦尼克号模型的建立和训练
-&emsp;&emsp;泰坦尼克号的沉没是历史上最臭名昭著的事件之一。这起事故导致2,224名乘客和机组人员中有1,502人死亡。在这个问题中，我们将使用数据科学来预测乘客是否能在这场悲剧中幸存下来，然后根据悲剧的实际统计数据来测试我们模型的性能。<br>
-&emsp;&emsp;为了跟进泰坦尼克号的例子，你需要做以下事情：<br>
-&emsp;&emsp;1.单击http://github.com/ ahmed-menshawy/ML_Titannic/archive/master，在ZIP文件中下载此存储库。或从终端执行:<br>
-&emsp;&emsp;2.Git克隆:https://github.com/ahmed-menshawy/ML_Titanic.git<br>
-&emsp;&emsp;3.安装(virtualenv)(http://virtualenv.readthedocs.org/en/latest/installation.html)<br>
-&emsp;&emsp;4.导航到解压克隆repo的目录，并用virtualenv ml_titania创建虚拟环境<br>
-&emsp;&emsp;5.使用aource ml_titanic/bin/ Activate激活环境<br>
-&emsp;&emsp;6.使用pip Install -r requirements.txt安装所需的依赖关系<br>
-&emsp;&emsp;7.从命令行或终端执行ipython笔记本<br>
-&emsp;&emsp;8.遵循本章中的示例代码<br>
-&emsp;&emsp;9.完成后，用deactivate命令关闭虚拟环境<br>
+&emsp;&emsp;泰坦尼克号的沉没是历史上最臭名昭著的事件之一。这起事故导致2,224名乘客和机组人员中有1,502人死亡。在这个问题中，我们将使用数据科学来预测乘客是否能在这场悲剧中幸存下来，然后根据悲剧的实际统计数据来测试我们模型的性能。
+
+&emsp;&emsp;为了了解泰坦尼克号的例子，你需要做以下事情：
+
+&emsp;&emsp;1. 单击[](http://github.com/ ahmed-menshawy/ML_Titannic/archive/master.zip),在ZIP文件中下载此存储库。或从终端执行:<br>
+&emsp;&emsp;2. Git克隆: [](https://github.com/ahmed-menshawy/ML_Titanic.git)<br>
+&emsp;&emsp;3. 安装(virtualenv)[](http://virtualenv.readthedocs.org/en/latest/installation.html)<br>
+&emsp;&emsp;4. 导航到解压克隆repo的目录，并用virtualenv ml_titania创建虚拟环境<br>
+&emsp;&emsp;5. 使用aource ml_titanic/bin/ Activate激活环境<br>
+&emsp;&emsp;6. 使用pip Install -r requirements.txt安装所需的依赖关系<br>
+&emsp;&emsp;7. 从命令行或终端执行ipython笔记本<br>
+&emsp;&emsp;8. 遵循本章中的示例代码<br>
+&emsp;&emsp;9. 完成后，用deactivate命令关闭虚拟环境<br>
+
 ### 2.3.1 数据处理和可视化
-&emsp;&emsp;在本节中，我们将做一些数据预处理和分析。数据探索和分析被认为是应用机器学习的最重要的步骤之一，也可能被认为是最重要的步骤，因为在这个步骤中，你会了解你的朋友-----数据，它会在训练过程中一直伴随着你。此外，了解你的数据将使你能够缩小可能用于检查哪个算法最适合你的数据的候选算法集。<br>
-&emsp;&emsp;让我们从导入实现所需的包开始:<br>
-&emsp;&emsp;Import matplotlib.pyplot as plt<br>
-&emsp;&emsp;matplotlib inline<br>
-&emsp;&emsp;from statsmodels.nonparametric.kde import KDEUnivariate<br>
-&emsp;&emsp;from statsmodels.nonparametric import smoothers_lowess<br>
-&emsp;&emsp;from pandas import series,DataFrame<br>
-&emsp;&emsp;from patsy import dmatrices<br>
-&emsp;&emsp;from sklearn import datdsets,svm<br>
-&emsp;&emsp;import numpy as np<br>
-&emsp;&emsp;import statamodels.api as sm<br>
-&emsp;&emsp;from scipy import stats<br>
-&emsp;&emsp;stats.chisqprob=lambds chisq,df:stats.chi2.sf(chisq,df)<br>
-&emsp;&emsp;让我们用pandas读入泰坦尼克号乘客和船员的数据:<br>
-&emsp;&emsp;Titanic_data=pd.read_csv(“data/titanic_train.csv”)<br>
-&emsp;&emsp;接下来，让我们查看数据集的维度，并且看看我们有多少样本数据，有多少解释性特征描述了我们的数据集:<br>
-&emsp;&emsp;Titanic_data.shape<br>
-&emsp;&emsp;Output :<br>
-&emsp;&emsp;{891,12}<br>
-&emsp;&emsp;因此，我们总共有891个观测值，数据样本，或乘客/机组记录，以及描述这一记录的12个解释特征:<br>
-&emsp;&emsp;List(titanic_data)<br>
-&emsp;&emsp;Output :<br>
-&emsp;&emsp;{‘PassengerId’,’Survived’,’Pclass’,’Name’,’Sex’,’Age’,’SibSp’,’Parch’,’Ticket’,’Fare’,’Cabin’,’Embarked’}<br>
-&emsp;&emsp;让我们看看一些样本/观察数据:<br>
-&emsp;&emsp;Titanic_data[500:510]<br>
+&emsp;&emsp;在本节中，我们将做一些数据预处理和分析。数据探索和分析被认为是应用机器学习的最重要的步骤之一，也可能被认为是最重要的步骤，因为在这个步骤中，你会了解你的朋友-----数据，它会在训练过程中一直伴随着你。此外，了解你的数据将使你能够缩小可能用于检查哪个算法最适合你的数据的候选算法集。
+
+&emsp;&emsp;让我们从导入实现所需的包开始:
+
+```
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+from statsmodels.nonparametric.kde import KDEUnivariate
+from statsmodels.nonparametric import smoothers_lowess
+from pandas import series,DataFrame
+from patsy import dmatrices
+from sklearn import datdsets,svm
+
+import numpy as np
+import pandas as pd
+import statamodels.api as sm
+
+from scipy import stats
+stats.chisqprob=lambds chisq,df:stats.chi2.sf(chisq,df)
+```
+
+&emsp;&emsp;让我们用pandas读入泰坦尼克号乘客和船员的数据:
+
+`
+&emsp;&emsp;Titanic_data=pd.read_csv(“data/titanic_train.csv”)
+`
+
+&emsp;&emsp;接下来，让我们查看数据集的维度，并且看看我们有多少样本数据，有多少解释性特征描述了我们的数据集:
+
+`
+&emsp;&emsp;Titanic_data.shape
+`
+
+Output :
+`
+{891,12}
+`
+
+&emsp;&emsp;因此，我们总共有891个观测值，数据样本，或乘客/机组记录，以及描述这一记录的12个解释特征:
+
+```
+List(titanic_data)
+Output :
+{‘PassengerId’,’Survived’,’Pclass’,’Name’,’Sex’,’Age’,’SibSp’,’Parch’,’Ticket’,’Fare’,’Cabin’,’Embarked’}
+```
+
+&emsp;&emsp;让我们看看一些样本/观察数据:
+
+`
+Titanic_data[500:510]
+`
+Output:
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图7 泰坦尼克数据库样本
+</div>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE15.png)<br>
+
 &emsp;&emsp;现在，我们有一个pandas数据模型，它包含了我们需要分析的891名乘客的信息。DataFrame的列表示每个乘客/机组人员的解释性特征，比如姓名、性别或年龄。<br>
+
 &emsp;&emsp;这些解释特性中有一些是完整的，没有任何缺失值，例如幸存特性，它有891个条目。其他解释性特性包含了缺失的值，例如年龄特性，它只有714个条目。DataFrame中的任何缺失值都表示为NaN。<br>
+
 &emsp;&emsp;如果你研究所有的数据集特性，你会发现机票和客舱特性有许多缺失值(NaNs)，因此它们不会为我们的分析增加多少价值。为了处理这个问题，我们将从DataFrame中删除它们。<br>
 &emsp;&emsp;使用以下代码完全从DataFrame删除机票和客舱功能:<br>
 &emsp;&emsp;titanic_data=titanic_data.drop([‘Ticket’,’Cabin’],axis=1)<br>
