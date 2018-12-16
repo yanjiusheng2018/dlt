@@ -117,6 +117,7 @@ Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
 图1 广告数据特征和各特征变量的散点图
 </div>
 
+
 &emsp;&emsp;现在，我们需要看看广告将如何帮助增加销量。所以，我们需要问自己几个问题。有价值的问题像是广告和销量之间的关系，哪种广告对销量的贡献更大，以及每种广告对销量的大致影响。我们将尝试用一个简单的线性模型来回答这些问题。
 
 ### 简单回归模型
@@ -144,6 +145,7 @@ Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
 图2 使残差平方和达到最小的直线回归拟合
 </div>
 
+
 &emsp;&emsp;下面是图2中存在的元素:
 
 &emsp;&emsp;●黑点表示x(电视广告)和y(销售额)的实际或观察值<br>
@@ -163,6 +165,7 @@ Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
 <div align="center">
 图3 最小二乘直线和回归系数的关系
 </div>
+
 
 &emsp;&emsp;现在，让我们开始使用Statsmodels来学习这些系数:
 
@@ -199,13 +202,14 @@ dtype         float64
 
 `
 #manually calculating the increase in the sales based on $50k
-7.032594+0.047537*50000<br>
+7.032594+0.047537*50000
 `
 
 Output:
 `
 9,409.444
 `
+
 &emsp;&emsp;我们也可以用Statsmodels来做预测。首先，我们需要提供pandas DataFrame的电视广告花费情况，因为Statsmodels的预测要求:
 
 ```
@@ -215,7 +219,7 @@ new_TVAdSpending.head()
 ```
 Output:
 
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE5.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E8%A1%A82.png)
 
 &emsp;&emsp;现在，我们可以继续使用predict函数来预测销售价值:
 
@@ -225,10 +229,11 @@ Preds = lm.predict{new_TVAdSpending}
 ```
 Output:
 
+`
 Array([ 9.40942557 ])
+`
 
-&emsp;&emsp;让我们看看学习过的最小二乘直线是怎样的。为了画出这条线，我们需要两个点，每个点都用这对来表示:( x,predict_value_of_x)。
-
+&emsp;&emsp;让我们看看学习过的最小二乘直线是怎样的。为了画出这条线，我们需要两个点，每个点都用这对来表示:( x,predict_value_of_x)。<br>
 &emsp;&emsp;那么，让我们取电视广告的最小值和最大值:
 
 ```
@@ -238,11 +243,7 @@ X_min_max.head()
 ```
 Output:改
 
-```
-TV<br>
-&emsp;&emsp;0      0.7
-&emsp;&emsp;1      296.4
-```
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E8%A1%A82.png)<br>
 &emsp;&emsp;让我们得到这两个值对应的预测值：
 
 ```
@@ -255,6 +256,7 @@ Output:
 `
 Array([7.0658692,21.12245377])
 `
+
 &emsp;&emsp;现在，让我们画出实际数据然后用最小二乘线来拟合:
 
 ```
@@ -264,7 +266,7 @@ advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’)
 Plt.plot (new_TVAdSpending,  preds, c=’red’, linewidth=2)
 ```
 
-Output: 改
+Output:
 
 <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
@@ -272,7 +274,6 @@ Output: 改
 <div align="center">
 图4 真实值与最小二乘回归直线
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE7.png)
 
 &emsp;&emsp;本示例的扩展和进一步的解释将在下一章进行解释。
 
@@ -287,14 +288,14 @@ Output: 改
 &emsp;&emsp;2.你也许知道有很多用于回归或分类的学习算法，并且每种学习算法对数据样本都有自己的假设。对所选定的数据选择合适的学习算法的能力将会随着对这个主题的实践和良好理解而逐渐产生。因此，logistic回归算法的中心假设是，我们的输入空间或特征空间可以被一个线性曲面分割成两个区域（每个类一个），如果我们只有两个特征，它可以是一条线，如果我们有三个特征，它可以是一个平面，以此类推。这个分类边界的位置和方向将由选定的数据决定。如果选定的数据满足这个约束条件，即能够将选定样本分隔成与每个类对应的具有线性曲面的区域，那么说明你选定的数据是线性可分的。下图5说明了这个假设。在图5中，用三维空间展示：输入或特征以及两个可能的类：患病的（红色）和非患病的（蓝色）。分界面将这个区域区分成两个区域，因为它是线性的并且帮助模型区分属于不同类别的样本，因此称这是一个线性判别。
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE5.png">
 </div>
 <div align="center">
 图5 分为两类的线性曲面分割图
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE8.png)
 
-&emsp;&emsp;如果你的样本数据不是线性可分离的，你可以将你的数据转换到更高纬度的空间，通过添加更多的特性来实现。<br>
+&emsp;&emsp;如果你的样本数据不是线性可分离的，你可以将你的数据转换到更高纬度的空间，通过添加更多的特性来实现。
+
 ### 2.2.1 分类与逻辑回归
 &emsp;&emsp;在前一节中，我们学习了如何预测连续型的数量（例如，电视广告对公司销售的影响）作为输入值的线性函数（例如，电视、广播和报纸广告）。但对某些情况而言，输出将不再是连续型的量。例如，预测某人是否患病是一个分类问题，我们需要一个不同的学习算法来解决这一问题。在本节中，我们将深入研究Logistic回归的数学分析，这是一种用于分类任务的学习算法。
 
