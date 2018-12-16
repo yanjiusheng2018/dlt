@@ -35,7 +35,7 @@
 
 &emsp;&emsp;你可以很容易地以许多不同的方式安装pandas。安装pandas的最好方法是通过conda [](http://pandas.org/pandas-docs/stable/install.html#installing-pandas-with-anaconda)。
 
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;“bconda是一个开源的包管理系统和环境管理系统，用于安装多个版本的软件包及其相应的数据分析工具并在它们之间轻松切换。它可以在Linux，OS X和Windows上运行，是为Python程序创建的，但可以打包和分发任何软件。——conda网站。”
+&emsp;&emsp;“bconda是一个开源的包管理系统和环境管理系统，用于安装多个版本的软件包及其相应的数据分析工具并在它们之间轻松切换。它可以在Linux，OS X和Windows上运行，是为Python程序创建的，但可以打包和分发任何软件。——conda网站。”
 
 &emsp;&emsp;你可以通过安装Anaconda轻松地获得conda，这是一个开放的数据科学平台。
 
@@ -46,50 +46,78 @@
 &emsp;&emsp;接下来，我们可以使用pandas.read_csv方法将数据加载到一个易于使用的pandas数据结构中，称为DataFrame。有关pandas.read_csv及其参数的更多信息，请参阅此方法的pandas文档[](http://pandas.pydata.org/pandas-docs/stable/qenerated/pandas.read_csv.html):
 
 ```
-&emsp;&emsp;&emsp;&emsp;#read advertising data samples into a DataFrame
+  #read advertising data samples into a DataFrame
 
-&emsp;&emsp;&emsp;&emsp;Advertising_data = <br>
-&emsp;&emsp;&emsp;&emsp;pd.read_csv(‘http://www-bcf.use.edu/~qareth/ISL/Advertising.csv’,index_col=0)
+  Advertising_data = <br>
+  pd.read_csv(‘http://www-bcf.use.edu/~qareth/ISL/Advertising.csv’,index_col=0)
 ```
 &emsp;&emsp;传递给pandas.read_csv方法的第一个参数是一个表示文件路径的字符串值。字符串可以是包含IUUQ、GUQ、T和GJMF的URL。传递的第二个参数是列的索引，它将用作数据行的标签/名称。
 
 &emsp;&emsp;现在，我们有了DataFrame数据，它包含URL中提供的广告数据，每一行都由第一列标记。如前所述，panda提供了易于使用的数据结构，你可以将其用作数据的容器。这些数据结构有一些与之相关联的方法，你将使用这些方法来转换和/或操作数据。
 
 &emsp;&emsp;现在，让我们看一下广告数据的前五行:
-
-&emsp;&emsp;#DataFrame.head methond above the first n row of the data where the<br>
-&emsp;&emsp;#default value of n is 5,DataFrame.head(n=5)<br>
-&emsp;&emsp;Advertising_data.head()<br>
+`
+   #DataFrame.head methond above the first n row of the data where the<br>
+   #default value of n is 5,DataFrame.head(n=5)<br>
+   Advertising_data.head()
+`
+ Output
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/1.png)
-### 了解广告数据
-&emsp;&emsp;这个问题属于监督学习类型，其中我们有解释特征(输入变量)和响应(输出变量)。输入/输入变量分别是什么?<br>
-&emsp;&emsp;1.电视:在一个特定的市场上为一个产品在电视上做广告的花费(以几千美元计)<br>
-&emsp;&emsp;2.收音机:花在收音机上的广告费用<br>
-&emsp;&emsp;3.报纸:花在报纸上的广告费用<br>
-&emsp;&emsp;响应/结果/输出变量是什么?<br>
-&emsp;&emsp;销售:在特定市场上的单个产品的销量(以数以千计的小部件为单位)<br>
+
+### 广告数据基本信息
+&emsp;&emsp;这个问题属于监督学习类型，其中我们有解释特征(输入变量)和响应(输出变量)。输入/输入变量分别是什么?<
+
+&emsp;&emsp;1.##电视##: 在一个特定的市场上为一个产品在电视上做广告的花费(以几千美元计)<br>
+&emsp;&emsp;2.##收音机##: 花在收音机上的广告费用<br>
+&emsp;&emsp;3.##报纸##: 花在报纸上的广告费用
+
+&emsp;&emsp;响应/结果/输出变量是什么?
+
+&emsp;&emsp;##销售##: 在特定市场上的单个产品的销量(以数以千计的小部件为单位)
+
 &emsp;&emsp;我们还可以使用DataFrame来知道我们数据中的样本/观察数:<br>
-&emsp;&emsp;#print the shape of the DataFrame<br>
-&emsp;&emsp;Advertising_data.shape<br>
-&emsp;&emsp;Output:<br>
-&emsp;&emsp;(200,4)<br>
-&emsp;&emsp;所以，广告数据中有200个观察结果。<br>
+`
+  #print the shape of the DataFrame<br>
+  &emsp;&emsp;Advertising_data.shape<br>
+  &emsp;&emsp;Output:<br>
+  &emsp;&emsp;(200,4)<br>
+`
+&emsp;&emsp;所以，广告数据中有200个观察结果。
+
 ### 数据分析与可视化
-&emsp;&emsp;为了理解数据的基本形式、输入变量和输出变量之间的关系以及更多内在联系，我们可以使用不同类型的可视化。为了理解广告数据输入变量和输出变量之间的关系，我们将使用散点图。<br>
-&emsp;&emsp;为了对数据进行不同类型的可视化，可以使用Matplotlib(http://matplotlib.org/)，这是一个用于可视化的Python 2D库。要获得Matplotlib，你可以按照他们的安装说明:http://matplotlib.org/users/installing.html.<br>
-&emsp;&emsp;让我们导入可视化库Matplotlib:<br>
-&emsp;&emsp;Import matplotlib.pyplot as plt<br>
-&emsp;&emsp;#The next line will allow us make inlines plots that could appear<br>
-&emsp;&emsp;directly in the notebook<br>
-&emsp;&emsp;#without poping up in a different window<br>
-&emsp;&emsp;Matplotlib inline<br>
+&emsp;&emsp;为了理解数据的基本形式、输入变量和输出变量之间的关系以及更多内在联系，我们可以使用不同类型的可视化。为了理解广告数据输入变量和输出变量之间的关系，我们将使用散点图。
+
+&emsp;&emsp;为了对数据进行不同类型的可视化，可以使用Matplotlib [](http://matplotlib.org/)，这是一个用于可视化的Python 2D库。要获得Matplotlib，你可以按照他们的安装说明:[](http://matplotlib.org/users/installing.html)。
+
+&emsp;&emsp;让我们导入可视化库Matplotlib:
+
+`
+  Import matplotlib.pyplot as plt<br>
+  #The next line will allow us make inlines plots that could appear<br>
+  directly in the notebook<br>
+  #without poping up in a different window<br>
+  Matplotlib inline<br>
+`
 &emsp;&emsp;现在，我们使用散点图来可视化广告数据特性和响应变量之间的关系:<br>
-&emsp;&emsp;fig, axs=plt.subplots{1,3,sharey=True}<br>
-&emsp;&emsp;#Adding the scatterplots to the grid<br>
-&emsp;&emsp;Advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’,ax=axs[0],figsize=(16,8))<br>
-&emsp;&emsp;Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])<br>
-&emsp;&emsp;Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png)<br>
+
+`
+  fig, axs=plt.subplots{1,3,sharey=True}<br>
+  #Adding the scatterplots to the grid<br>
+  Advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’,ax=axs[0],figsize=(16,8))<br>
+  Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])<br>
+  Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])<br>
+`
+<div align="center">
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png)
+</div>
+<div align="center">
+
+
+
+
+
+
+
 &emsp;&emsp;现在，我们需要看看广告将如何帮助增加销量。所以，我们需要问自己几个问题。有价值的问题像是广告和销量之间的关系，哪种广告对销量的贡献更大，以及每种广告对销量的大致影响。我们将尝试用一个简单的线性模型来回答这些问题。<br>
 ### 简单的回归模型
 &emsp;&emsp;线性回归模型是一种学习算法，它使用解释特征(或输入或预测因子)的组合来预测定量(也称为数值)响应。<br>
