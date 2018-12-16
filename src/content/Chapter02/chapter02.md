@@ -272,30 +272,24 @@
 &emsp;&emsp;plt.title(“Breakdown of survivals(0=Died,1=Survived)”)<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE17.png)
 &emsp;&emsp;让我们通过按性别细分前面的图表来对数据有更多的了解:<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
+&emsp;&emsp;fig=plt.figure(figsize=(18,6))<br>
+&emsp;&emsp;#Plotting gender based analysis for the survivals.<br>
+&emsp;&emsp;Male=titanic_data.Survived[titanic_data sex==’male’].value_counts().sort_index()<br>
+&emsp;&emsp;Female=titanic_data.Survived[titanic_data.Sex==’female’].value_counts().sort_index<br>
+&emsp;&emsp;ax1=fig.add_subplot(121)<br>
+&emsp;&emsp;male.plot(kind=’barh’,label=’Male’,aloha=0.55)<br>
+&emsp;&emsp;female.plot(kind=’barh’,color=’*FA2379’,label=’Female’,alpha=0.55)<br>
+&emsp;&emsp;plt.title(“Gender analysis of survivals (raw value counts)”);<br>
+&emsp;&emsp;plt.legend(loc=’best’)<br>
+&emsp;&emsp;ax1.set_ylim(-1,2)<br>
+&emsp;&emsp;ax2=fig.add_subplot(122)<br>
+&emsp;&emsp;(male/float(male.sum())).plot(kind=’barh’,label=’Male’,alpha=0.55)<br>
+&emsp;&emsp;(female/float(female.sum())).plot(kind=’barh’,color=’*FA2379’,label=’Female’,alpha=0.55)<br>
+&emsp;&emsp;Plt.title(“Gender analysis of survivals”);plt.legend(loc=’best’)<br>
+&emsp;&emsp;Ax2.set_ylim(-1,2)<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE18.png)
+&emsp;&emsp;现在，关于这两个可能的类(幸存和死亡)，我们有了更多的信息。探索和可视化步骤是必要的，因为它让你更深入地了解数据的结构，并帮助你选择适合你的问题的学习算法。如你所见，我们从非常基本的绘图开始，然后增加了绘图的复杂性，以发现关于我们正在使用的数据的更多信息。<br>
+
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 ### 2.3.2 数据分析——监督机器学习
@@ -322,23 +316,38 @@ res = model.fit()
 results[‘Logit’] = [res,formula]
 res.summary()
 ```
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
+&emsp;&emsp;Output:<br>
+&emsp;&emsp;Opitimization terminated successfully<br>
+&emsp;&emsp;现在，让我们画出实际值与模型的预测值以及残差的图形，残差是目标变量的实际值和预测值之差:<br>
+&emsp;&emsp;# Plot Predictions Vs Actual<br>
+&emsp;&emsp;plt.figure(figsize=(18,4));<br>
+&emsp;&emsp;plt.subplot(121,axisbg=”#DBDBDB”)<br>
+&emsp;&emsp;# generate predictions from our fitted model<br>
+&emsp;&emsp;ypred = res.predict(x)<br>
+&emsp;&emsp;plt.plot(x.index,ypred,’bo’,x.index,y,’mo’,alpha=.25);<br>
+&emsp;&emsp;plt.grid(color=’white’,linestyle=’dashed’)<br>
+&emsp;&emsp;plt.title(‘Logit predictions,Blue:\nFitted/predicted values: Red’);<br>
+&emsp;&emsp;#Residuals<br>
+&emsp;&emsp;ax2 = plt.subplot(122,axisbg=”#DBDBDB”)<br>
+&emsp;&emsp;plt.plot(res.resid_dev, ‘r-’)<br>
+&emsp;&emsp;plt.grid(color=’white’,linestyle=’dashed’)<br>
+&emsp;&emsp;ax2.set_xlim(-1,len(res.resid_dev))<br>
+&emsp;&emsp;plt.title(‘Logit Residuals’);<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE20.png)
+&emsp;&emsp;现在，我们已经建立了逻辑回归模型，在此之前，我们对数据集做了一些分析和探索。前面的示例展示了构建机器学习解决方案的通用管道。<br>
+&emsp;&emsp;大多数时候，实践者会陷入一些技术陷阱，因为他们缺乏理解机器学习概念的经验。例如，有人可能在测试集上获得99%的准确率，然后没有对数据中类的分布进行任何调查(比如有多少样本是负的，有多少样本是正的)，他们就建立了模型<br>
+&emsp;&emsp;为了突出其中的一些概念，并区分需要注意的不同类型的错误和真正需要关注的错误，我们将继续下一节。<br>
+## 2.4 不同类型的错误
+&emsp;&emsp;在机器学习中，有两种类型的错误，而作为数据科学的新手，你需要理解两者之间的关键区别。如果你最终将错误类型的错误最小化，那么整个学习系统将是无用的，并且该学习系统将无法实践未知数据，为了减少实践者对两类错误的理解，我们将在下面两节中解释这两类错误。<br>
+## 2.5 明显(训练集)错误
+&emsp;&emsp;这是你不需要考虑最小化的第一类错误。为这种类型的错误取一个小值并不意味着你的模型可以很好地处理不可见的数据(一般化)。为了更好地理解这种类型的错误，我们将给出一个类场景的简单示例。在课堂上解决问题的目的不是为了在考试中再次解决同样的问题，而是为了能够解决其他问题，而这些问题与你在课堂上练习过的问题必然是相似的。考试问题可能来自同一类课堂问题，但不一定相同。<br>
+&emsp;&emsp;明显的错误是经过训练的模型在我们已经知道真实结果/输出的训练集中执行的能力。如果你在训练集上得到0个错误，那么这对你来说是一个很好的指示器，你的模型(大部分)在看不见的数据上不能很好地工作(不会一般化)。另一方面，数据科学是关于使用训练集作为基础知识的学习算法，以工作在未来看不见的数据。<br>
+&emsp;&emsp;在图3中，红色曲线表示明显的错误。每当您你提高模型的记忆能力(例如通过增加解释特性的数量来增加模型的复杂性)时，你就会发现这个明显的错误接近于零。可以看出，如果你有和观察/样本一样多的特征，那么明显的误差将为零:<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE21.png)
+## 2.6 泛化/真正的错误
+&emsp;&emsp;这是数据科学中第二个也是更重要的错误类型。构建学习系统的全部目的是为了在测试集上获得更小的泛化误差；换句话说，就是想得到一个模型，该模型在一组没有在训练阶段使用过的观察样本上很好的工作。用上一节的课堂考试场景为例，可以把泛化错误看作是解决考试问题的能力，这些问题不一定和你在课堂上解决的问题相似，这样你就可以学习和熟悉这门课。因此，泛化性能是模型使用其在训练阶段学到的技能（参数）的能力，以便正确预测不可见数据的结果或输出。<br>
+&emsp;&emsp;在图13中，浅蓝色表示泛化误差。可以看到，随着模型复杂度的增加，泛化误差会减小，直到某个时候模型开始失去其增加的能力，泛化误差会减小。曲线的这一部分，你得到的泛化误差失去了它不断增加泛化能力的这一部分曲线，被称为过拟合。<br>
+&emsp;&emsp;本节的要点是尽可能减少泛化误差。<br>
+##2.7 总结
+&emsp;&emsp;线性模型是一个非常强大的工具，如果你的数据符合它的假设，你可以使用它作为初始学习算法。理解线性模型将帮助你理解使用线性模型作为构建模块的更复杂的模型。<br>
+&emsp;&emsp;接下来，我们将继续使用泰坦尼克号示例，更详细地处理模型复杂性和评估。模型复杂性是一个非常强大的工具，为了提高泛化误差，你需要小心使用它。误解它会导致过度拟合问题。<br>
