@@ -67,7 +67,7 @@
 &emsp;&emsp;Advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’,ax=axs[0],figsize=(16,8))<br>
 &emsp;&emsp;Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])<br>
 &emsp;&emsp;Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png)<br>
 &emsp;&emsp;现在，我们需要看看广告将如何帮助增加销量。所以，我们需要问自己几个问题。有价值的问题像是广告和销量之间的关系，哪种广告对销量的贡献更大，以及每种广告对销量的大致影响。我们将尝试用一个简单的线性模型来回答这些问题。<br>
 ### 简单的回归模型
 &emsp;&emsp;线性回归模型是一种学习算法，它使用解释特征(或输入或预测因子)的组合来预测定量(也称为数值)响应。<br>
@@ -81,7 +81,7 @@
 &emsp;&emsp;beta0和beta1都被认为是模型的系数。为了创建一个模型, 在广告的例子中该模型可以预测销量的价值,我们需要学习这些系数是因为beta1的度量了x 对y的影响。例如,如果beta1 = 0.04,这意味着额外的100美元花在电视广告上将使得销量增加4个单位。所以，我们需要继续看看我们应该如何学习这些系数。<br>
 ### 学习模型的系数
 &emsp;&emsp;为了估计模型的系数，我们需要用回归线对数据进行拟合，回归线给出的答案与实际销量情况类似。为了得到最适合数据的回归线，我们将使用一种称为最小二乘的准则。因此，我们需要找到一条使预测值和实际值之间的差最小的直线。换句话说，我们需要找到一个回归线，使残差平方和最小。图2说明了这一点:<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE3.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE3.png)<br>
 &emsp;&emsp;下面是图2中存在的元素:<br>
 &emsp;&emsp;黑点表示x(电视广告)和y(销售额)的实际或观察值<br>
 &emsp;&emsp;蓝线表示最小二乘直线(回归线)<br>
@@ -90,7 +90,7 @@
 &emsp;&emsp;beta0是截距，也就是x =0时y的值<br>
 &emsp;&emsp;beta1是斜率，它表示y的变化量除以x的变化量<br>
 &emsp;&emsp;图3给出了对此的图形解释:<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png)<br>
 &emsp;&emsp;现在，让我们开始使用Statsmodels来学习这些系数:<br>
 &emsp;&emsp;#To use the formula notation below,we need to import the module like the following<br>
 &emsp;&emsp;Import statsmodels.formula.api as smf<br>
@@ -118,7 +118,7 @@
 &emsp;&emsp;#creating a Pandas Dataframe to match Statsmodels interface expectations<br>
 &emsp;&emsp;new_TVAdSpending=pd.DataFrame({‘TV’:[50000]})<br>
 &emsp;&emsp;new_TVAdSpending.head()<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE5.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE5.png)<br>
 &emsp;&emsp;现在，我们可以继续使用predict函数来预测销售价值:<br>
 &emsp;&emsp;#use the model to make predictions on new value<br>
 &emsp;&emsp;Preds = lm.predict{new_TVAdSpending}<br>
@@ -144,7 +144,7 @@
 &emsp;&emsp;advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’)<br>
 &emsp;&emsp;#plotting the least squares line<br>
 &emsp;&emsp;Plt.plot(new_TVAdSpending,preds,c=’red’,linewidth=2)<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE7.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE7.png)<br>
 &emsp;&emsp;本示例的扩展和进一步的解释将在下一章进行解释。<br>
 ## 2.2 线性分类模型
 &emsp;&emsp;在本节中，我们将讨论logistic回归，这是被广泛使用的分类算法之一。<br>
@@ -153,28 +153,24 @@
 &emsp;&emsp;1. 与线性回归不同，logistic回归在给定一组特征或输入变量的情况下，不会尝试去估计或预测这些被给定的数值变量的值。相反，logistic回归算法的输出是给定样本或观察值属于特定类的概率。简单地说，假设我们有一个二元分类的问题。在这种类型的问题中，我们输出变量中只有两个类，例如，患病或不患病。某特定样本属于患病类的概率为P_0且该样本属于非患病类的概率为P_1=1-P_0。因此，logistic回归算法的输出总是在0-1之间。<br>
 &emsp;&emsp;2.你也许知道有很多用于回归或分类的学习算法，并且每种学习算法对数据样本都有自己的假设。对所选定的数据选择合适的学习算法的能力将会随着对这个主题的实践和良好理解而逐渐产生。因此，logistic回归算法的中心假设是，我们的输入空间或特征空间可以被一个线性曲面分割成两个区域（每个类一个），如果我们只有两个特征，它可以是一条线，如果我们有三个特征，它可以是一个平面，以此类推。这个分类边界的位置和方向将由选定的数据决定。如果选定的数据满足这个约束条件，即能够将选定样本分隔成与每个类对应的具有线性曲面的区域，那么说明你选定的数据是线性可分的。<br>
 &emsp;&emsp;下图5说明了这个假设。在图5中，用三维空间展示：输入或特征以及两个可能的类：患病的（红色）和非患病的（蓝色）。分界面将这个区域区分成两个区域，因为它是线性的并且帮助模型区分属于不同类别的样本，因此称这是一个线性判别。<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE8.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE8.png)<br>
 &emsp;&emsp;如果你的样本数据不是线性可分离的，你可以将你的数据转换到更高纬度的空间，通过添加更多的特性来实现。<br>
 ### 2.2.1 分类与逻辑回归
 &emsp;&emsp;在前一节中，我们学习了如何预测连续型的数量（例如，电视广告对公司销售的影响）作为输入值的线性函数（例如，电视、广播和报纸广告）。但对某些情况而言，输出将不再是连续型的量。例如，预测某人是否患病是一个分类问题，我们需要一个不同的学习算法来解决这一问题。在本节中，我们将深入研究Logistic回归的数学分析，这是一种用于分类任务的学习算法。<br>
 &emsp;&emsp;在线性回归中，我们试图用线性函数模型 来预测数据集中第 样本 的输出变量 的值。对于诸如二进制标签(ye（0，1）)之类的分类任务，以上的线性函数模型不是一个很好的解决方案。<br>
 &emsp;&emsp;Logistic回归是我们可以用于分类任务的众多学习算法之一，我们使用不同的假设类，同时试图预测特定样本属于一类的概率和它属于零类的概率。因此，Logistic回归中，我们将尝试学习以下函数：<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE9.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE9.png)<br>
 &emsp;&emsp;方程![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png) 通常被称为	sigmoid或logistic函数，它将 的值压缩到一个固定的范围[0，1]，如下图所示。因为z的输出值被压缩在[0，1]之间，我们可以将 理解为一个概率。<br>
 &emsp;&emsp;我们的目标是寻找参数 的值，使得当输入样本x属于一类 的概率大于该样本属于零类的概率：<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE11.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE11.png)<br>
 &emsp;&emsp;假设我们有一组训练样本，他们有相应的二进制标签。我们需要最小化以下成本函数，该函数能够衡量给定ho的性能。<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE12.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE12.png)<br>
 &emsp;&emsp;注意，对于每个训练样本，以上方程的两项之和中只有一项是非零的（取决于标签 的值是0还是1）。当 =1时，最小化模型成本函数意味着我们需要使 变大，当y=0时 使1- 变大。<br>
 &emsp;&emsp;现在，我们有一个成本函数来计算给定的 与我们的训练样本的匹配程度。我们可以学习使用优化技术对训练样本进行分类，使 最小化，并找到参数 的最佳值.一旦完成这一任务，我们就可以使用这些参数将一个新的测试样本分为1或0类，检查这两个类中哪类是最可能的。如果P(y=1)<p(y=0)，则输出0，否则输出1，这与类之间定义0.5的阈值并检查h(x)>0.5相同的。<br>
 &emsp;&emsp;为了使成本函数 最小化，我们可以使用一种优化技术来找到使成本函数最小化的最佳参数值 。我们可以使用一个叫做梯度的微积分工具，它用来找到成本函数的最大增长率。然后，我们可以用相反的方向来求这个函数的最小值；例如J(0)的梯度用VJ(0)来表示，即对模型参数的成本函数取梯度。因此，我们需要提供一个函数来计算J(0)和VJ(9)的值，以供对任意的参数 进行选择。如果我们对J(0)上的代价函数求关于0的梯度或导数，我们会得到如下结果<br>
-
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png)
-
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png)<br>
 &emsp;&emsp;用向量形式表示为:<br>
-
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE14.png)
-
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE14.png)<br>
 &emsp;&emsp;现在，我们对逻辑回归有了数学上的理解，让我们继续使用这种新的学习方法来解决一个分类任务<br>
 ## 2.3 泰坦尼克号模型的建立和训练
 &emsp;&emsp;泰坦尼克号的沉没是历史上最臭名昭著的事件之一。这起事故导致2,224名乘客和机组人员中有1,502人死亡。在这个问题中，我们将使用数据科学来预测乘客是否能在这场悲剧中幸存下来，然后根据悲剧的实际统计数据来测试我们模型的性能。<br>
@@ -214,7 +210,7 @@
 &emsp;&emsp;{‘PassengerId’,’Survived’,’Pclass’,’Name’,’Sex’,’Age’,’SibSp’,’Parch’,’Ticket’,’Fare’,’Cabin’,’Embarked’}<br>
 &emsp;&emsp;让我们看看一些样本/观察数据:<br>
 &emsp;&emsp;Titanic_data[500:510]<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE15.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE15.png)<br>
 &emsp;&emsp;现在，我们有一个pandas数据模型，它包含了我们需要分析的891名乘客的信息。DataFrame的列表示每个乘客/机组人员的解释性特征，比如姓名、性别或年龄。<br>
 &emsp;&emsp;这些解释特性中有一些是完整的，没有任何缺失值，例如幸存特性，它有891个条目。其他解释性特性包含了缺失的值，例如年龄特性，它只有714个条目。DataFrame中的任何缺失值都表示为NaN。<br>
 &emsp;&emsp;如果你研究所有的数据集特性，你会发现机票和客舱特性有许多缺失值(NaNs)，因此它们不会为我们的分析增加多少价值。为了处理这个问题，我们将从DataFrame中删除它们。<br>
@@ -262,7 +258,7 @@
 &emsp;&emsp;titanic_data.Embarked.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)<br>
 &emsp;&emsp;ax5.set_xlim(=1,len(titanic_data.Embarked.value_counts()))<br>
 &emsp;&emsp;plt.title(“Passengers per boarding location”)<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE16.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE16.png)<br>
 &emsp;&emsp;首先，我们画一个条形图，看看每个类别的观察人数(幸存/死亡):<br>
 &emsp;&emsp;正如我们所提到的，这个分析的目的是基于可用的特性来预测一个特定的乘客是否能在悲剧中幸存，例如旅行级别(数据中称为pclass)、性别、年龄和票价。所以，让我们看看我们是否可以从视觉上更好地理解乘客谁幸存和死亡。<br>
 &emsp;&emsp;plt.pigure(figsize=(6,4))<br>
@@ -270,7 +266,7 @@
 &emsp;&emsp;titanic_data.Survived.value_counts().plot(kind=’barh’,color=“blue”,alpha=.65)<br>
 &emsp;&emsp;ax.set_ylim(-1,len(titanic_data.Survived.value_counts()))<br>
 &emsp;&emsp;plt.title(“Breakdown of survivals(0=Died,1=Survived)”)<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE17.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE17.png)<br>
 &emsp;&emsp;让我们通过按性别细分前面的图表来对数据有更多的了解:<br>
 &emsp;&emsp;fig=plt.figure(figsize=(18,6))<br>
 &emsp;&emsp;#Plotting gender based analysis for the survivals.<br>
@@ -287,7 +283,7 @@
 &emsp;&emsp;(female/float(female.sum())).plot(kind=’barh’,color=’*FA2379’,label=’Female’,alpha=0.55)<br>
 &emsp;&emsp;Plt.title(“Gender analysis of survivals”);plt.legend(loc=’best’)<br>
 &emsp;&emsp;Ax2.set_ylim(-1,2)<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE18.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE18.png)<br>
 &emsp;&emsp;现在，关于这两个可能的类(幸存和死亡)，我们有了更多的信息。探索和可视化步骤是必要的，因为它让你更深入地了解数据的结构，并帮助你选择适合你的问题的学习算法。如你所见，我们从非常基本的绘图开始，然后增加了绘图的复杂性，以发现关于我们正在使用的数据的更多信息。<br>
 
 &emsp;&emsp;<br>
@@ -333,7 +329,7 @@ res.summary()
 &emsp;&emsp;plt.grid(color=’white’,linestyle=’dashed’)<br>
 &emsp;&emsp;ax2.set_xlim(-1,len(res.resid_dev))<br>
 &emsp;&emsp;plt.title(‘Logit Residuals’);<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE20.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE20.png)<br>
 &emsp;&emsp;现在，我们已经建立了逻辑回归模型，在此之前，我们对数据集做了一些分析和探索。前面的示例展示了构建机器学习解决方案的通用管道。<br>
 &emsp;&emsp;大多数时候，实践者会陷入一些技术陷阱，因为他们缺乏理解机器学习概念的经验。例如，有人可能在测试集上获得99%的准确率，然后没有对数据中类的分布进行任何调查(比如有多少样本是负的，有多少样本是正的)，他们就建立了模型<br>
 &emsp;&emsp;为了突出其中的一些概念，并区分需要注意的不同类型的错误和真正需要关注的错误，我们将继续下一节。<br>
@@ -343,7 +339,7 @@ res.summary()
 &emsp;&emsp;这是你不需要考虑最小化的第一类错误。为这种类型的错误取一个小值并不意味着你的模型可以很好地处理不可见的数据(一般化)。为了更好地理解这种类型的错误，我们将给出一个类场景的简单示例。在课堂上解决问题的目的不是为了在考试中再次解决同样的问题，而是为了能够解决其他问题，而这些问题与你在课堂上练习过的问题必然是相似的。考试问题可能来自同一类课堂问题，但不一定相同。<br>
 &emsp;&emsp;明显的错误是经过训练的模型在我们已经知道真实结果/输出的训练集中执行的能力。如果你在训练集上得到0个错误，那么这对你来说是一个很好的指示器，你的模型(大部分)在看不见的数据上不能很好地工作(不会一般化)。另一方面，数据科学是关于使用训练集作为基础知识的学习算法，以工作在未来看不见的数据。<br>
 &emsp;&emsp;在图3中，红色曲线表示明显的错误。每当您你提高模型的记忆能力(例如通过增加解释特性的数量来增加模型的复杂性)时，你就会发现这个明显的错误接近于零。可以看出，如果你有和观察/样本一样多的特征，那么明显的误差将为零:<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE21.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE21.png)<br>
 ## 2.6 泛化/真正的错误
 &emsp;&emsp;这是数据科学中第二个也是更重要的错误类型。构建学习系统的全部目的是为了在测试集上获得更小的泛化误差；换句话说，就是想得到一个模型，该模型在一组没有在训练阶段使用过的观察样本上很好的工作。用上一节的课堂考试场景为例，可以把泛化错误看作是解决考试问题的能力，这些问题不一定和你在课堂上解决的问题相似，这样你就可以学习和熟悉这门课。因此，泛化性能是模型使用其在训练阶段学到的技能（参数）的能力，以便正确预测不可见数据的结果或输出。<br>
 &emsp;&emsp;在图13中，浅蓝色表示泛化误差。可以看到，随着模型复杂度的增加，泛化误差会减小，直到某个时候模型开始失去其增加的能力，泛化误差会减小。曲线的这一部分，你得到的泛化误差失去了它不断增加泛化能力的这一部分曲线，被称为过拟合。<br>
