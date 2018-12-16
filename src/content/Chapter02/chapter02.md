@@ -81,15 +81,16 @@
 &emsp;&emsp;beta0和beta1都被认为是模型的系数。为了创建一个模型, 在广告的例子中该模型可以预测销量的价值,我们需要学习这些系数是因为beta1的度量了x 对y的影响。例如,如果beta1 = 0.04,这意味着额外的100美元花在电视广告上将使得销量增加4个单位。所以，我们需要继续看看我们应该如何学习这些系数。<br>
 ### 学习模型的系数
 &emsp;&emsp;为了估计模型的系数，我们需要用回归线对数据进行拟合，回归线给出的答案与实际销量情况类似。为了得到最适合数据的回归线，我们将使用一种称为最小二乘的准则。因此，我们需要找到一条使预测值和实际值之间的差最小的直线。换句话说，我们需要找到一个回归线，使残差平方和最小。图2说明了这一点:<br>
-![]()
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE3.png)
+&emsp;&emsp;下面是图2中存在的元素:<br>
+&emsp;&emsp;黑点表示x(电视广告)和y(销售额)的实际或观察值<br>
+&emsp;&emsp;蓝线表示最小二乘直线(回归线)<br>
+&emsp;&emsp;红线表示残差，残差是预测值和观察值(实际值)之间的差值<br>
+&emsp;&emsp;这就是我们的系数与最小二乘直线(回归线)的关系:<br>
+&emsp;&emsp;beta0是截距，也就是x =0时y的值<br>
+&emsp;&emsp;beta1是斜率，它表示y的变化量除以x的变化量<br>
+&emsp;&emsp;图3给出了对此的图形解释:<br>
+
 &emsp;&emsp;<br>
 
 
