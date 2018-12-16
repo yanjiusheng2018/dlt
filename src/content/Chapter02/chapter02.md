@@ -33,7 +33,7 @@
 ### 使用pandas导入数据
 &emsp;&emsp;Python中有很多库，你可以使用它们来读取、转换或写入数据。其中一个库是panda <http://pandas.pydata.org/> 。panda是一个开源库，具有用于数据分析的强大功能和工具，以及非常容易使用的数据结构。
 
-&emsp;&emsp;你可以很容易地以许多不同的方式安装pandas。安装pandas的最好方法是通过conda [](http://pandas.org/pandas-docs/stable/install.html#installing-pandas-with-anaconda)。
+&emsp;&emsp;你可以很容易地以许多不同的方式安装pandas。安装pandas的最好方法是通过conda <http://pandas.org/pandas-docs/stable/install.html#installing-pandas-with-anaconda>。
 
 &emsp;&emsp;“bconda是一个开源的包管理系统和环境管理系统，用于安装多个版本的软件包及其相应的数据分析工具并在它们之间轻松切换。它可以在Linux，OS X和Windows上运行，是为Python程序创建的，但可以打包和分发任何软件。——conda网站。”
 
@@ -43,7 +43,7 @@
 
 `import pandas as pd`
 
-&emsp;&emsp;接下来，我们可以使用pandas.read_csv方法将数据加载到一个易于使用的pandas数据结构中，称为DataFrame。有关pandas.read_csv及其参数的更多信息，请参阅此方法的pandas文档[](http://pandas.pydata.org/pandas-docs/stable/qenerated/pandas.read_csv.html):
+&emsp;&emsp;接下来，我们可以使用pandas.read_csv方法将数据加载到一个易于使用的pandas数据结构中，称为DataFrame。有关pandas.read_csv及其参数的更多信息，请参阅此方法的pandas文档<http://pandas.pydata.org/pandas-docs/stable/qenerated/pandas.read_csv.html>:
 
 ```
 #read advertising data samples into a DataFrame
@@ -90,12 +90,11 @@ Output
 ### 数据分析与可视化
 &emsp;&emsp;为了理解数据的基本形式、输入变量和输出变量之间的关系以及更多内在联系，我们可以使用不同类型的可视化。为了理解广告数据输入变量和输出变量之间的关系，我们将使用散点图。
 
-&emsp;&emsp;为了对数据进行不同类型的可视化，可以使用Matplotlib [](http://matplotlib.org/)，这是一个用于可视化的Python 2D库。要获得Matplotlib，你可以按照他们的安装说明:[](http://matplotlib.org/users/installing.html)。
+&emsp;&emsp;为了对数据进行不同类型的可视化，可以使用Matplotlib <http://matplotlib.org/> 这是一个用于可视化的Python 2D库。要获得Matplotlib，你可以按照他们的安装说明:<http://matplotlib.org/users/installing.html>。
 
 &emsp;&emsp;让我们导入可视化库Matplotlib:
 
 ```
-Import matplotlib.pyplot as plt
 #The next line will allow us make inlines plots that could appear
 directly in the notebook
 #without poping up in a different window
@@ -349,9 +348,9 @@ Output:
 
 &emsp;&emsp;为了了解泰坦尼克号的例子，你需要做以下事情：
 
-&emsp;&emsp;1. 单击 [](http://github.com/ ahmed-menshawy/ML_Titannic/archive/master.zip),在ZIP文件中下载此存储库。或从终端执行:<br>
-&emsp;&emsp;2. Git克隆: [](https://github.com/ahmed-menshawy/ML_Titanic.git)<br>
-&emsp;&emsp;3. 安装(virtualenv)[](http://virtualenv.readthedocs.org/en/latest/installation.html)<br>
+&emsp;&emsp;1. 单击<http://github.com/ ahmed-menshawy/ML_Titannic/archive/master.zip>,在ZIP文件中下载此存储库。或从终端执行:<br>
+&emsp;&emsp;2. Git克隆: <(https://github.com/ahmed-menshawy/ML_Titanic.git><br>
+&emsp;&emsp;3. 安装(virtualenv)<http://virtualenv.readthedocs.org/en/latest/installation.html><br>
 &emsp;&emsp;4. 导航到解压克隆repo的目录，并用virtualenv ml_titania创建虚拟环境<br>
 &emsp;&emsp;5. 使用aource ml_titanic/bin/ Activate激活环境<br>
 &emsp;&emsp;6. 使用pip Install -r requirements.txt安装所需的依赖关系<br>
