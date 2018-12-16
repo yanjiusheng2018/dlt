@@ -298,3 +298,47 @@
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
+### 2.3.2 数据分析——监督机器学习
+&emsp;&emsp;分析的目的是预测幸存者。因此，结果是否会幸存，这是一个二元分类问题;在这里，你只有两种可能的类。<br>
+&emsp;&emsp;对于二元分类问题，我们可以使用很多学习算法。逻辑回归就是其中之一。正如维基百科解释的那样:<br>
+
+&emsp;&emsp;在统计、逻辑回归或分对数回归是一种回归分析用于预测分类因变量的结果 (因变量可以承担有限数量的值,其大小是没有意义的,但其大小的顺序可能是也可能不是有意义的)基于一个或多个预测变量。也就是说，它被用来估计定性反应模型中参数的经验值。用逻辑函数将描述单个试验可能结果的概率作为解释变量(预测变量)的函数建模。经常(在本文中也是如此)“logistic回归”专指因变量为二元的问题，即可用类别数为两类以上的问题称为多项logistic回归，如果多个类别是有序的，则称为有序logistic回归。Logistic回归通过概率分数作为因变量的预测值来衡量一个分类因变量和一个或多个自变量之间的关系，这些自变量通常(但不一定)是连续的。[1]处理的问题与使用类似技术的probit回归相同。<br>
+&emsp;&emsp;为了使用逻辑回归，我们需要创建一个公式来告诉模型我们给它的特征/输入的类型:<br>
+```
+#model formula
+#here the~sigh is an=sigh,and the feature of our dataset
+#are written as a formula to predict survived. The C() lets our
+#regression know that those variable are categorical.
+#Ref:http://patsy.readthedocs.org/en/latest/formulas.html
+Formula=’Survived ~ C(Pclass) + C(Sex)+ Age + SibSp + C(Embarked)’
+#create a results dictionary to hold our regression results for easy analysis latter
+results{}
+#create a regression friendly dataframe using patsy’s dmatrices function
+y,x = dmatrices(formula, data=titanic_data, return_type=’dataframe’)
+model = sm.Logit(y,x)
+# fit our model to the training data
+res = model.fit()
+# save the result for outputting predictions later
+results[‘Logit’] = [res,formula]
+res.summary()
+```
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
