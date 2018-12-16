@@ -18,3 +18,28 @@
 &emsp;&emsp;**3.易于使用(不需要太多的调优)**:线性回归非常容易使用，而且大多数情况下，它是机器学习或数据科学课程中要学习的第一种方法，因为为了获得更好的性能，你没有太多的超参数需要调优。<br>
 &emsp;&emsp;**4.高度可解释性**:线性回归因其简洁性和易于检查各组预测系数的贡献度而具有高度可解释性;你可以很容易地理解模型性能并为非技术人员解释模型的输出内容。如果一个系数为零，则相关的预测变量没有贡献。如果系数不为零，则可以很容易确定特定预测变量的贡献度。<br>
 &emsp;&emsp;**5.许多其他方法的基础**:线性回归被认为是许多学习方法的基础，如神经网络和它的成长部分，深度学习。<br>
+### 2.1.2 以金融为例
+&emsp;&emsp;为了更好地理解线性回归模型，我们将以一个广告为例来说明。我们将尝试预测一些公司的销售额，考虑到这些公司在电视、广播和报纸广告上花费的金钱。<br>
+### 依赖关系
+&emsp;&emsp;为了给我们的广告数据样本建立线性回归模型，我们将使用Stats models库来为线性模型获得良好的特性，但接着，我们将使用scikit-learn，它对数据科学有非常有用的功能。<br>
+### 使用pandas导入数据
+&emsp;&emsp;Python中有很多库，你可以使用它们来读取、转换或写入数据。其中一个库是panda (http://pandas.pydata.org/)。panda是一个开源库，具有用于数据分析的强大功能和工具，以及非常容易使用的数据结构。<br>
+&emsp;&emsp;你可以很容易地以许多不同的方式安装pandas。安装pandas的最好方法是通过conda（http://pandas.org/pandas-docs/stable/install.html#installing-pandas-with-anaconda）<br>
+&emsp;&emsp;“bconda是一个开源的包管理系统和环境管理系统，用于安装多个版本的软件包及其相应的数据分析工具并在它们之间轻松切换。它可以在Linux、OS X和Windows上运行，是为Python程序创建的，但可以打包和分发任何软件。--------conda网站。”<br>
+&emsp;&emsp;你可以通过安装Anaconda轻松地获得conda，这是一个开放的数据科学平台。<br>
+&emsp;&emsp;所以，让我们来看看如何使用熊猫来阅读广告数据样本。首先，我们需要导入pandas：<br>
+&emsp;&emsp;所以，让我们来看看如何使用熊猫来阅读广告数据样本。首先，我们需要导入pandas：<br>
+&emsp;&emsp;接下来，我们可以使用pandas.read_csv方法将数据加载到一个易于使用的pandas数据结构中，称为DataFrame。有关pandas.read_csv及其参数的更多信息，请参阅此方法的pandas文档（http://pandas.pydata.org/pandas-docs/stable/qenerated/pandas.read_csv.html）：<br>
+&emsp;&emsp;#read advertising data samples into a DataFrame<br>
+&emsp;&emsp;Advertising_data = pd.read_csv(‘http://www-bcf.use.edu/~qareth/ISL/Advertising.csv’,index_col=0)<br>
+&emsp;&emsp;传递给pandas.read_csv方法的第一个参数是一个表示文件路径的字符串值。字符串可以是包含IUUQ、GUQ、T和GJMF的URL。传递的第二个参数是列的索引，它将用作数据行的标签/名称。<br>
+&emsp;&emsp;现在，我们有了DataFrame数据，它包含URL中提供的广告数据，每一行都由第一列标记。如前所述，panda提供了易于使用的数据结构，你可以将其用作数据的容器。这些数据结构有一些与之相关联的方法，你将使用这些方法来转换和/或操作数据。<br>
+&emsp;&emsp;现在，让我们看一下广告数据的前五行:<br>
+&emsp;&emsp;#DataFrame.head methond above the first n row of the data where the<br>
+&emsp;&emsp;#default value of n is 5,DataFrame.head(n=5)<br>
+&emsp;&emsp;Advertising_data.head()<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
