@@ -67,7 +67,7 @@
 &emsp;&emsp;Advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’,ax=axs[0],figsize=(16,8))<br>
 &emsp;&emsp;Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])<br>
 &emsp;&emsp;Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png)
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE2.png)
 &emsp;&emsp;现在，我们需要看看广告将如何帮助增加销量。所以，我们需要问自己几个问题。有价值的问题像是广告和销量之间的关系，哪种广告对销量的贡献更大，以及每种广告对销量的大致影响。我们将尝试用一个简单的线性模型来回答这些问题。<br>
 ### 简单的回归模型
 &emsp;&emsp;线性回归模型是一种学习算法，它使用解释特征(或输入或预测因子)的组合来预测定量(也称为数值)响应。<br>
@@ -91,6 +91,49 @@
 &emsp;&emsp;beta1是斜率，它表示y的变化量除以x的变化量<br>
 &emsp;&emsp;图3给出了对此的图形解释:<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png)
+&emsp;&emsp;现在，让我们开始使用Statsmodels来学习这些系数:<br>
+&emsp;&emsp;#To use the formula notation below,we need to import the module like the following<br>
+&emsp;&emsp;Import statsmodels.formula.api as smf<br>
+&emsp;&emsp;#create a fitted model in one line of code(which will represent the least squares line)<br>
+&emsp;&emsp;Lm=smf.ols(formula=’sales~TV’,data=advertising_data).fit()<br>
+&emsp;&emsp;#show the trained model cofficients<br>
+&emsp;&emsp;Lm.paramsOutput:<br>
+&emsp;&emsp;Intercept        7.032594<br>
+&emsp;&emsp;TV             0.047537<br>
+&emsp;&emsp;dtype: float64<br>
+&emsp;&emsp;正如我们所提到的，线性回归模型的优点之一是很容易解释，所以让我们继续解释这个模型。<br>
+### 解释模型系数
+&emsp;&emsp;我们来看看如何解释模型的系数，例如TV ad系数(beta1):<br>
+&emsp;&emsp;投入/功能(电视广告)支出增加1单位会使销量(响应)增加0.047537个单位。换句话说，在电视广告上多花100美元，就会增加4.7537个单位的销量。<br>
+&emsp;&emsp;从电视广告数据中建立一个学习模型的目的是预测未知数据的销售情况。那么，让我们看看如何使用学习过的模型来基于电视广告的给定价值来预测销售额(我们不知道)。<br>
+### 使用模型进行预测
+&emsp;&emsp;假设我们有未知的电视广告支出数据，我们想知道它们对公司销售情况的影响。所以，我们需要用学习过的模型来完成。假设我们想知道5万美元的电视广告会增加多少销售额。<br>
+&emsp;&emsp;让我们用我们学过的模型系数来做这样的计算：<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;y = 7.032594 + 0.047537 *x<br>
+&emsp;&emsp;#manually calculating the increase in the sales based on $50k<br>
+&emsp;&emsp;7.032594+0.047537*50000<br>
+&emsp;&emsp;Output:<br>
+&emsp;&emsp;9,409.444<br>
+&emsp;&emsp;我们也可以用Statsmodels来做预测。首先，我们需要提供pandas DataFrame的电视广告花费情况，因为Statsmodels的预测要求:<br>
+&emsp;&emsp;#creating a Pandas Dataframe to match Statsmodels interface expectations<br>
+&emsp;&emsp;new_TVAdSpending=pd.DataFrame({‘TV’:[50000]})<br>
+&emsp;&emsp;new_TVAdSpending.head()<br>
+![]()
 &emsp;&emsp;<br>
-
-
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
