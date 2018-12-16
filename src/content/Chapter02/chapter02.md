@@ -262,15 +262,16 @@
 &emsp;&emsp;titanic_data.Embarked.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)<br>
 &emsp;&emsp;ax5.set_xlim(=1,len(titanic_data.Embarked.value_counts()))<br>
 &emsp;&emsp;plt.title(“Passengers per boarding location”)<br>
-![]()
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE16.png)
+&emsp;&emsp;首先，我们画一个条形图，看看每个类别的观察人数(幸存/死亡):<br>
+&emsp;&emsp;正如我们所提到的，这个分析的目的是基于可用的特性来预测一个特定的乘客是否能在悲剧中幸存，例如旅行级别(数据中称为pclass)、性别、年龄和票价。所以，让我们看看我们是否可以从视觉上更好地理解乘客谁幸存和死亡。<br>
+&emsp;&emsp;plt.pigure(figsize=(6,4))<br>
+&emsp;&emsp;fig,ax=plt.subplots()<br>
+&emsp;&emsp;titanic_data.Survived.value_counts().plot(kind=’barh’,color=“blue”,alpha=.65)<br>
+&emsp;&emsp;ax.set_ylim(-1,len(titanic_data.Survived.value_counts()))<br>
+&emsp;&emsp;plt.title(“Breakdown of survivals(0=Died,1=Survived)”)<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE17.png)
+&emsp;&emsp;让我们通过按性别细分前面的图表来对数据有更多的了解:<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
