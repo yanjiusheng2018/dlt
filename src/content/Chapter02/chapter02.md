@@ -31,7 +31,7 @@
 &emsp;&emsp;为了给我们的广告数据样本建立线性回归模型，我们将使用Stats models库来为线性模型获得良好的特性，但接着，我们将使用scikit-learn，它对数据科学有非常有用的功能。
 
 ### 使用pandas导入数据
-&emsp;&emsp;Python中有很多库，你可以使用它们来读取、转换或写入数据。其中一个库是panda [](http://pandas.pydata.org/)。panda是一个开源库，具有用于数据分析的强大功能和工具，以及非常容易使用的数据结构。
+&emsp;&emsp;Python中有很多库，你可以使用它们来读取、转换或写入数据。其中一个库是panda <http://pandas.pydata.org/> 。panda是一个开源库，具有用于数据分析的强大功能和工具，以及非常容易使用的数据结构。
 
 &emsp;&emsp;你可以很容易地以许多不同的方式安装pandas。安装pandas的最好方法是通过conda [](http://pandas.org/pandas-docs/stable/install.html#installing-pandas-with-anaconda)。
 
@@ -633,7 +633,7 @@ plt.title(‘Logit Residuals’);
 
 &emsp;&emsp;本节的要点是尽可能减少泛化误差。
 
-##2.7 总结
+## 2.7 总结
 &emsp;&emsp;线性模型是一个非常强大的工具，如果你的数据符合它的假设，你可以使用它作为初始学习算法。理解线性模型将帮助你理解使用线性模型作为构建模块的更复杂的模型。
 
 &emsp;&emsp;接下来，我们将继续使用泰坦尼克号示例，更详细地处理模型复杂性和评估。模型复杂性是一个非常强大的工具，为了提高泛化误差，你需要小心使用它。误解它会导致过度拟合问题。
