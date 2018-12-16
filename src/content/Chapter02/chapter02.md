@@ -190,7 +190,7 @@ Output
 
 &emsp;&emsp;让我们用我们学过的模型系数来做这样的计算：
 
-&emsp;&emsp;&emsp;&emsp;&emsp;y = 7.032594 + 0.047537 *x
+&emsp;&emsp;&emsp;&emsp;&emsp;y = 7.032594 + 0.047537*x
 
 `
 #manually calculating the increase in the sales based on $50k<br>
@@ -295,7 +295,7 @@ Output: 改
 
 &emsp;&emsp;Logistic回归是我们可以用于分类任务的众多学习算法之一，我们使用不同的假设类，同时试图预测特定样本属于一类的概率和它属于零类的概率。因此，Logistic回归中，我们将尝试学习以下函数：
 
-学些的函数
+函数
 <div align="center">
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
 </div>
@@ -420,7 +420,7 @@ Output:
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
 </div>
 <div align="center">
-图7 泰坦尼克数据库样本
+图7 泰坦尼克号数据库样本
 </div>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE15.png)<br>
 
@@ -428,87 +428,125 @@ Output:
 
 &emsp;&emsp;这些解释特性中有一些是完整的，没有任何缺失值，例如幸存特性，它有891个条目。其他解释性特性包含了缺失的值，例如年龄特性，它只有714个条目。DataFrame中的任何缺失值都表示为NaN。<br>
 
-&emsp;&emsp;如果你研究所有的数据集特性，你会发现机票和客舱特性有许多缺失值(NaNs)，因此它们不会为我们的分析增加多少价值。为了处理这个问题，我们将从DataFrame中删除它们。<br>
-&emsp;&emsp;使用以下代码完全从DataFrame删除机票和客舱功能:<br>
-&emsp;&emsp;titanic_data=titanic_data.drop([‘Ticket’,’Cabin’],axis=1)<br>
-&emsp;&emsp;使用以下代码从所有剩余的特性中删除所有NaN值:<br>
+&emsp;&emsp;如果你研究所有的数据集特性，你会发现机票和客舱特性有许多缺失值(NaNs)，因此它们不会为我们的分析增加多少价值。为了处理这个问题，我们将从DataFrame中删除它们。
+
+&emsp;&emsp;使用以下代码完全从DataFrame删除机票和客舱功能:
+
+`itanic_data=titanic_data.drop([‘Ticket’,’Cabin’],axis=1)
+`
+
 &emsp;&emsp;在我们的数据集中存在这样的缺失值有很多原因。但是为了保持数据集的完整性，我们需要处理这些缺失的值。一般我们会选择删除缺失值。<br>
-&emsp;&emsp;titanic_data=titanic_data.dropna()<br>
-&emsp;&emsp;现在，我们有一个竞争数据集，我们可以用来做分析。如果你决定只删除所有NaNs，而不首先删除机票和舱位特性，你将发现大多数数据集被删除，因为.dropna() 方法从DataFrame中删除一个观察值，即使其中一个特性中只有一个NaN。<br>
-&emsp;&emsp;我们做一些数据可视化，看看一些特征的分布，理解解释特征之间的关系:<br>
-&emsp;&emsp;#declaring graph parameters<br>
-&emsp;&emsp;Fig=plt.figre(figsize=(18,6))<br>
-&emsp;&emsp;alpha=alpha_scatterplot=0.3<br>
-&emsp;&emsp;alpha_bar_chart=0.55<br>
-&emsp;&emsp;#defining a grid of subplots to contain all the figures<br>
-&emsp;&emsp;Ax1=plt.subplot2grid((2,3),(0,0))<br>
-&emsp;&emsp;#Add the first bar plot which represents the count of people who survived vs not survived.<br>
-&emsp;&emsp;titanic_data.Survived.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)<br>
-&emsp;&emsp;#Adding margins to the plot<br>
-&emsp;&emsp;Ax1.set_xlim(-1,2)<br>
-&emsp;&emsp;#Adding bar plot title<br>
-&emsp;&emsp;plt.title(“Distribution of Survival,(1=Survived)”)<br>
-&emsp;&emsp;plt.subplot2grid((2,3),(0,1))<br>
-&emsp;&emsp;plt.scatter(titanic_data.survived,titanic_data.Age,alpha=alpha_scatterplot)<br>
-&emsp;&emsp;#setting the value of the y label (age)<br>
-&emsp;&emsp;Plt.ylabel(“Age”)<br>
-&emsp;&emsp;#formatting the grid<br>
-&emsp;&emsp;Plt.grid(b=True,which=’major’,axis=’y’)<br>
-&emsp;&emsp;Plt.title(“Survival by Age,(1=Survived)”)<br>
-&emsp;&emsp;ax3=plt.subplot2grid((2,3),(0,2))<br>
-&emsp;&emsp;titanic_data.Pclass.value_counts().plot(kind=”barh”,alpha=alphas_bar_chart)<br>
-&emsp;&emsp;ax3.set_ylim(-1,len(titanic_data.Plass.value_counts()))<br>
-&emsp;&emsp;plt.title("Class Distribution")<br>
-&emsp;&emsp;plt.subplot2grid((2,3),(1,0),colsoan=2)<br>
-&emsp;&emsp;#plotting kernel density estimate of the subse of the 1st class passenger’sage<br>
-&emsp;&emsp;titanic_data.Age[titaic_data.Pclass==1].plot(kind=’kde’)<br>
-&emsp;&emsp;titanic_data.Age[titaic_data.Pclass==2].plot(kind=’kde’)<br>
-&emsp;&emsp;titanic_data.Age[titaic_data.Pclass==3].plot(kind=’kde’)<br>
-&emsp;&emsp;#Adding x label (age) to the plot<br>
-&emsp;&emsp;Plt.xlabel(“Age”)<br>
-&emsp;&emsp;Plt.title(“Age Distribution within classes”)<br>
-&emsp;&emsp;#Add legend to the plot.<br>
-&emsp;&emsp;Plt.legend((‘1st Class’,’2nd Class’,’3rd Class’),loc=’best’)<br>
-&emsp;&emsp;ax5=plt.subplot2grid((2,3),(1,2))<br>
-&emsp;&emsp;titanic_data.Embarked.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)<br>
-&emsp;&emsp;ax5.set_xlim(=1,len(titanic_data.Embarked.value_counts()))<br>
-&emsp;&emsp;plt.title(“Passengers per boarding location”)<br>
+&emsp;&emsp;使用以下代码将所有剩余特性中的缺失值删除
+
+`
+&emsp;&emsp;titanic_data=titanic_data.dropna()
+`
+
+&emsp;&emsp;现在，我们有一个竞争数据集，我们可以用来做分析。如果你决定只删除所有NaNs，而不首先删除机票和舱位特性，你将发现大多数数据集被删除，因为.dropna() 方法从DataFrame中删除一个观察值，即使其中一个特性中只有一个缺失值。
+
+&emsp;&emsp;我们做一些数据可视化，看看一些特征的分布，理解解释特征之间的关系:
+
+```
+#declaring graph parameters
+Fig=plt.figre(figsize=(18,6))
+alpha=alpha_scatterplot=0.3
+alpha_bar_chart=0.55
+#defining a grid of subplots to contain all the figures
+Ax1=plt.subplot2grid((2,3),(0,0))
+#Add the first bar plot which represents the count of people who survived vs not survived.
+titanic_data.Survived.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)
+#Adding margins to the plot
+Ax1.set_xlim(-1,2)
+#Adding bar plot title
+plt.title(“Distribution of Survival,(1=Survived)”)
+plt.subplot2grid((2,3),(0,1))
+plt.scatter(titanic_data.survived,titanic_data.Age,alpha=alpha_scatterplot)
+#setting the value of the y label (age)
+Plt.ylabel(“Age”)
+#formatting the grid
+Plt.grid(b=True,which=’major’,axis=’y’)
+Plt.title(“Survival by Age,(1=Survived)”)
+ax3=plt.subplot2grid((2,3),(0,2))
+titanic_data.Pclass.value_counts().plot(kind=”barh”,alpha=alphas_bar_chart)
+ax3.set_ylim(-1,len(titanic_data.Plass.value_counts()))
+plt.title("Class Distribution")
+plt.subplot2grid((2,3),(1,0),colsoan=2)
+#plotting kernel density estimate of the subse of the 1st class passenger’s
+age
+titanic_data.Age[titaic_data.Pclass==1].plot(kind=’kde’)
+titanic_data.Age[titaic_data.Pclass==2].plot(kind=’kde’)
+titanic_data.Age[titaic_data.Pclass==3].plot(kind=’kde’)
+#Adding x label (age) to the plot
+Plt.xlabel(“Age”)
+Plt.title(“Age Distribution within classes”)
+#Add legend to the plot.
+Plt.legend((‘1st Class’,’2nd Class’,’3rd Class’),loc=’best’)
+ax5=plt.subplot2grid((2,3),(1,2))
+titanic_data.Embarked.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)
+ax5.set_xlim(=1,len(titanic_data.Embarked.value_counts()))
+plt.title(“Passengers per boarding location”)
+```
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图8 泰坦尼克号样本数据的基本信息图
+</div>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE16.png)<br>
-&emsp;&emsp;首先，我们画一个条形图，看看每个类别的观察人数(幸存/死亡):<br>
-&emsp;&emsp;正如我们所提到的，这个分析的目的是基于可用的特性来预测一个特定的乘客是否能在悲剧中幸存，例如旅行级别(数据中称为pclass)、性别、年龄和票价。所以，让我们看看我们是否可以从视觉上更好地理解乘客谁幸存和死亡。<br>
-&emsp;&emsp;plt.pigure(figsize=(6,4))<br>
-&emsp;&emsp;fig,ax=plt.subplots()<br>
-&emsp;&emsp;titanic_data.Survived.value_counts().plot(kind=’barh’,color=“blue”,alpha=.65)<br>
-&emsp;&emsp;ax.set_ylim(-1,len(titanic_data.Survived.value_counts()))<br>
-&emsp;&emsp;plt.title(“Breakdown of survivals(0=Died,1=Survived)”)<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE17.png)<br>
-&emsp;&emsp;让我们通过按性别细分前面的图表来对数据有更多的了解:<br>
-&emsp;&emsp;fig=plt.figure(figsize=(18,6))<br>
-&emsp;&emsp;#Plotting gender based analysis for the survivals.<br>
-&emsp;&emsp;Male=titanic_data.Survived[titanic_data sex==’male’].value_counts().sort_index()<br>
-&emsp;&emsp;Female=titanic_data.Survived[titanic_data.Sex==’female’].value_counts().sort_index<br>
-&emsp;&emsp;ax1=fig.add_subplot(121)<br>
-&emsp;&emsp;male.plot(kind=’barh’,label=’Male’,aloha=0.55)<br>
-&emsp;&emsp;female.plot(kind=’barh’,color=’*FA2379’,label=’Female’,alpha=0.55)<br>
-&emsp;&emsp;plt.title(“Gender analysis of survivals (raw value counts)”);<br>
-&emsp;&emsp;plt.legend(loc=’best’)<br>
-&emsp;&emsp;ax1.set_ylim(-1,2)<br>
-&emsp;&emsp;ax2=fig.add_subplot(122)<br>
-&emsp;&emsp;(male/float(male.sum())).plot(kind=’barh’,label=’Male’,alpha=0.55)<br>
-&emsp;&emsp;(female/float(female.sum())).plot(kind=’barh’,color=’*FA2379’,label=’Female’,alpha=0.55)<br>
-&emsp;&emsp;Plt.title(“Gender analysis of survivals”);plt.legend(loc=’best’)<br>
-&emsp;&emsp;Ax2.set_ylim(-1,2)<br>
+
+&emsp;&emsp;正如我们所提到的，这个分析的目的是基于可用的特性来预测一个特定的乘客是否能在悲剧中幸存，例如旅行级别(数据中称为pclass)、性别、年龄和票价。所以，让我们看看我们是否可以从视觉上更好地理解乘客谁幸存和死亡。
+
+&emsp;&emsp;首先，我们画一个条形图，看看每个类别的观察人数(幸存/死亡):
+
+```
+plt.pigure(figsize=(6,4))
+fig,ax=plt.subplots()
+titanic_data.Survived.value_counts().plot(kind=’barh’,color=“blue”,alpha=.65)
+ax.set_ylim(-1,len(titanic_data.Survived.value_counts()))
+plt.title(“Breakdown of survivals(0=Died,1=Survived)”)
+```
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图9 幸存情况分布图
+</div> 
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE17.png)
+
+&emsp;&emsp;让我们通过按性别细分前面的图表来对数据有更多的了解:
+
+```
+fig=plt.figure(figsize=(18,6))
+#Plotting gender based analysis for the survivals.
+Male=titanic_data.Survived[titanic_data sex==’male’].value_counts().sort_index()
+Female=titanic_data.Survived[titanic_data.Sex==’female’].value_counts().sort_index
+ax1=fig.add_subplot(121)
+male.plot(kind=’barh’,label=’Male’,aloha=0.55)
+female.plot(kind=’barh’,color=’*FA2379’,label=’Female’,alpha=0.55)
+plt.title(“Gender analysis of survivals (raw value counts)”);
+plt.legend(loc=’best’)
+ax1.set_ylim(-1,2)
+```
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图10 按性别特征预测未来幸村情况
+</div>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE18.png)<br>
+
 &emsp;&emsp;现在，关于这两个可能的类(幸存和死亡)，我们有了更多的信息。探索和可视化步骤是必要的，因为它让你更深入地了解数据的结构，并帮助你选择适合你的问题的学习算法。如你所见，我们从非常基本的绘图开始，然后增加了绘图的复杂性，以发现关于我们正在使用的数据的更多信息。<br>
 
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
 ### 2.3.2 数据分析——监督机器学习
-&emsp;&emsp;分析的目的是预测幸存者。因此，结果是否会幸存，这是一个二元分类问题;在这里，你只有两种可能的类。<br>
-&emsp;&emsp;对于二元分类问题，我们可以使用很多学习算法。逻辑回归就是其中之一。正如维基百科解释的那样:<br>
+&emsp;&emsp;分析的目的是预测幸存者。因此，结果是否会幸存，这是一个二元分类问题;在这里，你只有两种可能的类。
 
-&emsp;&emsp;在统计、逻辑回归或分对数回归是一种回归分析用于预测分类因变量的结果 (因变量可以承担有限数量的值,其大小是没有意义的,但其大小的顺序可能是也可能不是有意义的)基于一个或多个预测变量。也就是说，它被用来估计定性反应模型中参数的经验值。用逻辑函数将描述单个试验可能结果的概率作为解释变量(预测变量)的函数建模。经常(在本文中也是如此)“logistic回归”专指因变量为二元的问题，即可用类别数为两类以上的问题称为多项logistic回归，如果多个类别是有序的，则称为有序logistic回归。Logistic回归通过概率分数作为因变量的预测值来衡量一个分类因变量和一个或多个自变量之间的关系，这些自变量通常(但不一定)是连续的。[1]处理的问题与使用类似技术的probit回归相同。<br>
-&emsp;&emsp;为了使用逻辑回归，我们需要创建一个公式来告诉模型我们给它的特征/输入的类型:<br>
+&emsp;&emsp;对于二元分类问题，我们可以使用很多学习算法。逻辑回归就是其中之一。正如维基百科解释的那样:
+
+&emsp;&emsp;在统计、逻辑回归或分对数回归是一种回归分析用于预测分类因变量的结果 (因变量可以承担有限数量的值,其大小是没有意义的,但其大小的顺序可能是也可能不是有意义的)基于一个或多个预测变量。也就是说，它被用来估计定性反应模型中参数的经验值。用逻辑函数将描述单个试验可能结果的概率作为解释变量(预测变量)的函数建模。经常(在本文中也是如此)“logistic回归”专指因变量为二元的问题，即可用类别数为两类以上的问题称为多项logistic回归，如果多个类别是有序的，则称为有序logistic回归。Logistic回归通过概率分数作为因变量的预测值来衡量一个分类因变量和一个或多个自变量之间的关系，这些自变量通常(但不一定)是连续的。[1]处理的问题与使用类似技术的probit回归相同。
+
+&emsp;&emsp;为了使用逻辑回归，我们需要创建一个公式来告诉模型我们给它的特征/输入的类型:
 ```
 #model formula
 #here the~sigh is an=sigh,and the feature of our dataset
@@ -527,38 +565,83 @@ res = model.fit()
 results[‘Logit’] = [res,formula]
 res.summary()
 ```
-&emsp;&emsp;Output:<br>
-&emsp;&emsp;Opitimization terminated successfully<br>
-&emsp;&emsp;现在，让我们画出实际值与模型的预测值以及残差的图形，残差是目标变量的实际值和预测值之差:<br>
-&emsp;&emsp;# Plot Predictions Vs Actual<br>
-&emsp;&emsp;plt.figure(figsize=(18,4));<br>
-&emsp;&emsp;plt.subplot(121,axisbg=”#DBDBDB”)<br>
-&emsp;&emsp;# generate predictions from our fitted model<br>
-&emsp;&emsp;ypred = res.predict(x)<br>
-&emsp;&emsp;plt.plot(x.index,ypred,’bo’,x.index,y,’mo’,alpha=.25);<br>
-&emsp;&emsp;plt.grid(color=’white’,linestyle=’dashed’)<br>
-&emsp;&emsp;plt.title(‘Logit predictions,Blue:\nFitted/predicted values: Red’);<br>
-&emsp;&emsp;#Residuals<br>
-&emsp;&emsp;ax2 = plt.subplot(122,axisbg=”#DBDBDB”)<br>
-&emsp;&emsp;plt.plot(res.resid_dev, ‘r-’)<br>
-&emsp;&emsp;plt.grid(color=’white’,linestyle=’dashed’)<br>
-&emsp;&emsp;ax2.set_xlim(-1,len(res.resid_dev))<br>
-&emsp;&emsp;plt.title(‘Logit Residuals’);<br>
+
+Output
+
+```
+Opitimization terminated successfully
+Current function value:0.444388
+Iterations 6
+```
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图11 Logistic回归结果
+</div>
+
+&emsp;&emsp;现在，让我们画出实际值与模型的预测值以及残差的图形，残差是目标变量的实际值和预测值之差:
+
+```
+# Plot Predictions Vs Actual
+plt.figure(figsize=(18,4));
+
+plt.subplot(121,axisbg=”#DBDBDB”)
+# generate predictions from our fitted model
+ypred = res.predict(x)
+plt.plot(x.index,ypred,’bo’,x.index,y,’mo’,alpha=.25);
+plt.grid(color=’white’,linestyle=’dashed’)
+plt.title(‘Logit predictions,Blue:\nFitted/predicted values: Red’);
+
+#Residuals
+ax2 = plt.subplot(122,axisbg=”#DBDBDB”)
+plt.plot(res.resid_dev, ‘r-’)
+plt.grid(color=’white’,linestyle=’dashed’)
+ax2.set_xlim(-1,len(res.resid_dev))
+plt.title(‘Logit Residuals’);
+```
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图12 对Logistic回归模型的理解
+</div>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE20.png)<br>
-&emsp;&emsp;现在，我们已经建立了逻辑回归模型，在此之前，我们对数据集做了一些分析和探索。前面的示例展示了构建机器学习解决方案的通用管道。<br>
-&emsp;&emsp;大多数时候，实践者会陷入一些技术陷阱，因为他们缺乏理解机器学习概念的经验。例如，有人可能在测试集上获得99%的准确率，然后没有对数据中类的分布进行任何调查(比如有多少样本是负的，有多少样本是正的)，他们就建立了模型<br>
-&emsp;&emsp;为了突出其中的一些概念，并区分需要注意的不同类型的错误和真正需要关注的错误，我们将继续下一节。<br>
+
+&emsp;&emsp;现在，我们已经建立了逻辑回归模型，在此之前，我们对数据集做了一些分析和探索。前面的示例展示了构建机器学习解决方案的通用管道。
+
+&emsp;&emsp;大多数时候，实践者会陷入一些技术陷阱，因为他们缺乏理解机器学习概念的经验。例如，有人可能在测试集上获得99%的准确率，然后没有对数据中类的分布进行任何调查(比如有多少样本是负的，有多少样本是正的)，他们就建立了模型
+
+&emsp;&emsp;为了突出其中的一些概念，并区分需要注意的不同类型的错误和真正需要关注的错误，我们将继续下一节。
+
 ## 2.4 不同类型的错误
-&emsp;&emsp;在机器学习中，有两种类型的错误，而作为数据科学的新手，你需要理解两者之间的关键区别。如果你最终将错误类型的错误最小化，那么整个学习系统将是无用的，并且该学习系统将无法实践未知数据，为了减少实践者对两类错误的理解，我们将在下面两节中解释这两类错误。<br>
+&emsp;&emsp;在机器学习中，有两种类型的错误，而作为数据科学的新手，你需要理解两者之间的关键区别。如果你最终将错误类型的错误最小化，那么整个学习系统将是无用的，并且该学习系统将无法实践未知数据，为了减少实践者对两类错误的理解，我们将在下面两节中解释这两类错误。
+
 ## 2.5 明显(训练集)错误
-&emsp;&emsp;这是你不需要考虑最小化的第一类错误。为这种类型的错误取一个小值并不意味着你的模型可以很好地处理不可见的数据(一般化)。为了更好地理解这种类型的错误，我们将给出一个类场景的简单示例。在课堂上解决问题的目的不是为了在考试中再次解决同样的问题，而是为了能够解决其他问题，而这些问题与你在课堂上练习过的问题必然是相似的。考试问题可能来自同一类课堂问题，但不一定相同。<br>
-&emsp;&emsp;明显的错误是经过训练的模型在我们已经知道真实结果/输出的训练集中执行的能力。如果你在训练集上得到0个错误，那么这对你来说是一个很好的指示器，你的模型(大部分)在看不见的数据上不能很好地工作(不会一般化)。另一方面，数据科学是关于使用训练集作为基础知识的学习算法，以工作在未来看不见的数据。<br>
-&emsp;&emsp;在图3中，红色曲线表示明显的错误。每当您你提高模型的记忆能力(例如通过增加解释特性的数量来增加模型的复杂性)时，你就会发现这个明显的错误接近于零。可以看出，如果你有和观察/样本一样多的特征，那么明显的误差将为零:<br>
+&emsp;&emsp;这是你不需要考虑最小化的第一类错误。为这种类型的错误取一个小值并不意味着你的模型可以很好地处理不可见的数据(一般化)。为了更好地理解这种类型的错误，我们将给出一个类场景的简单示例。在课堂上解决问题的目的不是为了在考试中再次解决同样的问题，而是为了能够解决其他问题，而这些问题与你在课堂上练习过的问题必然是相似的。考试问题可能来自同一类课堂问题，但不一定相同。
+
+&emsp;&emsp;明显的错误是经过训练的模型在我们已经知道真实结果/输出的训练集中执行的能力。如果你在训练集上得到0个错误，那么这对你来说是一个很好的指示器，你的模型(大部分)在看不见的数据上不能很好地工作(不会一般化)。另一方面，数据科学是关于使用训练集作为基础知识的学习算法，以工作在未来看不见的数据。
+
+&emsp;&emsp;在图13中，红色曲线表示明显的错误。每当您你提高模型的记忆能力(例如通过增加解释特性的数量来增加模型的复杂性)时，你就会发现这个明显的错误接近于零。可以看出，如果你有和观察/样本一样多的特征，那么明显的误差将为零:
+
+<div align="center">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+</div>
+<div align="center">
+图13 明显误差（红色）和泛化误差（蓝色）
+</div>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE21.png)<br>
+
 ## 2.6 泛化/真正的错误
-&emsp;&emsp;这是数据科学中第二个也是更重要的错误类型。构建学习系统的全部目的是为了在测试集上获得更小的泛化误差；换句话说，就是想得到一个模型，该模型在一组没有在训练阶段使用过的观察样本上很好的工作。用上一节的课堂考试场景为例，可以把泛化错误看作是解决考试问题的能力，这些问题不一定和你在课堂上解决的问题相似，这样你就可以学习和熟悉这门课。因此，泛化性能是模型使用其在训练阶段学到的技能（参数）的能力，以便正确预测不可见数据的结果或输出。<br>
-&emsp;&emsp;在图13中，浅蓝色表示泛化误差。可以看到，随着模型复杂度的增加，泛化误差会减小，直到某个时候模型开始失去其增加的能力，泛化误差会减小。曲线的这一部分，你得到的泛化误差失去了它不断增加泛化能力的这一部分曲线，被称为过拟合。<br>
-&emsp;&emsp;本节的要点是尽可能减少泛化误差。<br>
+&emsp;&emsp;这是数据科学中第二个也是更重要的错误类型。构建学习系统的全部目的是为了在测试集上获得更小的泛化误差；换句话说，就是想得到一个模型，该模型在一组没有在训练阶段使用过的观察样本上很好的工作。用上一节的课堂考试场景为例，可以把泛化错误看作是解决考试问题的能力，这些问题不一定和你在课堂上解决的问题相似，这样你就可以学习和熟悉这门课。因此，泛化性能是模型使用其在训练阶段学到的技能（参数）的能力，以便正确预测不可见数据的结果或输出。
+
+&emsp;&emsp;在图13中，浅蓝色表示泛化误差。可以看到，随着模型复杂度的增加，泛化误差会减小，直到某个时候模型开始失去其增加的能力，泛化误差会减小。曲线的这一部分，你得到的泛化误差失去了它不断增加泛化能力的这一部分曲线，被称为过拟合。
+
+&emsp;&emsp;本节的要点是尽可能减少泛化误差。
+
 ##2.7 总结
-&emsp;&emsp;线性模型是一个非常强大的工具，如果你的数据符合它的假设，你可以使用它作为初始学习算法。理解线性模型将帮助你理解使用线性模型作为构建模块的更复杂的模型。<br>
-&emsp;&emsp;接下来，我们将继续使用泰坦尼克号示例，更详细地处理模型复杂性和评估。模型复杂性是一个非常强大的工具，为了提高泛化误差，你需要小心使用它。误解它会导致过度拟合问题。<br>
+&emsp;&emsp;线性模型是一个非常强大的工具，如果你的数据符合它的假设，你可以使用它作为初始学习算法。理解线性模型将帮助你理解使用线性模型作为构建模块的更复杂的模型。
+
+&emsp;&emsp;接下来，我们将继续使用泰坦尼克号示例，更详细地处理模型复杂性和评估。模型复杂性是一个非常强大的工具，为了提高泛化误差，你需要小心使用它。误解它会导致过度拟合问题。
