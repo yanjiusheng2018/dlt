@@ -284,7 +284,7 @@ Output:
 
 &emsp;&emsp;我们用以下两点来说明这个定义：
 
-&emsp;&emsp;1. 与线性回归不同，logistic回归在给定一组特征或输入变量的情况下，不会尝试去估计或预测这些被给定的数值变量的值。相反，logistic回归算法的输出是给定样本或观察值属于特定类的概率。简单地说，假设我们有一个二元分类的问题。在这种类型的问题中，我们输出变量中只有两个类，例如，患病或不患病。某特定样本属于患病类的概率为P_0且该样本属于非患病类的概率为P_1=1-P_0。因此，logistic回归算法的输出总是在0-1之间。<br>
+&emsp;&emsp;1. 与线性回归不同，logistic回归在给定一组特征或输入变量的情况下，不会尝试去估计或预测这些被给定的数值变量的值。相反，logistic回归算法的输出是给定样本或观察值属于特定类的概率。简单地说，假设我们有一个二元分类的问题。在这种类型的问题中，我们输出变量中只有两个类，例如，患病或不患病。某特定样本属于患病类的概率为P0且该样本属于非患病类的概率为P1=1-P0。因此，logistic回归算法的输出总是在0-1之间。<br>
 &emsp;&emsp;2.你也许知道有很多用于回归或分类的学习算法，并且每种学习算法对数据样本都有自己的假设。对所选定的数据选择合适的学习算法的能力将会随着对这个主题的实践和良好理解而逐渐产生。因此，logistic回归算法的中心假设是，我们的输入空间或特征空间可以被一个线性曲面分割成两个区域（每个类一个），如果我们只有两个特征，它可以是一条线，如果我们有三个特征，它可以是一个平面，以此类推。这个分类边界的位置和方向将由选定的数据决定。如果选定的数据满足这个约束条件，即能够将选定样本分隔成与每个类对应的具有线性曲面的区域，那么说明你选定的数据是线性可分的。下图5说明了这个假设。在图5中，用三维空间展示：输入或特征以及两个可能的类：患病的（红色）和非患病的（蓝色）。分界面将这个区域区分成两个区域，因为它是线性的并且帮助模型区分属于不同类别的样本，因此称这是一个线性判别。
 
 <div align="center">
@@ -299,57 +299,48 @@ Output:
 ### 2.2.1 分类与逻辑回归
 &emsp;&emsp;在前一节中，我们学习了如何预测连续型的数量（例如，电视广告对公司销售的影响）作为输入值的线性函数（例如，电视、广播和报纸广告）。但对某些情况而言，输出将不再是连续型的量。例如，预测某人是否患病是一个分类问题，我们需要一个不同的学习算法来解决这一问题。在本节中，我们将深入研究Logistic回归的数学分析，这是一种用于分类任务的学习算法。
 
-&emsp;&emsp;在线性回归中，我们试图用线性函数模型 来预测数据集中第 样本 的输出变量 的值。对于诸如二进制标签(ye（0，1）)之类的分类任务，以上的线性函数模型不是一个很好的解决方案。
+&emsp;&emsp;在线性回归中，我们试图用线性函数模型     来预测数据集中第i个样本x(i)的输出变量y(i)的值。对于诸如二进制标签(y(i)∈{0，1})之类的分类任务，以上的线性函数模型不是一个很好的解决方案。
 
 &emsp;&emsp;Logistic回归是我们可以用于分类任务的众多学习算法之一，我们使用不同的假设类，同时试图预测特定样本属于一类的概率和它属于零类的概率。因此，Logistic回归中，我们将尝试学习以下函数：
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%85%AC%E5%BC%8F1.png">
 </div>
 
-&emsp;&emsp;
-
-方程![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png)通常被称为	sigmoid或logistic函数，它将 的值压缩到一个固定的范围[0,1]，如下图所示。因为z的输出值被压缩在[0,1]之间，我们可以将 理解为一个概率。
+方程![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png)通常被称为	sigmoid或logistic函数，它将回归值压缩到一个固定的范围[0,1]，如下图所示。因为z的输出值被压缩在[0,1]之间，我们可以将 理解为一个概率。
 
 &emsp;&emsp;我们的目标是寻找参数 的值，使得当输入样本x属于一类 的概率大于该样本属于零类的概率：
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE6.png">
 </div>
 <div align="center">
 图6 sigmoid函数形态
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE11.png)<br>
 
-&emsp;&emsp;因此，假设我们有一组训练样本，他们有相应的二进制标签。我们需要最小化以下成本函数，该函数能够衡量给定ho的性能。
 
-函数
+&emsp;&emsp;因此，假设我们有一组训练样本，他们有相应的二进制标签           。我们需要最小化以下成本函数，该函数能够衡量给定参数的性能。
+
+
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%85%AC%E5%BC%8F2.png">
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE12.png)<br>
 
-&emsp;&emsp;注意，对于每个训练样本，以上方程的两项之和中只有一项是非零的（取决于标签 的值是0还是1）。当 =1时，最小化模型成本函数意味着我们需要使 变大，当y=0时 使1- 变大。
+&emsp;&emsp;注意，对于每个训练样本，以上方程的两项之和中只有一项是非零的（取决于标签 的值是0还是1）。当y(i)=1时，最小化模型成本函数意味着我们需要使参数变大，当y=0时 使1-h(θ)变大。
 
-&emsp;&emsp;现在，我们有一个成本函数来计算给定的 与我们的训练样本的匹配程度。我们可以学习使用优化技术对训练样本进行分类，使 最小化，并找到参数 的最佳值.一旦完成这一任务，我们就可以使用这些参数将一个新的测试样本分为1或0类，检查这两个类中哪类是最可能的。如果P(y=1)<p(y=0)，则输出0，否则输出1，这与类之间定义0.5的阈值并检查h(x)>0.5相同的。
+&emsp;&emsp;现在，我们有一个成本函数来计算给定的h(θ)与我们的训练样本的匹配程度。我们可以学习使用优化技术对训练样本进行分类，使J(θ)最小化，并找到参数θ的最佳值.一旦完成这一任务，我们就可以使用这些参数将一个新的测试样本分为1或0类，检查这两个类中哪类是最可能的。如果在定x条件下P(y=1)<p(y=0)，则输出0，否则输出1，这与类之间定义0.5的阈值并检查h(x)>0.5是相同的。
 
-&emsp;&emsp;为了使成本函数 最小化，我们可以使用一种优化技术来找到使成本函数最小化的最佳参数值 。我们可以使用一个叫做梯度的微积分工具，它用来找到成本函数的最大增长率。然后，我们可以用相反的方向来求这个函数的最小值；例如J(0)的梯度用VJ(0)来表示，即对模型参数的成本函数取梯度。因此，我们需要提供一个函数来计算J(0)和VJ(9)的值，以供对任意的参数 进行选择。如果我们对J(0)上的代价函数求关于0的梯度或导数，我们会得到如下结果
+&emsp;&emsp;为了使成本函数J(θ)最小化，我们可以使用一种优化技术来找到使成本函数最小化的最佳参数值θ。我们可以使用一个叫做梯度的微积分工具，它用来找到成本函数的最大增长率。然后，我们可以用相反的方向来求这个函数的最小值；例如J(0)的梯度用VJ(0)来表示，即对模型参数的成本函数取梯度。因此，我们需要提供一个函数来计算J(0)和VJ(9)的值，以供对任意的参数θ进行选择。如果我们对J(0)上的代价函数求关于0的梯度或导数，我们会得到如下结果：
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%85%AC%E5%BC%8F3.png">
 </div>
-<div align="center">
-方程
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png)<br>
 
-&emsp;&emsp;用向量形式表示为:<br>
+&emsp;&emsp;用向量形式表示为:
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%85%AC%E5%BC%8F4.png">
 </div>
-<div align="center">
-方程
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE14.png)<br>
 
 &emsp;&emsp;现在，我们对逻辑回归有了数学上的理解，让我们继续使用这种新的学习方法来解决一个分类任务
  
