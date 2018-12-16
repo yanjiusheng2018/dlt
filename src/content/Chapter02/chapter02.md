@@ -298,7 +298,7 @@ Output:
 ### 2.2.1 分类与逻辑回归
 &emsp;&emsp;在前一节中，我们学习了如何预测连续型的数量（例如，电视广告对公司销售的影响）作为输入值的线性函数（例如，电视、广播和报纸广告）。但对某些情况而言，输出将不再是连续型的量。例如，预测某人是否患病是一个分类问题，我们需要一个不同的学习算法来解决这一问题。在本节中，我们将深入研究Logistic回归的数学分析，这是一种用于分类任务的学习算法。
 
-&emsp;&emsp;在线性回归中，我们试图用线性函数模型     来预测数据集中第i个样本x(i)的输出变量y(i)的值。对于诸如二进制标签(y(i)∈{0，1})之类的分类任务，以上的线性函数模型不是一个很好的解决方案。
+&emsp;&emsp;在线性回归中，我们试图用线性函数模型![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E6%96%87%E4%B8%AD%E5%85%AC%E5%BC%8F1.png)来预测数据集中第i个样本x(i)的输出变量y(i)的值。对于诸如二进制标签(y(i)∈{0，1})之类的分类任务，以上的线性函数模型不是一个很好的解决方案。
 
 &emsp;&emsp;Logistic回归是我们可以用于分类任务的众多学习算法之一，我们使用不同的假设类，同时试图预测特定样本属于一类的概率和它属于零类的概率。因此，Logistic回归中，我们将尝试学习以下函数：
 
@@ -306,7 +306,7 @@ Output:
 <img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%85%AC%E5%BC%8F1.png">
 </div>
 
-方程![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png)通常被称为	sigmoid或logistic函数，它将回归值压缩到一个固定的范围[0,1]，如下图所示。因为z的输出值被压缩在[0,1]之间，我们可以将 理解为一个概率。
+方程!![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E6%96%87%E4%B8%AD%E5%85%AC%E5%BC%8F2.png)通常被称为	sigmoid或logistic函数，它将回归值压缩到一个固定的范围[0,1]，如下图所示。因为z的输出值被压缩在[0,1]之间，我们可以将 理解为一个概率。
 
 &emsp;&emsp;我们的目标是寻找参数 的值，使得当输入样本x属于一类 的概率大于该样本属于零类的概率：
 
@@ -318,7 +318,7 @@ Output:
 </div>
 
 
-&emsp;&emsp;因此，假设我们有一组训练样本，他们有相应的二进制标签           。我们需要最小化以下成本函数，该函数能够衡量给定参数的性能。
+&emsp;&emsp;因此，假设我们有一组训练样本，他们有相应的二进制标签![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E6%96%87%E4%B8%AD%E5%85%AC%E5%BC%8F3.png)。我们需要最小化以下成本函数，该函数能够衡量给定参数的性能。
 
 
 <div align="center">
