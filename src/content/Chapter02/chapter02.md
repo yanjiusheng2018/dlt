@@ -202,10 +202,11 @@ dtype         float64
 
 `
 #manually calculating the increase in the sales based on $50k
+
 7.032594+0.047537*50000
 `
 
-Output:
+Output:<br>
 `
 9,409.444
 `
