@@ -174,38 +174,67 @@ Lm=smf.ols(formula=’sales~TV’,data=advertising_data).fit()
 Lm.params
 ```
 Output
-&emsp;&emsp;正如我们所提到的，线性回归模型的优点之一是很容易解释，所以让我们继续解释这个模型。<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE5.png)
+&emsp;&emsp;正如我们所提到的，线性回归模型的优点之一是很容易解释，所以让我们继续解释这个模型。
+
 ### 解释模型系数
-&emsp;&emsp;我们来看看如何解释模型的系数，例如TV ad系数(beta1):<br>
-&emsp;&emsp;投入/功能(电视广告)支出增加1单位会使销量(响应)增加0.047537个单位。换句话说，在电视广告上多花100美元，就会增加4.7537个单位的销量。<br>
-&emsp;&emsp;从电视广告数据中建立一个学习模型的目的是预测未知数据的销售情况。那么，让我们看看如何使用学习过的模型来基于电视广告的给定价值来预测销售额(我们不知道)。<br>
+&emsp;&emsp;我们来看看如何解释模型的系数，例如TV ad系数(beta1):
+
+&emsp;&emsp;投入/功能(电视广告)支出增加1单位会使销量(响应)增加0.047537个单位。换句话说，在电视广告上多花100美元，就会增加4.7537个单位的销量。
+
+&emsp;&emsp;从电视广告数据中建立一个学习模型的目的是预测未知数据的销售情况。那么，让我们看看如何使用学习过的模型来基于电视广告的给定价值来预测销售额(我们不知道)。
+
 ### 使用模型进行预测
-&emsp;&emsp;假设我们有未知的电视广告支出数据，我们想知道它们对公司销售情况的影响。所以，我们需要用学习过的模型来完成。假设我们想知道5万美元的电视广告会增加多少销售额。<br>
-&emsp;&emsp;让我们用我们学过的模型系数来做这样的计算：<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;y = 7.032594 + 0.047537 *x<br>
-&emsp;&emsp;#manually calculating the increase in the sales based on $50k<br>
-&emsp;&emsp;7.032594+0.047537*50000<br>
-&emsp;&emsp;Output:<br>
-&emsp;&emsp;9,409.444<br>
-&emsp;&emsp;我们也可以用Statsmodels来做预测。首先，我们需要提供pandas DataFrame的电视广告花费情况，因为Statsmodels的预测要求:<br>
-&emsp;&emsp;#creating a Pandas Dataframe to match Statsmodels interface expectations<br>
-&emsp;&emsp;new_TVAdSpending=pd.DataFrame({‘TV’:[50000]})<br>
-&emsp;&emsp;new_TVAdSpending.head()<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE5.png)<br>
-&emsp;&emsp;现在，我们可以继续使用predict函数来预测销售价值:<br>
-&emsp;&emsp;#use the model to make predictions on new value<br>
-&emsp;&emsp;Preds = lm.predict{new_TVAdSpending}<br>
-&emsp;&emsp;Output<br>
-&emsp;&emsp;Array([9.40942557])<br>
-&emsp;&emsp;让我们看看学习过的最小二乘直线是怎样的。为了画出这条线，我们需要两个点，每个点都用这对来表示:( x,predict_value_of_x)。<br>
-&emsp;&emsp;那么，让我们取电视广告的最小值和最大值:<br>
-&emsp;&emsp;# create a DataFrame with the minimum and maximum values of TV<br>
-&emsp;&emsp;X_min_max=pd.DataFrame({‘TV’:[advertising_data.TV.min(),advertising_data.TV.max()]})<br>
-&emsp;&emsp;X_min_max.head()<br>
-&emsp;&emsp;Output<br>
+&emsp;&emsp;假设我们有未知的电视广告支出数据，我们想知道它们对公司销售情况的影响。所以，我们需要用学习过的模型来完成。假设我们想知道5万美元的电视广告会增加多少销售额。
+
+&emsp;&emsp;让我们用我们学过的模型系数来做这样的计算：
+
+&emsp;&emsp;&emsp;&emsp;&emsp;y = 7.032594 + 0.047537 *x
+
+`
+#manually calculating the increase in the sales based on $50k<br>
+7.032594+0.047537*50000<br>
+`
+Output:<br>
+9,409.444
+
+&emsp;&emsp;我们也可以用Statsmodels来做预测。首先，我们需要提供pandas DataFrame的电视广告花费情况，因为Statsmodels的预测要求:
+
+```
+#creating a Pandas Dataframe to match Statsmodels interface expectations
+new_TVAdSpending=pd.DataFrame({‘TV’:[50000]})
+new_TVAdSpending.head()
+```
+Output:
+
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE5.png)
+
+&emsp;&emsp;现在，我们可以继续使用predict函数来预测销售价值:
+
+`
+#use the model to make predictions on new value
+Preds = lm.predict{new_TVAdSpending}
+`
+
+Output:
+Array([ 9.40942557 ])
+
+&emsp;&emsp;让我们看看学习过的最小二乘直线是怎样的。为了画出这条线，我们需要两个点，每个点都用这对来表示:( x,predict_value_of_x)。
+
+&emsp;&emsp;那么，让我们取电视广告的最小值和最大值:
+
+`
+# create a DataFrame with the minimum and maximum values of TV
+X_min_max=pd.DataFrame({‘TV’:[advertising_data.TV.min(),advertising_data.TV.max()]})
+X_min_max.head()
+`
+Output:
 &emsp;&emsp;TV<br>
 &emsp;&emsp;0      0.7<br>
 &emsp;&emsp;1      296.4<br>
+
+
+
 &emsp;&emsp;让我们得到这两个值对应的预测值：<br>
 &emsp;&emsp;# predictions for X min and max values<br>
 &emsp;&emsp;predictions=lm.predict(X_min_max)<br>
