@@ -200,11 +200,10 @@ dtype         float64
 
 &emsp;&emsp;&emsp;&emsp;&emsp;y = 7.032594 + 0.047537*x
 
-`
+```
 #manually calculating the increase in the sales based on $50k
-
 7.032594+0.047537*50000
-`
+```
 
 Output:<br>
 `
@@ -350,7 +349,7 @@ Output:
 
 &emsp;&emsp;为了了解泰坦尼克号的例子，你需要做以下事情：
 
-&emsp;&emsp;1. 单击[](http://github.com/ ahmed-menshawy/ML_Titannic/archive/master.zip),在ZIP文件中下载此存储库。或从终端执行:<br>
+&emsp;&emsp;1. 单击 [](http://github.com/ ahmed-menshawy/ML_Titannic/archive/master.zip),在ZIP文件中下载此存储库。或从终端执行:<br>
 &emsp;&emsp;2. Git克隆: [](https://github.com/ahmed-menshawy/ML_Titanic.git)<br>
 &emsp;&emsp;3. 安装(virtualenv)[](http://virtualenv.readthedocs.org/en/latest/installation.html)<br>
 &emsp;&emsp;4. 导航到解压克隆repo的目录，并用virtualenv ml_titania创建虚拟环境<br>
@@ -395,7 +394,7 @@ stats.chisqprob=lambds chisq,df:stats.chi2.sf(chisq,df)
 &emsp;&emsp;Titanic_data.shape
 `
 
-Output :
+Output :<br>
 `
 {891,12}
 `
@@ -416,22 +415,20 @@ Titanic_data[500:510]
 Output:
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE7.png">
 </div>
 <div align="center">
 图7 泰坦尼克号数据库样本
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE15.png)<br>
 
 &emsp;&emsp;现在，我们有一个pandas数据模型，它包含了我们需要分析的891名乘客的信息。DataFrame的列表示每个乘客/机组人员的解释性特征，比如姓名、性别或年龄。<br>
-
 &emsp;&emsp;这些解释特性中有一些是完整的，没有任何缺失值，例如幸存特性，它有891个条目。其他解释性特性包含了缺失的值，例如年龄特性，它只有714个条目。DataFrame中的任何缺失值都表示为NaN。<br>
-
 &emsp;&emsp;如果你研究所有的数据集特性，你会发现机票和客舱特性有许多缺失值(NaNs)，因此它们不会为我们的分析增加多少价值。为了处理这个问题，我们将从DataFrame中删除它们。
 
 &emsp;&emsp;使用以下代码完全从DataFrame删除机票和客舱功能:
 
-`itanic_data=titanic_data.drop([‘Ticket’,’Cabin’],axis=1)
+`
+itanic_data=titanic_data.drop([‘Ticket’,’Cabin’],axis=1)
 `
 
 &emsp;&emsp;在我们的数据集中存在这样的缺失值有很多原因。但是为了保持数据集的完整性，我们需要处理这些缺失的值。一般我们会选择删除缺失值。<br>
@@ -486,13 +483,12 @@ ax5.set_xlim(=1,len(titanic_data.Embarked.value_counts()))
 plt.title(“Passengers per boarding location”)
 ```
 
-<div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<div align="center">.
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE8.png">
 </div>
 <div align="center">
 图8 泰坦尼克号样本数据的基本信息图
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE16.png)<br>
 
 &emsp;&emsp;正如我们所提到的，这个分析的目的是基于可用的特性来预测一个特定的乘客是否能在悲剧中幸存，例如旅行级别(数据中称为pclass)、性别、年龄和票价。所以，让我们看看我们是否可以从视觉上更好地理解乘客谁幸存和死亡。
 
@@ -506,12 +502,11 @@ ax.set_ylim(-1,len(titanic_data.Survived.value_counts()))
 plt.title(“Breakdown of survivals(0=Died,1=Survived)”)
 ```
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE9.png">
 </div>
 <div align="center">
 图9 幸存情况分布图
 </div> 
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE17.png)
 
 &emsp;&emsp;让我们通过按性别细分前面的图表来对数据有更多的了解:
 
@@ -529,14 +524,13 @@ ax1.set_ylim(-1,2)
 ```
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE10.png">
 </div>
 <div align="center">
 图10 按性别特征预测未来幸村情况
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE18.png)<br>
 
-&emsp;&emsp;现在，关于这两个可能的类(幸存和死亡)，我们有了更多的信息。探索和可视化步骤是必要的，因为它让你更深入地了解数据的结构，并帮助你选择适合你的问题的学习算法。如你所见，我们从非常基本的绘图开始，然后增加了绘图的复杂性，以发现关于我们正在使用的数据的更多信息。<br>
+&emsp;&emsp;现在，关于这两个可能的类(幸存和死亡)，我们有了更多的信息。探索和可视化步骤是必要的，因为它让你更深入地了解数据的结构，并帮助你选择适合你的问题的学习算法。如你所见，我们从非常基本的绘图开始，然后增加了绘图的复杂性，以发现关于我们正在使用的数据的更多信息。
 
 ### 2.3.2 数据分析——监督机器学习
 &emsp;&emsp;分析的目的是预测幸存者。因此，结果是否会幸存，这是一个二元分类问题;在这里，你只有两种可能的类。
@@ -546,6 +540,7 @@ ax1.set_ylim(-1,2)
 &emsp;&emsp;在统计、逻辑回归或分对数回归是一种回归分析用于预测分类因变量的结果 (因变量可以承担有限数量的值,其大小是没有意义的,但其大小的顺序可能是也可能不是有意义的)基于一个或多个预测变量。也就是说，它被用来估计定性反应模型中参数的经验值。用逻辑函数将描述单个试验可能结果的概率作为解释变量(预测变量)的函数建模。经常(在本文中也是如此)“logistic回归”专指因变量为二元的问题，即可用类别数为两类以上的问题称为多项logistic回归，如果多个类别是有序的，则称为有序logistic回归。Logistic回归通过概率分数作为因变量的预测值来衡量一个分类因变量和一个或多个自变量之间的关系，这些自变量通常(但不一定)是连续的。[1]处理的问题与使用类似技术的probit回归相同。
 
 &emsp;&emsp;为了使用逻辑回归，我们需要创建一个公式来告诉模型我们给它的特征/输入的类型:
+
 ```
 #model formula
 #here the~sigh is an=sigh,and the feature of our dataset
@@ -574,7 +569,7 @@ Iterations 6
 ```
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE11.png">
 </div>
 <div align="center">
 图11 Logistic回归结果
@@ -602,12 +597,11 @@ plt.title(‘Logit Residuals’);
 ```
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE12.png">
 </div>
 <div align="center">
 图12 对Logistic回归模型的理解
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE20.png)<br>
 
 &emsp;&emsp;现在，我们已经建立了逻辑回归模型，在此之前，我们对数据集做了一些分析和探索。前面的示例展示了构建机器学习解决方案的通用管道。
 
@@ -626,12 +620,11 @@ plt.title(‘Logit Residuals’);
 &emsp;&emsp;在图13中，红色曲线表示明显的错误。每当您你提高模型的记忆能力(例如通过增加解释特性的数量来增加模型的复杂性)时，你就会发现这个明显的错误接近于零。可以看出，如果你有和观察/样本一样多的特征，那么明显的误差将为零:
 
 <div align="center">
-<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE4.png">
+<img src="https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png">
 </div>
 <div align="center">
 图13 明显误差（红色）和泛化误差（蓝色）
 </div>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE21.png)<br>
 
 ## 2.6 泛化/真正的错误
 &emsp;&emsp;这是数据科学中第二个也是更重要的错误类型。构建学习系统的全部目的是为了在测试集上获得更小的泛化误差；换句话说，就是想得到一个模型，该模型在一组没有在训练阶段使用过的观察样本上很好的工作。用上一节的课堂考试场景为例，可以把泛化错误看作是解决考试问题的能力，这些问题不一定和你在课堂上解决的问题相似，这样你就可以学习和熟悉这门课。因此，泛化性能是模型使用其在训练阶段学到的技能（参数）的能力，以便正确预测不可见数据的结果或输出。
