@@ -170,16 +170,45 @@
 &emsp;&emsp;为了使成本函数 最小化，我们可以使用一种优化技术来找到使成本函数最小化的最佳参数值 。我们可以使用一个叫做梯度的微积分工具，它用来找到成本函数的最大增长率。然后，我们可以用相反的方向来求这个函数的最小值；例如J(0)的梯度用VJ(0)来表示，即对模型参数的成本函数取梯度。因此，我们需要提供一个函数来计算J(0)和VJ(9)的值，以供对任意的参数 进行选择。如果我们对J(0)上的代价函数求关于0的梯度或导数，我们会得到如下结果<br>
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png)
 &emsp;&emsp;用向量形式表示为:<br>
-![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png)
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
-&emsp;&emsp;<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE14.png)
+&emsp;&emsp;现在，我们对逻辑回归有了数学上的理解，让我们继续使用这种新的学习方法来解决一个分类任务<br>
+## 2.3 泰坦尼克号模型的建立和训练
+&emsp;&emsp;泰坦尼克号的沉没是历史上最臭名昭著的事件之一。这起事故导致2,224名乘客和机组人员中有1,502人死亡。在这个问题中，我们将使用数据科学来预测乘客是否能在这场悲剧中幸存下来，然后根据悲剧的实际统计数据来测试我们模型的性能。<br>
+&emsp;&emsp;为了跟进泰坦尼克号的例子，你需要做以下事情：<br>
+&emsp;&emsp;1.单击http://github.com/ ahmed-menshawy/ML_Titannic/archive/master，在ZIP文件中下载此存储库。或从终端执行:<br>
+&emsp;&emsp;2.Git克隆:https://github.com/ahmed-menshawy/ML_Titanic.git<br>
+&emsp;&emsp;3.安装(virtualenv)(http://virtualenv.readthedocs.org/en/latest/installation.html)<br>
+&emsp;&emsp;4.导航到解压克隆repo的目录，并用virtualenv ml_titania创建虚拟环境<br>
+&emsp;&emsp;5.使用aource ml_titanic/bin/ Activate激活环境<br>
+&emsp;&emsp;6.使用pip Install -r requirements.txt安装所需的依赖关系<br>
+&emsp;&emsp;7.从命令行或终端执行ipython笔记本<br>
+&emsp;&emsp;8.遵循本章中的示例代码<br>
+&emsp;&emsp;9.完成后，用deactivate命令关闭虚拟环境<br>
+### 2.3.1 数据处理和可视化
+&emsp;&emsp;在本节中，我们将做一些数据预处理和分析。数据探索和分析被认为是应用机器学习的最重要的步骤之一，也可能被认为是最重要的步骤，因为在这个步骤中，你会了解你的朋友-----数据，它会在训练过程中一直伴随着你。此外，了解你的数据将使你能够缩小可能用于检查哪个算法最适合你的数据的候选算法集。<br>
+&emsp;&emsp;让我们从导入实现所需的包开始:<br>
+&emsp;&emsp;Import matplotlib.pyplot as plt<br>
+&emsp;&emsp;matplotlib inline<br>
+&emsp;&emsp;from statsmodels.nonparametric.kde import KDEUnivariate<br>
+&emsp;&emsp;from statsmodels.nonparametric import smoothers_lowess<br>
+&emsp;&emsp;from pandas import series,DataFrame<br>
+&emsp;&emsp;from patsy import dmatrices<br>
+&emsp;&emsp;from sklearn import datdsets,svm<br>
+&emsp;&emsp;import numpy as np<br>
+&emsp;&emsp;import statamodels.api as sm<br>
+&emsp;&emsp;from scipy import stats<br>
+&emsp;&emsp;stats.chisqprob=lambds chisq,df:stats.chi2.sf(chisq,df)<br>
+&emsp;&emsp;让我们用pandas读入泰坦尼克号乘客和船员的数据:<br>
+&emsp;&emsp;Titanic_data=pd.read_csv(“data/titanic_train.csv”)<br>
+&emsp;&emsp;接下来，让我们查看数据集的维度，并且看看我们有多少样本数据，有多少解释性特征描述了我们的数据集:<br>
+&emsp;&emsp;Titanic_data.shape<br>
+&emsp;&emsp;Output :<br>
+&emsp;&emsp;{891,12}<br>
+&emsp;&emsp;因此，我们总共有891个观测值，数据样本，或乘客/机组记录，以及描述这一记录的12个解释特征:<br>
+&emsp;&emsp;List(titanic_data)<br>
+&emsp;&emsp;Output :<br>
+&emsp;&emsp;{‘PassengerId’,’Survived’,’Pclass’,’Name’,’Sex’,’Age’,’SibSp’,’Parch’,’Ticket’,’Fare’,’Cabin’,’Embarked’}<br>
+&emsp;&emsp;让我们看看一些样本/观察数据:<br>
+&emsp;&emsp;Titanic_data[500:510]<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
