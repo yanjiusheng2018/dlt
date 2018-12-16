@@ -168,9 +168,13 @@
 &emsp;&emsp;注意，对于每个训练样本，以上方程的两项之和中只有一项是非零的（取决于标签 的值是0还是1）。当 =1时，最小化模型成本函数意味着我们需要使 变大，当y=0时 使1- 变大。<br>
 &emsp;&emsp;现在，我们有一个成本函数来计算给定的 与我们的训练样本的匹配程度。我们可以学习使用优化技术对训练样本进行分类，使 最小化，并找到参数 的最佳值.一旦完成这一任务，我们就可以使用这些参数将一个新的测试样本分为1或0类，检查这两个类中哪类是最可能的。如果P(y=1)<p(y=0)，则输出0，否则输出1，这与类之间定义0.5的阈值并检查h(x)>0.5相同的。<br>
 &emsp;&emsp;为了使成本函数 最小化，我们可以使用一种优化技术来找到使成本函数最小化的最佳参数值 。我们可以使用一个叫做梯度的微积分工具，它用来找到成本函数的最大增长率。然后，我们可以用相反的方向来求这个函数的最小值；例如J(0)的梯度用VJ(0)来表示，即对模型参数的成本函数取梯度。因此，我们需要提供一个函数来计算J(0)和VJ(9)的值，以供对任意的参数 进行选择。如果我们对J(0)上的代价函数求关于0的梯度或导数，我们会得到如下结果<br>
+
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE13.png)
+
 &emsp;&emsp;用向量形式表示为:<br>
+
 ![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE14.png)
+
 &emsp;&emsp;现在，我们对逻辑回归有了数学上的理解，让我们继续使用这种新的学习方法来解决一个分类任务<br>
 ## 2.3 泰坦尼克号模型的建立和训练
 &emsp;&emsp;泰坦尼克号的沉没是历史上最臭名昭著的事件之一。这起事故导致2,224名乘客和机组人员中有1,502人死亡。在这个问题中，我们将使用数据科学来预测乘客是否能在这场悲剧中幸存下来，然后根据悲剧的实际统计数据来测试我们模型的性能。<br>
@@ -210,5 +214,86 @@
 &emsp;&emsp;{‘PassengerId’,’Survived’,’Pclass’,’Name’,’Sex’,’Age’,’SibSp’,’Parch’,’Ticket’,’Fare’,’Cabin’,’Embarked’}<br>
 &emsp;&emsp;让我们看看一些样本/观察数据:<br>
 &emsp;&emsp;Titanic_data[500:510]<br>
+![](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter02/chapter02_image/%E5%9B%BE15.png)
+&emsp;&emsp;现在，我们有一个pandas数据模型，它包含了我们需要分析的891名乘客的信息。DataFrame的列表示每个乘客/机组人员的解释性特征，比如姓名、性别或年龄。<br>
+&emsp;&emsp;这些解释特性中有一些是完整的，没有任何缺失值，例如幸存特性，它有891个条目。其他解释性特性包含了缺失的值，例如年龄特性，它只有714个条目。DataFrame中的任何缺失值都表示为NaN。<br>
+&emsp;&emsp;如果你研究所有的数据集特性，你会发现机票和客舱特性有许多缺失值(NaNs)，因此它们不会为我们的分析增加多少价值。为了处理这个问题，我们将从DataFrame中删除它们。<br>
+&emsp;&emsp;使用以下代码完全从DataFrame删除机票和客舱功能:<br>
+&emsp;&emsp;titanic_data=titanic_data.drop([‘Ticket’,’Cabin’],axis=1)<br>
+&emsp;&emsp;使用以下代码从所有剩余的特性中删除所有NaN值:<br>
+&emsp;&emsp;在我们的数据集中存在这样的缺失值有很多原因。但是为了保持数据集的完整性，我们需要处理这些缺失的值。一般我们会选择删除缺失值。<br>
+&emsp;&emsp;titanic_data=titanic_data.dropna()<br>
+&emsp;&emsp;现在，我们有一个竞争数据集，我们可以用来做分析。如果你决定只删除所有NaNs，而不首先删除机票和舱位特性，你将发现大多数数据集被删除，因为.dropna() 方法从DataFrame中删除一个观察值，即使其中一个特性中只有一个NaN。<br>
+&emsp;&emsp;我们做一些数据可视化，看看一些特征的分布，理解解释特征之间的关系:<br>
+&emsp;&emsp;#declaring graph parameters<br>
+&emsp;&emsp;Fig=plt.figre(figsize=(18,6))<br>
+&emsp;&emsp;alpha=alpha_scatterplot=0.3<br>
+&emsp;&emsp;alpha_bar_chart=0.55<br>
+&emsp;&emsp;#defining a grid of subplots to contain all the figures<br>
+&emsp;&emsp;Ax1=plt.subplot2grid((2,3),(0,0))<br>
+&emsp;&emsp;#Add the first bar plot which represents the count of people who survived vs not survived.<br>
+&emsp;&emsp;titanic_data.Survived.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)<br>
+&emsp;&emsp;#Adding margins to the plot<br>
+&emsp;&emsp;Ax1.set_xlim(-1,2)<br>
+&emsp;&emsp;#Adding bar plot title<br>
+&emsp;&emsp;plt.title(“Distribution of Survival,(1=Survived)”)<br>
+&emsp;&emsp;plt.subplot2grid((2,3),(0,1))<br>
+&emsp;&emsp;plt.scatter(titanic_data.survived,titanic_data.Age,alpha=alpha_scatterplot)<br>
+&emsp;&emsp;#setting the value of the y label (age)<br>
+&emsp;&emsp;Plt.ylabel(“Age”)<br>
+&emsp;&emsp;#formatting the grid<br>
+&emsp;&emsp;Plt.grid(b=True,which=’major’,axis=’y’)<br>
+&emsp;&emsp;Plt.title(“Survival by Age,(1=Survived)”)<br>
+&emsp;&emsp;ax3=plt.subplot2grid((2,3),(0,2))<br>
+&emsp;&emsp;titanic_data.Pclass.value_counts().plot(kind=”barh”,alpha=alphas_bar_chart)<br>
+&emsp;&emsp;ax3.set_ylim(-1,len(titanic_data.Plass.value_counts()))<br>
+&emsp;&emsp;plt.title("Class Distribution")<br>
+&emsp;&emsp;plt.subplot2grid((2,3),(1,0),colsoan=2)<br>
+&emsp;&emsp;#plotting kernel density estimate of the subse of the 1st class passenger’sage<br>
+&emsp;&emsp;titanic_data.Age[titaic_data.Pclass==1].plot(kind=’kde’)<br>
+&emsp;&emsp;titanic_data.Age[titaic_data.Pclass==2].plot(kind=’kde’)<br>
+&emsp;&emsp;titanic_data.Age[titaic_data.Pclass==3].plot(kind=’kde’)<br>
+&emsp;&emsp;#Adding x label (age) to the plot<br>
+&emsp;&emsp;Plt.xlabel(“Age”)<br>
+&emsp;&emsp;Plt.title(“Age Distribution within classes”)<br>
+&emsp;&emsp;#Add legend to the plot.<br>
+&emsp;&emsp;Plt.legend((‘1st Class’,’2nd Class’,’3rd Class’),loc=’best’)<br>
+&emsp;&emsp;ax5=plt.subplot2grid((2,3),(1,2))<br>
+&emsp;&emsp;titanic_data.Embarked.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)<br>
+&emsp;&emsp;ax5.set_xlim(=1,len(titanic_data.Embarked.value_counts()))<br>
+&emsp;&emsp;plt.title(“Passengers per boarding location”)<br>
+![]()
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
+&emsp;&emsp;<br>
 &emsp;&emsp;<br>
 &emsp;&emsp;<br>
