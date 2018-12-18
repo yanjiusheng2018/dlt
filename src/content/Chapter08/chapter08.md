@@ -275,7 +275,7 @@ valid_input_features, valid_input_labels = pickle.load(open('./preprocess/prepro
 ```
 ### 建立网络
 &emsp;&emsp;现在是时候构建我们的分类应用程序的核心，这是该CNN架构的计算图，但是为了最大化这种实现的好处，我们不会使用TensorFlow层API。 相反，我们将使用它的TensorFlow神经网络版本。<br>
-<br\>
+
 &emsp;&emsp;因此，让我们首先定义模型输入占位符，它将输入图像，目标类和丢失层的保持概率参数（这有助于我们通过删除一些连接来降低架构的复杂性，从而减少机会的可能性过拟合）：<br>
 ```
 # Defining the model inputs
@@ -451,7 +451,7 @@ batch_size = 128
 keep_probability = 0.5
 ```
 &emsp;&emsp;现在，让我们开始训练过程，但仅针对一批CIFAR-10数据集，并查看基于此批次的模型准确性。<br>
-<br\>
+
 &emsp;&emsp;然而，在此之前，我们将定义一个辅助函数，它将加载批处理训练并将输入图像与目标类分开：<br>
 ```
 # Splitting the dataset features and labels to batches
