@@ -346,7 +346,7 @@ def build_model_output(output, input_size, output_size):
     return model_out, logits
 ```
 ## 训练损失
-&emsp;&emsp;接下来是训练损失。通过模型的运算，我们已经得到了逻辑运算和目标函数，并计算softmax的交叉熵损失。首先，对需要的目标进行独热编码，得到已经编码好的字符。其次，重组热编码之后的目标，得到规格为（MN）C的2维张量，其中C是类或字符数。由于我们重组了LSTM输出结果并通过具有C个单元的完全连接层运行。因此，我们的逻辑运算也是（MN）C。<br>
+&emsp;&emsp;接下来是训练损失。通过模型的运算，我们已经得到了对数运算和目标函数，并计算softmax的交叉熵损失。首先，对需要的目标进行独热编码，得到已经编码好的字符。其次，重组热编码之后的目标，得到规格为（MN）C的2维张量，其中C是类或字符数。由于我们重组了LSTM输出结果并通过具有C个单元的完全连接层运行。因此，我们的对数损失函数也是（MN）C。<br>
 &emsp;&emsp;之后，通过tf.nn.softmax_cross_entropy_with_logits运行logits和targets并得到损失的平均值：<br>
 ```
 def model_loss(logits, targets, lstm_size, num_classes):
