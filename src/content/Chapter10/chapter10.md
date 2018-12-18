@@ -476,7 +476,7 @@ Epoch number: 5/5...  Step: 988...  loss: 1.7351...  0.051 sec/batch
 Epoch number: 5/5...  Step: 989...  loss: 1.7260...  0.049 sec/batch
 Epoch number: 5/5...  Step: 990...  loss: 1.7144...  0.051 sec/batch
 ```
-## 检查点
+## 保存检查点
 &emsp;&emsp;现在，加载checkpoints。为了更好的了解存储和加载checkpoints，可以查看Tensorflow文档(http://www.tensorflow.org/programmers_guide/variables):<br>
 &emsp;&emsp;tf.train.get_checkpoint_state('checkpoints')<br>
 ## 生成文本
