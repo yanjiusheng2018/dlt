@@ -50,7 +50,7 @@ import pandas as pd
 ```python
 #read advertising data samples into a DataFrame
 
-Advertising_data = <br>
+Advertising_data = 
 pd.read_csv(‘http://www-bcf.use.edu/~qareth/ISL/Advertising.csv’,index_col=0)
 ```
 &emsp;&emsp;传递给pandas.read_csv方法的第一个参数是一个表示文件路径的字符串值。字符串可以是包含IUUQ、GUQ、T和GJMF的URL。传递的第二个参数是列的索引，它将用作数据行的标签/名称。
@@ -83,10 +83,13 @@ Output
 
 ```python
 #print the shape of the DataFrame
-&emsp;&emsp;Advertising_data.shape
-&emsp;&emsp;Output:
-&emsp;&emsp;(200,4)
+Advertising_data.shape
 ```
+
+Output:<br>
+`
+(200,4)
+`
 &emsp;&emsp;所以，广告数据中有200个观察结果。
 
 ### 数据分析与可视化
