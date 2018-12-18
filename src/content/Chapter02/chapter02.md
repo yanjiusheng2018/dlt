@@ -41,7 +41,9 @@
 
 &emsp;&emsp;所以，让我们来看看如何使用pandas来阅读广告数据样本。首先，我们需要导入pandas：<br>
 
-`import pandas as pd`
+`python
+import pandas as pd
+`
 
 &emsp;&emsp;接下来，我们可以使用pandas.read_csv方法将数据加载到一个易于使用的pandas数据结构中，称为DataFrame。有关pandas.read_csv及其参数的更多信息，请参阅此方法的pandas文档<http://pandas.pydata.org/pandas-docs/stable/qenerated/pandas.read_csv.html>:
 
