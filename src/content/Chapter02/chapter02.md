@@ -48,7 +48,7 @@ import pandas as pd
 &emsp;&emsp;接下来，我们可以使用pandas.read_csv方法将数据加载到一个易于使用的pandas数据结构中，称为DataFrame。有关pandas.read_csv及其参数的更多信息，请参阅此方法的pandas文档<http://pandas.pydata.org/pandas-docs/stable/qenerated/pandas.read_csv.html>:
 
 ```python
-#read advertising data samples into a DataFrame
+# 将广告数据示例读入DataFrame
 
 Advertising_data = 
 pd.read_csv(‘http://www-bcf.use.edu/~qareth/ISL/Advertising.csv’,index_col=0)
@@ -60,8 +60,7 @@ pd.read_csv(‘http://www-bcf.use.edu/~qareth/ISL/Advertising.csv’,index_col=0
 &emsp;&emsp;现在，让我们看一下广告数据的前五行:
 
 ```python
-#DataFrame.head methond above the first n row of the data where the
-#default value of n is 5,DataFrame.head(n=5)
+# DataFrame.head 方法显示数据的前n行，n默认值为5     
 Advertising_data.head()
 ```
 Output
@@ -82,7 +81,7 @@ Output
 &emsp;&emsp;我们还可以使用DataFrame来知道我们数据中的样本/观察数:
 
 ```python
-#print the shape of the DataFrame
+#sales 以千为单位
 Advertising_data.shape
 ```
 
@@ -102,14 +101,14 @@ Output:<br>
 ```python
 #The next line will allow us make inlines plots that could appear
 directly in the notebook
-#without poping up in a different window
+#为了对数据进行不同类型的可视化，使用Matplotlib
 Matplotlib inline
 ```
-&emsp;&emsp;现在，我们使用散点图来可视化广告数据特性和响应变量之间的关系:
 
 ```python
+#使用一个散点图来可视化广告数据特性与响应变量之间的关系
 fig, axs=plt.subplots{1,3,sharey=True}
-#Adding the scatterplots to the grid
+#将散点图添加到网格中
 Advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’,ax=axs[0],figsize=(16,8))
 Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[1])
 Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
@@ -174,11 +173,11 @@ Advertising_datd.plot(kind=’scatters’,x=’radio’,y=’sales’,ax=axs[2])
 &emsp;&emsp;现在，让我们开始使用Statsmodels来学习这些系数:
 
 ```python
-#To use the formula notation below,we need to import the module like the following
+#在一行代码中创建一个合适的模型(表示最小二乘线)
 Import statsmodels.formula.api as smf
 #create a fitted model in one line of code(which will represent the least squares line)
 Lm=smf.ols(formula=’sales~TV’,data=advertising_data).fit()
-#show the trained model cofficients
+# 显示训练后的模型系数
 Lm.params
 ```
 Output:
@@ -205,7 +204,7 @@ dtype         float64
 &emsp;&emsp;&emsp;&emsp;&emsp;y = 7.032594 + 0.047537*x
 
 ```python
-#manually calculating the increase in the sales based on $50k
+#计算当自变量值为50000美元时的销售额
 7.032594+0.047537*50000
 ```
 
@@ -217,7 +216,7 @@ Output:<br>
 &emsp;&emsp;我们也可以用Statsmodels来做预测。首先，我们需要提供pandas DataFrame的电视广告花费情况，因为Statsmodels的预测要求:
 
 ```python
-#creating a Pandas Dataframe to match Statsmodels interface expectations
+#创建Pandas DataFrame以匹配StatsModel接口期望
 new_TVAdSpending=pd.DataFrame({‘TV’:[50000]})
 new_TVAdSpending.head()
 ```
@@ -228,7 +227,7 @@ Output:
 &emsp;&emsp;现在，我们可以继续使用predict函数来预测销售价值:
 
 ```python
-#use the model to make predictions on new value
+#使用模型对新值进行预测。
 Preds = lm.predict{new_TVAdSpending}
 ```
 Output:
@@ -241,7 +240,8 @@ Array([ 9.40942557 ])
 &emsp;&emsp;那么，让我们取电视广告的最小值和最大值:
 
 ```python
-# create a DataFrame with the minimum and maximum values of TV
+# x最小值和最大值的预测
+predictions = lm.predict(X_min_max) 
 X_min_max=pd.DataFrame({‘TV’:[advertising_data.TV.min(),advertising_data.TV.max()]})
 X_min_max.head()
 ```
@@ -251,7 +251,7 @@ Output:
 &emsp;&emsp;让我们得到这两个值对应的预测值：
 
 ```python
-# predictions for X min and max values
+# x最小值和最大值的预测
 predictions=lm.predict(X_min_max)
 predictions
 ```
@@ -264,9 +264,9 @@ Array([7.0658692,21.12245377])
 &emsp;&emsp;现在，让我们画出实际数据然后用最小二乘线来拟合:
 
 ```python
-#plotting the actual observeddata
+#绘制实际观测数据
 advertising_data.plot(kind=’scatter’,x=’TV’,y=’sales’)
-#plotting the least squares line
+#绘制最小二乘线
 Plt.plot (new_TVAdSpending,  preds, c=’red’, linewidth=2)
 ```
 
@@ -447,44 +447,43 @@ itanic_data=titanic_data.drop([‘Ticket’,’Cabin’],axis=1)
 &emsp;&emsp;我们做一些数据可视化，看看一些特征的分布，理解解释特征之间的关系:
 
 ```python
-#declaring graph parameters
-Fig=plt.figre(figsize=(18,6))
-alpha=alpha_scatterplot=0.3
-alpha_bar_chart=0.55
-#defining a grid of subplots to contain all the figures
-Ax1=plt.subplot2grid((2,3),(0,0))
-#Add the first bar plot which represents the count of people who survived vs not survived.
-titanic_data.Survived.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)
-#Adding margins to the plot
-Ax1.set_xlim(-1,2)
-#Adding bar plot title
-plt.title(“Distribution of Survival,(1=Survived)”)
-plt.subplot2grid((2,3),(0,1))
-plt.scatter(titanic_data.survived,titanic_data.Age,alpha=alpha_scatterplot)
-#setting the value of the y label (age)
-Plt.ylabel(“Age”)
-#formatting the grid
-Plt.grid(b=True,which=’major’,axis=’y’)
-Plt.title(“Survival by Age,(1=Survived)”)
-ax3=plt.subplot2grid((2,3),(0,2))
-titanic_data.Pclass.value_counts().plot(kind=”barh”,alpha=alphas_bar_chart)
-ax3.set_ylim(-1,len(titanic_data.Plass.value_counts()))
-plt.title("Class Distribution")
-plt.subplot2grid((2,3),(1,0),colsoan=2)
-#plotting kernel density estimate of the subse of the 1st class passenger’s
-age
-titanic_data.Age[titaic_data.Pclass==1].plot(kind=’kde’)
-titanic_data.Age[titaic_data.Pclass==2].plot(kind=’kde’)
-titanic_data.Age[titaic_data.Pclass==3].plot(kind=’kde’)
-#Adding x label (age) to the plot
-Plt.xlabel(“Age”)
-Plt.title(“Age Distribution within classes”)
-#Add legend to the plot.
-Plt.legend((‘1st Class’,’2nd Class’,’3rd Class’),loc=’best’)
-ax5=plt.subplot2grid((2,3),(1,2))
-titanic_data.Embarked.value_counts().plot(kind=’bar’,alpha=alpha_bar_chart)
-ax5.set_xlim(=1,len(titanic_data.Embarked.value_counts()))
-plt.title(“Passengers per boarding location”)
+# 图参数声明
+fig = plt.figure(figsize=(18,6)) 
+alpha=alpha_scatterplot = 0.3 
+alpha_bar_chart = 0.55
+# Defining a grid of subplots to contain all the figures 
+axl = plt.subplot2grid((2,3),(0,0))
+# 添加第一个条形图，表示幸存的人和没有幸存的人的数量。
+titanic_data.Survived.value_counts().plot(kind='bar', alpha=alpha_bar_chart)
+# 添加边距
+axl.set_xlim(-1, 2)
+# 添加图标题
+plt.title("Distribution of Survival, (l = Survived)") 
+plt.subplot2grid((2,3),(0,1)) 
+plt.scatter(titanic_data.Survived, titanic_data.Age, alpha=alpha_scatterplot)
+# 设置y标签的值(年龄)
+plt.ylabel("Age")
+# 格式化
+plt.grid(b=True, which='major', axis='y') 
+plt.title("Survival by Age, (l = Survived)") 
+ax3 = plt.subplot2grid((2,3),(0,2))
+titanic_data.Pclass.value_counts().plot(kind="barh", alpha=alpha_bar_chart) 
+ax3.set_ylim(-1, len(titanic_data.Pclass.value_counts()))
+plt.title("Class Distribution") 
+plt.subplot2grid((2,3),(1,0), colspan=2)
+# plotting kernel density estimate of the subse of the lst class passenger’s age
+titanic_data.Age[titanic_data.Pclass == 1].plot(kind='kde') 
+titanic_data.Age[titanic_data.Pclass == 2].plot(kind='kde') 
+titanic_data.Age[titanic_data.Pclass == 3].plot(kind='kde')
+# 将x标记(年龄)添加到绘图中
+plt.xlabel("Age")
+plt.title("Age Distribution within classes")
+# Add legend to the plot.
+plt.legend(('lst Class', '2nd Class','3rd Class'),loc='best') 
+ax5 = plt.subplot2grid((2,3),(1,2)) 
+titanic_data.Embarked.value_counts().plot(kind='bar', alpha=alpha_bar_chart)
+ax5.set_xlim(-1, len(titanic_data.Embarked.value_counts())) 
+plt.title("Passengers per boarding location")
 ```
 
 <div align="center">.
@@ -512,19 +511,23 @@ plt.title(“Breakdown of survivals(0=Died,1=Survived)”)
 图9 幸存情况分布图
 </div> 
 
-&emsp;&emsp;让我们通过按性别细分前面的图表来对数据有更多的了解:
-
 ```python
-fig=plt.figure(figsize=(18,6))
-#Plotting gender based analysis for the survivals.
-Male=titanic_data.Survived[titanic_data sex==’male’].value_counts().sort_index()
-Female=titanic_data.Survived[titanic_data.Sex==’female’].value_counts().sort_index
-ax1=fig.add_subplot(121)
-male.plot(kind=’barh’,label=’Male’,aloha=0.55)
-female.plot(kind=’barh’,color=’*FA2379’,label=’Female’,alpha=0.55)
-plt.title(“Gender analysis of survivals (raw value counts)”);
-plt.legend(loc=’best’)
-ax1.set_ylim(-1,2)
+#将先前的图表按性别细分，来更好地理解这些数据
+fig = plt.figure(figsize=(18,6))
+#为幸存者绘制基于性别的分析。
+male = titanic_data.Survived[titanic_data.Sex == 'male'].value_counts().sort_index()
+female = titanic_data.Survived[titanic_data.Sex == 'female'].value_counts().sort_index()
+axl = fig.add_subplot(121) 
+male.plot(kind='barh',label='Male', alpha=0.55)
+female.plot(kind='barh', color='#FA2379',label='Female', alpha=0.55) 
+plt.title("Gender analysis of survivals (raw value counts) "); plt.legend(loc='best')
+axl.set_ylim(-1, 2)
+ax2 = fig.add_subplot(122) 
+(male/float(male.sum())).plot(kind='barh',label='Male', alpha=0.55) 
+(female/float(female.sum())).plot(kind='barh', color='#FA2379',label='Female', alpha=0.55)
+plt.title("Gender analysis of survivals"); plt.legend(loc='best') 
+ax2.set_ylim(-1, 2)
+
 ```
 
 <div align="center">
@@ -546,21 +549,20 @@ ax1.set_ylim(-1,2)
 &emsp;&emsp;为了使用逻辑回归，我们需要创建一个公式来告诉模型我们给它的特征/输入的类型:
 
 ```python
-#model formula
-#here the~sigh is an=sigh,and the feature of our dataset
-#are written as a formula to predict survived. The C() lets our
-#regression know that those variable are categorical.
-#Ref:http://patsy.readthedocs.org/en/latest/formulas.html
-Formula=’Survived ~ C(Pclass) + C(Sex)+ Age + SibSp + C(Embarked)’
-#create a results dictionary to hold our regression results for easy analysis latter
-results{}
-#create a regression friendly dataframe using patsy’s dmatrices function
-y,x = dmatrices(formula, data=titanic_data, return_type=’dataframe’)
+# 模型公式
+# ~表示=, 数据集的特征被写成预测生存的公式。C()让我们的回归知道这些变量是绝对的。
+# Ref: http://patsy.readthedocs.org/en/latest/formulas.html
+formula = 'Survived ~ C(Pclass) + C(Sex) + Age + SibSp + C(Embarked)'
+# create a results dictionary to hold our regression results for easy analysis later
+results = {}
+# 使用 patsy's dmatrices 函数创建一个回归友好的数据框架 
+y,x = dmatrices(formula, data=titanic_data, return_type='dataframe')
+# 实例化模型
 model = sm.Logit(y,x)
-# fit our model to the training data
+# 将我们的模型与培训数据相匹配
 res = model.fit()
-# save the result for outputting predictions later
-results[‘Logit’] = [res,formula]
+# 保存结果，以便稍后输出预测
+results['Logit'] = [res, formula]
 res.summary()
 ```
 
@@ -582,22 +584,20 @@ Iterations 6
 &emsp;&emsp;现在，让我们画出实际值与模型的预测值以及残差的图形，残差是目标变量的实际值和预测值之差:
 
 ```python
-# Plot Predictions Vs Actual
-plt.figure(figsize=(18,4));
-
-plt.subplot(121,axisbg=”#DBDBDB”)
-# generate predictions from our fitted model
+#画出我们的模型和实际模型的预测以及残差(目标变量的实际值和预测值之间的差异)
+plt.figure(figsize=(18,4)); 
+plt.subplot(121, facecolor="#DBDBDB")
+# 根据我们的拟合模型生成预测
 ypred = res.predict(x)
-plt.plot(x.index,ypred,’bo’,x.index,y,’mo’,alpha=.25);
-plt.grid(color=’white’,linestyle=’dashed’)
-plt.title(‘Logit predictions,Blue:\nFitted/predicted values: Red’);
-
-#Residuals
-ax2 = plt.subplot(122,axisbg=”#DBDBDB”)
-plt.plot(res.resid_dev, ‘r-’)
-plt.grid(color=’white’,linestyle=’dashed’)
-ax2.set_xlim(-1,len(res.resid_dev))
-plt.title(‘Logit Residuals’);
+plt.plot(x.index, ypred,'bo',x.index,y,'mo', alpha=.25); 
+plt.grid(color='white', linestyle='dashed')
+plt.title('Logit predictions, Blue: \nFitted/predicted values: Red');
+# 剩余误差
+ax2 = plt.subplot(122, facecolor="#DBDBDB") 
+plt.plot(res.resid_dev, 'r-') 
+plt.grid(color='white', linestyle='dashed') 
+ax2.set_xlim(-1, len(res.resid_dev)) 
+plt.title('Logit Residuals');
 ```
 
 <div align="center">
