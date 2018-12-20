@@ -1102,7 +1102,6 @@ Epoch 0
  ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.9.png?raw=true)
  ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.10.png?raw=true)
  ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.11.png?raw=true)
- ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.11.png?raw=true)
  ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.12.png?raw=true)
  
    虽然特征匹配损失在半监督学习的任务中表现良好，但是生成器生成的图像不如前面章节创建的图像好。但是这个实现主要是为了演示我们如何使用用于半监督学习设置的GAN。
