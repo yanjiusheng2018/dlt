@@ -19,7 +19,9 @@
 - 202,599张脸部图片
 - 每个图像有五个地标位置和40个二进制属性注释
 我们可以将此数据集用于除面部生成之外的许多计算机视觉应用，例如面部识别和定位，或面部属性检测。此图显示了在训练过程中，生成器发生错误后(或学习人脸分布)是如何接近真实图片的：
-<img src='./chapter15_image/02.png' style='float:center'/>
+
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/01.png?raw=true)
+
 
 ```python
 ### 获取数据
@@ -85,7 +87,7 @@ for k,ax in enumerate(axes.flat):
 # 展示画板
 plt.show()
 ```
-
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/1.1.png?raw=true)
 #### 建立模型
 现在，让我们从构建实现的核心开始，即开始计算图形。它主要包括以下部分：
 - 模型输入
@@ -440,11 +442,44 @@ with tf.Graph().as_default():
     # 调用model_train开始进行训练
     model_train(num_epochs, train_batch_size,    learning_rate,  beta1,
                 celeba_dataset.get_batches, [28,28,3,train_batch_size],   'RGB')
-
 ```
 
+ Epoch 1/2	 Discriminator Loss:0.0032	 Generator Loss:7.0822
+    Epoch 1/2	 Discriminator Loss:0.0012	 Generator Loss:9.5755
+    ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/1.2.png?raw=true)
+    
+     Epoch 1/2	 Discriminator Loss:0.0010	 Generator Loss:9.1579
+    Epoch 1/2	 Discriminator Loss:0.0006	 Generator Loss:9.5570
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/1.3.png?raw=true)
+    
+     Epoch 1/2	 Discriminator Loss:0.0005	 Generator Loss:10.2887
+    Epoch 1/2	 Discriminator Loss:0.0009	 Generator Loss:10.5652
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/1.4.png?raw=true)
+    
+     Epoch 1/2	 Discriminator Loss:0.0003	 Generator Loss:10.9225
+    Epoch 2/2	 Discriminator Loss:0.0002	 Generator Loss:11.8593
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/1.5.png?raw=true)
+   
+     Epoch 2/2	 Discriminator Loss:0.0001	 Generator Loss:12.7685
+    Epoch 2/2	 Discriminator Loss:0.0001	 Generator Loss:12.2158
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/1.6.png?raw=true)
+    
+     Epoch 2/2	 Discriminator Loss:0.0001	 Generator Loss:12.7092
+    Epoch 2/2	 Discriminator Loss:0.0001	 Generator Loss:13.2471
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/1.7.png?raw=true)
+    
+     Epoch 2/2	 Discriminator Loss:0.0000	 Generator Loss:13.4493
+    Epoch 2/2	 Discriminator Loss:0.0000	 Generator Loss:13.7767
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/1.8.png?raw=true)
+   
+     Epoch 2/2	 Discriminator Loss:0.0000	 Generator Loss:13.5980
+    
+    
+    
+    
 
-##生成对抗网络的半监督学习
+
+# 生成对抗网络的半监督学习
 
 半监督学习是一种技术，其中标记和未标记的数据都用来训练分类器。
 这种类型的分类器占用标记数据的一小部分和大量未标记数据（来自同一域）。它的目的是将这些数据源结合起来训练深度卷积神经网络（DCNN），来学习能够将新数据点映射到其期望结果的推断函数。
@@ -453,7 +488,7 @@ with tf.Graph().as_default():
 ### 直觉
 在构建用于生成图像的GAN时，我们同时训练了生成器和判别器。训练后，我们可以丢弃判别器，因为我们只是用它来训练生成器。
 下图是使用半监督学习GAN对11种分类问题的体系结构。
-![02.png](attachment:02.png)
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/02.png?raw=true)
 在半监督学习中，我们需要将判别器转换为多类分类器。这个新模型必须能够在测试集上很好地概括，即使我们没有很多用于训练的标记示例。另外，这次，在训练结束时，我们实际上可以扔掉生成器。这时候的角色已经更改。现在生成器仅用于在训练期间帮助判别器。换句话说，生成器充当不同的信息源，判别器从中获得原始的，未标记的训练数据。正如我们将看到的，这些未标记的数据是提高判别器性能的关键。此外，对于常规图像生成GAN，判别器仅具有一个角色。计算其输入是真实的还是非真实的,我们把它称为GAN问题的概率。
 然而，为了将判别器变为半监督分类器，除了GAN问题之外，判别器还必须学习每个原始数据集类的概率。换句话说，对于每个输入的图像，判别器必须学习它的概率。
 回想一下，对于图像生成GAN判别器，我们有一个sigmoid单位输出。这个输出值表示输入图像为真实的概率（值接近1），或假的概率（值接近0）。换句话说，从判别器的角度来看，接近1的值意味着样本可能来自训练集。同样，接近0的值意味着样本来自生成器网络的可能性更高。通过使用该概率，判别器能够将信号发送回生成器。这个信号允许生成器在训练期间调整其参数，从而可以提高其创建逼真图像的能力。
@@ -529,6 +564,7 @@ if not isfile(input_data_dir + "test_32x32.mat"):
 在这个任务中，我们将使用SVHN数据集，它是斯坦福的街景房屋编号的缩写。因此，让我们开始该实现通过导入所需要的包开始：
 接下来，我们将定义一个帮助类来下载SVHN数据集（首先需要手动创建JOQVU@EBUB@EJS first）：
 让我们了解这些图像是什么样子的。
+
 ```python
 # 加载用来训练的数据集
 train_data = loadmat(input_data_dir + 'train_32x32.mat')
@@ -548,6 +584,7 @@ for ii, ax in zip(indices, axes.flatten()):
 plt.subplots_adjust(wspace=0, hspace=0)
 ```
 
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.1.png?raw=true)
 接下来，我们需要将图像缩到-1到1之间，并且这个步骤是必要的，因此我们将使用tanh()函数，它将压缩生成器的输出值：
 
 ```python
@@ -564,6 +601,7 @@ def scale_images(image, feature_range=(-1, 1)):
 
 #### 建立模型 
 在本节中，我们将构建测试所需要的所有部分，因此我们从定义输入开始，这些输入将用于给计算图提供数据。
+
 ```python
 class Dataset:
     def __init__(self, train_set, test_set, validation_frac=0.5, shuffle_data=True, scale_func=None):
@@ -1026,34 +1064,47 @@ Epoch 0
 		Classifier train accuracy:  0.179
 		Classifier test accuracy 0.24746465888137675
     
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.2.png?raw=true)
+
     Epoch 1
 		Classifier train accuracy:  0.339
 		Classifier test accuracy 0.433159188690842
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.3.png?raw=true)
     
    Epoch 2
 		Classifier train accuracy:  0.539
 		Classifier test accuracy 0.5295021511985248
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.4.png?raw=true)
     
     Epoch 3
 		Classifier train accuracy:  0.681
 		Classifier test accuracy 0.6194683466502766
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.5.png?raw=true)
     
     Epoch 4
 		Classifier train accuracy:  0.807
 		Classifier test accuracy 0.6441303011677935
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.6.png?raw=true)
     
-    ```python
-    <matplotlib.legend.Legend at 0x217ca6e2358>
-    ```
+     <matplotlib.legend.Legend at 0x217ca6e2358>
+  
+   ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.7.png?raw=true)  
     
     ```python
     # 此处会将之前显示的图片直接保存到电脑的硬盘中
-for ii in range(len(samples)):
+    for ii in range(len(samples)):
     fig,ax = view_generated_samples(ii, samples, 5, 10, figsize=(10,5))
     fig.savefig('images/samples_{:03d}.png'.format(ii))
     plt.close()
-    ```
+   ```
     
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.8.png?raw=true)
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.9.png?raw=true)
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.10.png?raw=true)
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.11.png?raw=true)
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.11.png?raw=true)
+ ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.12.png?raw=true)
+ 
    虽然特征匹配损失在半监督学习的任务中表现良好，但是生成器生成的图像不如前面章节创建的图像好。但是这个实现主要是为了演示我们如何使用用于半监督学习设置的GAN。
 
 ## 总结
