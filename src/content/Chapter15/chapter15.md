@@ -20,8 +20,9 @@
 - 每个图像有五个地标位置和40个二进制属性注释
 我们可以将此数据集用于除面部生成之外的许多计算机视觉应用，例如面部识别和定位，或面部属性检测。此图显示了在训练过程中，生成器发生错误后(或学习人脸分布)是如何接近真实图片的：
 
-![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/01.png?raw=true)
 
+
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/01.png?raw=true)
 
 ```python
 ### 获取数据
@@ -40,9 +41,12 @@ warnings.filterwarnings('ignore')
 ```
 
 ### 探索数据
+
 CelebA数据集包含超过20万个带注释的名人图像。 由于我们下面要使用GAN生成类似的图像，因此值得查看数据集中的一堆图像，看看它们的外观。在本节中，我们将定义一些辅助函数，用于可视化CelebA数据集中的一组图像。
 现在，让我们使用utils脚本来显示数据集中的一些图像。
 该计算机视觉任务的主要目的是使用GAN生成与名人数据集中的图像类似的图像，所以我们需要关注图像的脸部部分。为了关注图像的脸部，我们将删除不包含名人脸部的图像部分。
+
+
 
 ```python
 # 下载数据包celebA的路径
@@ -50,6 +54,8 @@ gzip_filename = './data/img_align_celeba.zip'
 # 将数据集进行解压缩之后，数据集所在的路径
 img_dir = './data/img_align_celeba/'
 ```
+
+
 
 ```python
 # exits是为了验证数据集的压缩包是否存在，listdir的目的是拿到img_dir目录下所有的文件夹和文件的名字，并将每个都转换成列表中的元素
@@ -87,8 +93,12 @@ for k,ax in enumerate(axes.flat):
 # 展示画板
 plt.show()
 ```
+
+
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/1.1.png?raw=true)
+
 #### 建立模型
+
 现在，让我们从构建实现的核心开始，即开始计算图形。它主要包括以下部分：
 - 模型输入
 - 判别
@@ -96,6 +106,7 @@ plt.show()
 - 模型损失
 - 模型优化
 - 训练模式
+
 
 ```python
 # 拿到图片，并将图片进行切割，只显示人的脸部
@@ -122,6 +133,8 @@ def get_image(image_path, width, height, mode):
     return np.array(image.convert(mode))
 ```
 
+
+
 ```python
 # 按照批次将图片进行处理
 def get_batch(image_files, width, height, mode):
@@ -135,6 +148,7 @@ def get_batch(image_files, width, height, mode):
 
     return data_batch
 ```
+
 
 ```python
 # 设计一个类用来调用之前定义的函数，来处理从硬盘中读取到的图片
@@ -174,9 +188,10 @@ class Dataset(object):
             # 用生成器的形式分批次将处理过的数据迭代出去
             yield data_batch / IMAGE_MAX_VALUE - 0.5
  ```
- 
+
+
  ```python
- # 将随机生成的数字按照图片的规则进行显示
+# 将随机生成的数字按照图片的规则进行显示
 def images_square_grid(images, mode):
 
 
@@ -204,11 +219,14 @@ def images_square_grid(images, mode):
 
     return new_im
  ```
+
 ##### 模型输入
+
 在本节中，我们将实现一个辅助函数，这样我们就可以定义模型输入占位符，这个占位符将负责把数据输入计算图。这些辅助函数应该能够创建三个主要占位符：
 - 来自数据集的实际输入图像，其中包含的尺寸有（批量大小，输入图像宽度，输入图像高度，通道数）
 - 潜在空间Z，将由发生器用于生成假图像学习率占位符
 - 辅助函数将返回这三个输入占位符的元组。接下来我们继续定义此功能：
+
 
 ```python
 # 定义一个inputs函数
@@ -223,6 +241,7 @@ def inputs(img_width,img_height,img_channels,latent_space_z_dim):
 ```
 
 ##### 判别器
+
 接下来，我们需要实现网络的判别器部分，这将用于判断传入的数据是来自真实数据集还是由生成器生成的数据集。同样，我们可以用tf.variable_scope的TensorFlow功能使用判别器为一些变量加前缀，以便于我们可以检索和重新使用它们。所以，让我们定义一个函数，它将返回判别器的二进制输出以及logit值：
 
 ```python
@@ -259,7 +278,9 @@ def discriminator(input_imgs,reuse=False):
 ```
 
 ##### 生成器
+
 现在，是时候实现网络的第二部分，也就是使用潜在空间z复制原始输入图像。我们也将使用tf.variable_scope来实现此功能。接下来我们定义可以把生成器返回生成图像的函数。
+
 
 ```python
 # 定义GAN中的生成器
@@ -296,7 +317,9 @@ def generator(z_latent_space,output_channel_dim,is_train=True):
         return output
     
 ```
+
 ##### 模型损失
+
 现在出现了一个棘手的部分，也就是在上一章中讨论过的计算判别器和生成器的损耗。所以，我们定义这样的函数，它将利用先前定义的生成器和判别器函数：
 
 ```python
@@ -321,8 +344,11 @@ def model_losses(input_actual,input_latent_z,out_channel_dim):
     disc_loss = disc_loss_true + disc_loss_fake
     return disc_loss,gen_loss
 ```
+
 ##### 模型优化
+
 最后，在运行我们的模型之前，我们需要实现这个任务的优化标准。下面继续使用之前使用的命名约定来检索判别器和生成器的可训练参数并训练它们：
+
 
 ```python
 # 设置模型的优化函数
@@ -366,11 +392,14 @@ def show_generator_output(sess,num_images,input_latent_z,output_channel_dim,img_
     # 展示画板
     plt.show()
 ```
+
 ##### 训练模型
+
 现在，是时候训练模型，看看生成器如何在某种程度上通过生成非常接近原始CelebA数据集的图像来欺骗判别器。
 首先，让我们定义一个辅助函数，它将显示一些通过生成器生成的图像：
 然后，我们使用之前定义的辅助函数来构建模型输入，损失和优化标准。我们将它们堆叠在一起，并开始基于CelebA数据集训练我们的模型。启动培训的过程，可能需要一些时间，它取决于每个人的主机规格。
 经过一段时间对模型的训练，我们可以得到下面的图形。
+
 ```python
 # 定义模型训练函数
 def model_train(epochs,batch_size,learning_rete,beta11,get_batches,input_data_shape,data_img_mode):
@@ -420,6 +449,7 @@ def model_train(epochs,batch_size,learning_rete,beta11,get_batches,input_data_sh
                 if steps % show_every == 0:
                     show_generator_output(sess,num_images,z_input,image_channels,data_img_mode)
 ```
+
 
 ```python
 # 每次训练从硬盘中读取的数据量
@@ -474,10 +504,6 @@ with tf.Graph().as_default():
    
      Epoch 2/2	 Discriminator Loss:0.0000	 Generator Loss:13.5980
     
-    
-    
-    
-
 
 # 生成对抗网络的半监督学习
 
@@ -486,9 +512,12 @@ with tf.Graph().as_default():
 在这个前沿，我们提出了一个GAN模型，使用一个非常小的标记训练集对街景房屋号码进行分类。实际上，该模型使用大约1.3％的原始SVHN训练标签，也就是1000（一千）标记的示例。我们使用一些从OpenAI（网站中找到）（http://arxiv.org/abs/1606.03498）
 
 ### 直觉
+
 在构建用于生成图像的GAN时，我们同时训练了生成器和判别器。训练后，我们可以丢弃判别器，因为我们只是用它来训练生成器。
 下图是使用半监督学习GAN对11种分类问题的体系结构。
+
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/02.png?raw=true)
+
 在半监督学习中，我们需要将判别器转换为多类分类器。这个新模型必须能够在测试集上很好地概括，即使我们没有很多用于训练的标记示例。另外，这次，在训练结束时，我们实际上可以扔掉生成器。这时候的角色已经更改。现在生成器仅用于在训练期间帮助判别器。换句话说，生成器充当不同的信息源，判别器从中获得原始的，未标记的训练数据。正如我们将看到的，这些未标记的数据是提高判别器性能的关键。此外，对于常规图像生成GAN，判别器仅具有一个角色。计算其输入是真实的还是非真实的,我们把它称为GAN问题的概率。
 然而，为了将判别器变为半监督分类器，除了GAN问题之外，判别器还必须学习每个原始数据集类的概率。换句话说，对于每个输入的图像，判别器必须学习它的概率。
 回想一下，对于图像生成GAN判别器，我们有一个sigmoid单位输出。这个输出值表示输入图像为真实的概率（值接近1），或假的概率（值接近0）。换句话说，从判别器的角度来看，接近1的值意味着样本可能来自训练集。同样，接近0的值意味着样本来自生成器网络的可能性更高。通过使用该概率，判别器能够将信号发送回生成器。这个信号允许生成器在训练期间调整其参数，从而可以提高其创建逼真图像的能力。
@@ -561,9 +590,12 @@ if not isfile(input_data_dir + "test_32x32.mat"):
 ```
 
 ### 数据分析和预处理
+
 在这个任务中，我们将使用SVHN数据集，它是斯坦福的街景房屋编号的缩写。因此，让我们开始该实现通过导入所需要的包开始：
 接下来，我们将定义一个帮助类来下载SVHN数据集（首先需要手动创建JOQVU@EBUB@EJS first）：
 让我们了解这些图像是什么样子的。
+
+
 
 ```python
 # 加载用来训练的数据集
@@ -584,8 +616,10 @@ for ii, ax in zip(indices, axes.flatten()):
 plt.subplots_adjust(wspace=0, hspace=0)
 ```
 
- ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.1.png?raw=true)
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.1.png?raw=true)
+
 接下来，我们需要将图像缩到-1到1之间，并且这个步骤是必要的，因此我们将使用tanh()函数，它将压缩生成器的输出值：
+
 
 ```python
 # 将输入的图片进行缩放
@@ -600,6 +634,7 @@ def scale_images(image, feature_range=(-1, 1)):
 ```
 
 #### 建立模型 
+
 在本节中，我们将构建测试所需要的所有部分，因此我们从定义输入开始，这些输入将用于给计算图提供数据。
 
 ```python
@@ -676,7 +711,9 @@ class Dataset:
 ```
 
 ##### 模型输入
+
 首先，我们将定义模型输入参数，它将用于给计算模型提供数据的模型输入占位符
+
 
 ```python
 # 定义模型中的输入变量
@@ -691,7 +728,9 @@ def inputs(actual_dim, z_dim):
     return inputs_actual, inputs_latent_z, target, label_mask
 ```
 
+
 ##### 生成器
+
 在这一部分中，我们将实现GAN网络的第一个核心部分。本部分的结构和实现将遵循最初的DCGAN文件：
 
 ```python
@@ -727,7 +766,10 @@ def generator(latent_z, output_image_dim, reuse_vars=False, leaky_alpha=0.2, is_
 
         return output
 ```
+
+
 ##### 判别器
+
 现在，是时候建立GAN网络的第二个核心部分了——判别器。在以前的实现中，我们说过判别器将产生一个二进制输出，表示输入的图像来自真实数据集（1）还是由生成器（0）生成的数据集。这里的情况不同，所以判别器现在将是一个多类分类器。
 现在，让我们继续构建体系结构的判别器部分：
 不是在最后应用一个完全连接的层，我们将执行所谓的全球平均池（GAP），GAP取一个特征向量的空间维数的平均值。这将产生一个压缩的张量到一个值。
@@ -745,6 +787,7 @@ def generator(latent_z, output_image_dim, reuse_vars=False, leaky_alpha=0.2, is_
 
 这些层代表每一个分类的得分。为了得到概率的分数，我们将使用TPGUNBY激活函数：
 最后，判别器函数将如下所示，
+
 
 ```python
 # 定义网络中的判别器
@@ -814,13 +857,15 @@ def discriminator(input_x, reuse_vars=False, leaky_alpha=0.2, drop_out_rate=0., 
         return softmax_output, classes_logits, gan_logits, leaky_output_features
 ```
 
-##### 模型损失
+#### 模型损失
+
 现在是定义模型损失的时候了。首先，判别器损失将分为两部分： 
 - 第一种代表GAN问题，即无监督损失。 
 - 第二种是计算个体的实际类概率，即监督损失。对于判别器的无监督损失，需要对实际的训练图像和生成图像进行区分。
 对于一般的GAN，一半时间内，判别器会从训练集中获取未标记的图像作为输入，另一半则从生成器获取假的、未标记的图像。
 对于判别器损失的第二部分，即监督损失，它需要建立在判别器逻辑的基础上。因此，我们将使用softmax交叉熵，因为这是一个多分类问题。
 最后，如下所示：
+
 
 ```python
 # 定义模型损失
@@ -902,7 +947,9 @@ def model_optimizer(disc_loss, gen_loss, learning_rate, beta1):
 ```
 
 ##### 模型优化器
+
 现在，我们定义模型优化器，它与我们前面定义的模型非常相似
+
 
 ```python
 # 定义生成对抗性网络
@@ -932,6 +979,7 @@ class GAN:
 
 ```
 
+
 ```python
 # 定义函数来显示图片
 def view_generated_samples(epoch, samples, nrows, ncols, figsize=(5, 5)):
@@ -948,6 +996,7 @@ def view_generated_samples(epoch, samples, nrows, ncols, figsize=(5, 5)):
         plt.show()
         return fig, axes
 ```
+
 
 ```python
 # 定义训练函数
@@ -1047,6 +1096,7 @@ plt.plot(train_accuracies, label='Train', alpha=0.5)
 plt.plot(test_accuracies, label='Test', alpha=0.5)
 plt.title("Accuracy")
 plt.legend()
+
 ```
 
 WARNING:tensorflow:From <ipython-input-8-6588728a804a>:55: calling reduce_max (from tensorflow.python.ops.math_ops) with keep_dims is deprecated and will be removed in a future version.
@@ -1090,30 +1140,29 @@ Epoch 0
   
    ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.7.png?raw=true)  
     
-    ```python
-    # 此处会将之前显示的图片直接保存到电脑的硬盘中
-    for ii in range(len(samples)):
+ 
+
+```python
+# 此处会将之前显示的图片直接保存到电脑的硬盘中
+for ii in range(len(samples)):
     fig,ax = view_generated_samples(ii, samples, 5, 10, figsize=(10,5))
     fig.savefig('images/samples_{:03d}.png'.format(ii))
     plt.close()
-   ```
-    
- ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.8.png?raw=true)
- ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.9.png?raw=true)
- ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.10.png?raw=true)
- ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.11.png?raw=true)
- ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.12.png?raw=true)
+```
+
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.8.png?raw=true)
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.9.png?raw=true)
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.10.png?raw=true)
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.11.png?raw=true)
+![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.12.png?raw=true)
  
    虽然特征匹配损失在半监督学习的任务中表现良好，但是生成器生成的图像不如前面章节创建的图像好。但是这个实现主要是为了演示我们如何使用用于半监督学习设置的GAN。
 
 ## 总结
+
 最后，许多研究人员认为无监督学习是一般AI中缺失的环节系统。为克服这些障碍，尝试用较少的方法解决已确定的问题，标记数据是关键。在这种情况下，GAN为复杂学习提供了一个真正的选择，标记较少的样本的任务。然而，监督和半监督之间的绩效差距学习仍然远非平等。 我们当然可以期待这种差距随着新方法的发挥而变得更小。
 
 学号|姓名|专业
 -|-|-
 201802110533|张倩茹|概率论与数理统计
 201802110535|王悦|概率论与数理统计
-<br>
-
-    
-    
