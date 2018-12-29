@@ -24,9 +24,13 @@
 
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/01.png?raw=true)
 
-```python
+
+
 ### 获取数据
 在本节中，我们将定义一些帮助我们下载的辅助函数CelebA数据集。 我们首先导入他们所需的包,执行命令如下：
+
+
+```python
 import os
 import zipfile
 import numpy as np
@@ -1119,28 +1123,24 @@ Epoch 0
     Epoch 1
 		Classifier train accuracy:  0.339
 		Classifier test accuracy 0.433159188690842
-		
  ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.3.png?raw=true)
     
    Epoch 2
 		Classifier train accuracy:  0.539
 		Classifier test accuracy 0.5295021511985248
-		
    ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.4.png?raw=true)
     
     Epoch 3
 		Classifier train accuracy:  0.681
 		Classifier test accuracy 0.6194683466502766
-		
    ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.5.png?raw=true)
     
     Epoch 4
 		Classifier train accuracy:  0.807
 		Classifier test accuracy 0.6441303011677935
-		
    ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.6.png?raw=true)
     
-
+     <matplotlib.legend.Legend at 0x217ca6e2358>
   
    ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.7.png?raw=true)  
     
@@ -1155,15 +1155,10 @@ for ii in range(len(samples)):
 ```
 
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.8.png?raw=true)
-
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.9.png?raw=true)
-
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.10.png?raw=true)
-
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.11.png?raw=true)
-
 ![image](https://github.com/yanjiusheng2018/dlt/blob/master/src/content/Chapter15/chapter15_image/2.12.png?raw=true)
-
  
    虽然特征匹配损失在半监督学习的任务中表现良好，但是生成器生成的图像不如前面章节创建的图像好。但是这个实现主要是为了演示我们如何使用用于半监督学习设置的GAN。
 
